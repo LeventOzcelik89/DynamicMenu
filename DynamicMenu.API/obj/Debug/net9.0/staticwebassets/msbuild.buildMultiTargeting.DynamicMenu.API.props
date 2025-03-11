@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\DynamicMenu.API.props" />
+</Project>

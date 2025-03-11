@@ -1,0 +1,4 @@
+dotnet ef migrations add InitialCreate --project DynamicMenu.Infrastructure --startup-project DynamicMenu.API
+
+dotnet ef database update --project DynamicMenu.Infrastructure --startup-project DynamicMenu.API
+
