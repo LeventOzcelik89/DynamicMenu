@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DynamicMenu.Web</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="~/lib/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet" />
+    
+    <!-- Custom CSS -->
+    <link href="~/css/site.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">DynamicMenu.Web</a>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - DynamicMenu.Web
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="~/lib/jquery/jquery-3.7.1.min.js"></script>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="~/lib/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="~/js/site.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html> 

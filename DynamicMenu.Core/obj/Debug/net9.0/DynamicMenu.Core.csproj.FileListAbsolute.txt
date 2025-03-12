@@ -22,3 +22,4 @@ D:\Repositories\DynamicMenu\DynamicMenu.Core\obj\Debug\net9.0\DynamicMenu.Core.d
 D:\Repositories\DynamicMenu\DynamicMenu.Core\obj\Debug\net9.0\refint\DynamicMenu.Core.dll
 D:\Repositories\DynamicMenu\DynamicMenu.Core\obj\Debug\net9.0\DynamicMenu.Core.pdb
 D:\Repositories\DynamicMenu\DynamicMenu.Core\obj\Debug\net9.0\ref\DynamicMenu.Core.dll
+D:\Repositories\DynamicMenu\DynamicMenu.Core\obj\Debug\net9.0\DynamicMenu.Core.sourcelink.json

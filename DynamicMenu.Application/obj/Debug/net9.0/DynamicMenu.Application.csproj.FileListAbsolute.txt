@@ -26,3 +26,4 @@ D:\Repositories\DynamicMenu\DynamicMenu.Application\bin\Debug\net9.0\DynamicMenu
 D:\Repositories\DynamicMenu\DynamicMenu.Application\bin\Debug\net9.0\DynamicMenu.Core.pdb
 D:\Repositories\DynamicMenu\DynamicMenu.Application\bin\Debug\net9.0\DynamicMenu.Infrastructure.pdb
 D:\Repositories\DynamicMenu\DynamicMenu.Application\obj\Debug\net9.0\DynamicM.8F19D4DF.Up2Date
+D:\Repositories\DynamicMenu\DynamicMenu.Application\obj\Debug\net9.0\DynamicMenu.Application.sourcelink.json

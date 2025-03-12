@@ -32,3 +32,4 @@ D:\Repositories\DynamicMenu\DynamicMenu.Infrastructure\obj\Debug\net9.0\refint\D
 D:\Repositories\DynamicMenu\DynamicMenu.Infrastructure\obj\Debug\net9.0\DynamicMenu.Infrastructure.pdb
 D:\Repositories\DynamicMenu\DynamicMenu.Infrastructure\obj\Debug\net9.0\DynamicMenu.Infrastructure.genruntimeconfig.cache
 D:\Repositories\DynamicMenu\DynamicMenu.Infrastructure\obj\Debug\net9.0\ref\DynamicMenu.Infrastructure.dll
+D:\Repositories\DynamicMenu\DynamicMenu.Infrastructure\obj\Debug\net9.0\DynamicMenu.Infrastructure.sourcelink.json

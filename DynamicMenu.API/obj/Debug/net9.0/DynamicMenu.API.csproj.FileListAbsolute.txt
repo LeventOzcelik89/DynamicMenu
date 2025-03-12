@@ -332,3 +332,4 @@ D:\Repositories\DynamicMenu\DynamicMenu.API\bin\Debug\net9.0\DynamicMenu.Applica
 D:\Repositories\DynamicMenu\DynamicMenu.API\bin\Debug\net9.0\DynamicMenu.Application.pdb
 D:\Repositories\DynamicMenu\DynamicMenu.API\obj\Debug\net9.0\DynamicMenu.API.MvcApplicationPartsAssemblyInfo.cs
 D:\Repositories\DynamicMenu\DynamicMenu.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
+D:\Repositories\DynamicMenu\DynamicMenu.API\obj\Debug\net9.0\DynamicMenu.API.sourcelink.json
