@@ -1,12 +1,33 @@
+using DynamicMenu.Core.Models;
+using DynamicMenu.Web.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 
 namespace DynamicMenu.Web.Controllers
 {
     public class HomeController : Controller
     {
+
+        private readonly RemoteServiceDynamicMenuAPI _remoteServiceDynamicMenuAPI;
+        public HomeController(RemoteServiceDynamicMenuAPI remoteServiceDynamicMenuAPI)
+        {
+            _remoteServiceDynamicMenuAPI = remoteServiceDynamicMenuAPI;
+        }
+
         public IActionResult Index()
         {
             return View();
         }
+
+        public async Task<ActionResult<IEnumerable<MenuItemExport>>> GetMenu(int menuId)
+        {
+
+            var url = "Present?menuId=" + menuId;
+            var res = await _remoteServiceDynamicMenuAPI.GetData<MenuItemExport[]>(url);
+
+            return Ok(res);
+
+        }
+
     }
-} 
+}

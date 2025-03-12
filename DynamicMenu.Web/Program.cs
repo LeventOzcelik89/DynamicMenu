@@ -1,3 +1,4 @@
+using DynamicMenu.Web.Model;
 using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,6 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation(); // Hot reload için gerekli
+
+
+builder.Services.AddHttpClient<RemoteServiceDynamicMenuAPI>()
+    .SetHandlerLifetime(TimeSpan.FromSeconds(5))
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { ServerCertificateCustomValidationCallback = delegate { return true; } });
+
 
 var app = builder.Build();
 
@@ -32,4 +39,5 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
-app.Run(); 
+
+app.Run();

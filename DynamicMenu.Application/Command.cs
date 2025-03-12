@@ -62,7 +62,6 @@ namespace DynamicMenu.Application
             }
             catch (Exception ex)
             {
-                cacheStatus = 2;
                 var errorText = "MenuTypeCommand: " + ex + " " + ex.StackTrace;
             }
 

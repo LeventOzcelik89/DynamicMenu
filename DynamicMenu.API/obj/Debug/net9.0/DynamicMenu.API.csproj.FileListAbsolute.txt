@@ -330,6 +330,9 @@ D:\Repositories\DynamicMenu\DynamicMenu.API\obj\Debug\net9.0\ref\DynamicMenu.API
 D:\Repositories\DynamicMenu\DynamicMenu.API\bin\Debug\net9.0\Newtonsoft.Json.dll
 D:\Repositories\DynamicMenu\DynamicMenu.API\bin\Debug\net9.0\DynamicMenu.Application.dll
 D:\Repositories\DynamicMenu\DynamicMenu.API\bin\Debug\net9.0\DynamicMenu.Application.pdb
-D:\Repositories\DynamicMenu\DynamicMenu.API\obj\Debug\net9.0\DynamicMenu.API.MvcApplicationPartsAssemblyInfo.cs
 D:\Repositories\DynamicMenu\DynamicMenu.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 D:\Repositories\DynamicMenu\DynamicMenu.API\obj\Debug\net9.0\DynamicMenu.API.sourcelink.json
+D:\Repositories\DynamicMenu\DynamicMenu.API\bin\Debug\net9.0\Microsoft.AspNetCore.JsonPatch.dll
+D:\Repositories\DynamicMenu\DynamicMenu.API\bin\Debug\net9.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+D:\Repositories\DynamicMenu\DynamicMenu.API\bin\Debug\net9.0\Newtonsoft.Json.Bson.dll
+D:\Repositories\DynamicMenu\DynamicMenu.API\obj\Debug\net9.0\DynamicMenu.API.MvcApplicationPartsAssemblyInfo.cs

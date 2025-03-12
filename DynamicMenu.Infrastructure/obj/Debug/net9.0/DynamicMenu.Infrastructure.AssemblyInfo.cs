@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DynamicMenu.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+207662d37cff4b9d5332616440345b7bc4f996cd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1fa7cd87a1e886505c11eb173ef157cde149ecd")]
 [assembly: System.Reflection.AssemblyProductAttribute("DynamicMenu.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DynamicMenu.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

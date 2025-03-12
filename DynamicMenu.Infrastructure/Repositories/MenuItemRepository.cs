@@ -19,7 +19,7 @@ namespace DynamicMenu.Infrastructure.Repositories
         {
             return await _context.MenuItems
                 //.Include(x => x.MenuItemRoles)
-                .Include(x => x.Children)
+                //  .Include(x => x.Children)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
@@ -27,7 +27,7 @@ namespace DynamicMenu.Infrastructure.Repositories
         {
             return await _context.MenuItems
                 //.Include(x => x.MenuItemRoles)
-                .Include(x => x.Children)
+                //.Include(x => x.Children)
                 .Where(x => x.Pid == null)
                 .OrderBy(x => x.SortOrder)
                 .Select(x => new MenuItem
@@ -56,7 +56,7 @@ namespace DynamicMenu.Infrastructure.Repositories
         {
             return await _context.MenuItems
                 //.Include(x => x.MenuItemRoles)
-                .Include(x => x.Children)
+                //.Include(x => x.Children)
                 //.Where(x => x.AppId == appType && x.Pid == null)
                 .OrderBy(x => x.SortOrder)
                 .ToListAsync();
@@ -77,8 +77,6 @@ namespace DynamicMenu.Infrastructure.Repositories
         {
             return await _context.MenuItems
                 .Where(x => x.MenuId == menuId)
-                .Include(x => x.Children)
-                .OrderBy(x => x.SortOrder)
                 .ToListAsync();
         }
 

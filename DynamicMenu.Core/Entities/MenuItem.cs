@@ -22,10 +22,10 @@ namespace DynamicMenu.Core.Entities
         public DateTime? ModifiedDate { get; set; }
         //public string CategoryName { get; set; }
         public int MenuId { get; set; }
-        public Menu Menu { get; set; }
+        public virtual Menu Menu { get; set; }
 
-        public MenuItem Parent { get; set; }
-        public ICollection<MenuItem> Children { get; set; }
+        public virtual MenuItem Parent { get; set; }
+        public virtual ICollection<MenuItem> Children { get; set; }
         //public ICollection<MenuItemRole> MenuItemRoles { get; set; }
     }
 } 
