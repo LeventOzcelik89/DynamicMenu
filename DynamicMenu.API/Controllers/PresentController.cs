@@ -80,6 +80,7 @@ namespace DynamicMenu.API.Controllers
 
                 res.Add(new MenuItemExport
                 {
+                    parent = item.Keyword,
                     key = subItem.Keyword,
                     text = subItem.Text,
                     icon = subItem.IconPath,

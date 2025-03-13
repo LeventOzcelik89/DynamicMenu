@@ -12,7 +12,6 @@
     <div class="mobilContainer">
 
         <div id="app" class="app">
-
         </div>
 
         <nav class="bottom-nav">
@@ -40,14 +39,17 @@
 
     </div>
 
-    <script type="text/template" id="pageTemplate">
+    <script type="text/template" id="menuTemplate">
         <div class="page" data-page="{{key}}">
             <header>
+                <button class="back-button" data-page="{{parent}}">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
                 <h1>{{caption}}</h1>
             </header>
             <main>
                 <div class="menu-container" data-target="menuItems">
-                    
+
                 </div>
             </main>
         </div>
@@ -57,7 +59,7 @@
         <div class="menu-item" data-page="{{target}}">
             <i class="fas fa-exchange-alt"></i>
             <span>{{text}}</span>
-            <i class="fas fa-chevron-right"></i>
+            <i class="fas fa-chevron-right" data-target="go"></i>
         </div>
     </script>
 
@@ -69,65 +71,101 @@
     <script type="text/javascript">
 
         var page = {
+            menuContainerElem: $('#app'),
+            data: null,
+            menus: {},
+            getList: function(item){
+
+                var menuTemplate = $('#menuTemplate').html();
+                menuTemplate = menuTemplate.replace(/{{caption}}/g, item.text);
+                menuTemplate = menuTemplate.replace(/{{key}}/g, item.key);
+                menuTemplate = menuTemplate.replace(/{{parent}}/g, (item.parent ?? 'root'));
+
+                menuTemplate = $(menuTemplate);
+
+                if(item.key == 'root'){
+                    menuTemplate.find('.back-button').remove();
+                }
+
+                $.each(item.items, function(j, subitem){
+                    var menuItemTemplate = $('#menuItemTemplate').html();
+                        menuItemTemplate = menuItemTemplate
+                            .replace(/{{text}}/g, subitem.text)
+                            .replace(/{{target}}/g, subitem.key);
+
+                    menuItemTemplate = $(menuItemTemplate);
+
+                    if(subitem.items == null || subitem.items.length == 0){
+                        menuItemTemplate.find('[data-target="go"]').remove();
+                    }
+
+                    menuTemplate.find('[data-target="menuItems"]').append(menuItemTemplate);
+                });
+
+                return $(menuTemplate);
+
+            },
             makeList: function(item){
-            
-                var pageTemplate = $('#pageTemplate').html();
-                        pageTemplate = pageTemplate.replace('{{caption}}', item.text);
-                        pageTemplate = pageTemplate.replace('{{key}}', item.key);
-                        pageTemplate = $(pageTemplate);
 
-                        $.each(item.items, function(j, subitem){
-                            var menuItemTemplate = $('#menuItemTemplate').html();
-                                menuItemTemplate = menuItemTemplate
-                                    .replace('{{text}}', subitem.text)
-                                    .replace('{{target}}', subitem.key);
+                if(item == null){
+                    item = { key: 'root', text: 'İşlemler', items: page.data };
+                }
 
-                            pageTemplate.append($(menuItemTemplate));
-                        });
+                if(page.menus[item.key] != undefined){
+                    page.menuContainerElem.append(page.menus[item.key]);
+                    return ;
+                }
 
-                        $('#app').append(pageTemplate);
+                page.menus[item.key] = page.getList(item);
+                page.menuContainerElem.append(page.menus[item.key]);
 
             },
             ready: function () {
 
-                ReadData('/Home/GetMenu?menuId=1', null, function (items) {
+                var makeSubMenu = function(item){
 
-                    $.each(items, function(i, item){
-                        
-                        page.makeList(item);
+                    page.makeList(item);
 
-                        $.each(item.items, function(j, subitem){
-                        
-                            page.makeList(item);
+                    $.each(item.items, function(ix,itemx){
 
-                        });
+                        if(itemx.items != null && itemx.items.length > 0){
+                            //  page.makeList(itemx);
+                            makeSubMenu(itemx);
+                        }
 
                     });
+
+                };
+
+                ReadData('/Home/GetMenu?menuId=1', null, function (items) {
+
+                    page.data = items;
+                    page.makeList(null);
+
+                    $.each(page.data, function(i,item){
+                        if(item.items != null && item.items.length > 0){
+                            makeSubMenu(item);
+                        }
+                    });
+
+                    $('.page').hide();
+                    $('.page[data-page="root"]').show();
 
                 });
 
             },
             showMenu: function (item) {
 
-                var elem = $('.page[data-page="' + $(item).attr('data-page') + '"]');
-
-                $('.page').addClass('hidden');
-                $(elem).removeClass('hidden');
 
             },
             backMenu: function (item) {
 
-                var elem = $('#' + $(item).attr('data-target'));
-                page.showMenu(elem);
             }
         }
 
         $(document)
 
             .ready(function () {
-
-                //var pages = $('.page');
-                //var mainMenu = $('#main-menu');
 
                 page.ready();
 
@@ -137,7 +175,11 @@
 
                 e.preventDefault();
 
-                page.showMenu(this);
+                var page = $('.page[data-page="' + $(this).attr('data-page') + '"]');
+                if(page.length > 0){
+                    $('.page').hide();
+                    page.show();
+                }
 
                 return false;
 
@@ -147,7 +189,8 @@
 
                 e.preventDefault();
 
-                page.backMenu(this);
+                $('.page').hide();
+                $('.page[data-page="' + $(this).attr('data-page') + '"]').show();
 
                 return false;
 

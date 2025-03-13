@@ -7,12 +7,12 @@
       "RelativeMoniker": "D:0:0:{B99A34C5-2E0B-4B3E-9C6E-A9F0666F86A9}|DynamicMenu.Web\\DynamicMenu.Web.csproj|solutionrelative:dynamicmenu.web\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B99A34C5-2E0B-4B3E-9C6E-A9F0666F86A9}|DynamicMenu.Web\\DynamicMenu.Web.csproj|d:\\repositories\\dynamicmenu\\dynamicmenu.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B99A34C5-2E0B-4B3E-9C6E-A9F0666F86A9}|DynamicMenu.Web\\DynamicMenu.Web.csproj|solutionrelative:dynamicmenu.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{B99A34C5-2E0B-4B3E-9C6E-A9F0666F86A9}|DynamicMenu.Web\\DynamicMenu.Web.csproj|d:\\repositories\\dynamicmenu\\dynamicmenu.web\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B99A34C5-2E0B-4B3E-9C6E-A9F0666F86A9}|DynamicMenu.Web\\DynamicMenu.Web.csproj|solutionrelative:dynamicmenu.web\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B99A34C5-2E0B-4B3E-9C6E-A9F0666F86A9}|DynamicMenu.Web\\DynamicMenu.Web.csproj|d:\\repositories\\dynamicmenu\\dynamicmenu.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B99A34C5-2E0B-4B3E-9C6E-A9F0666F86A9}|DynamicMenu.Web\\DynamicMenu.Web.csproj|solutionrelative:dynamicmenu.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B99A34C5-2E0B-4B3E-9C6E-A9F0666F86A9}|DynamicMenu.Web\\DynamicMenu.Web.csproj|d:\\repositories\\dynamicmenu\\dynamicmenu.web\\model\\remoteservicedynamicmenuapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -210,8 +210,7 @@
               "ViewState": "AgIAAD4AAAAAAAAAAAAnwEwAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-04T11:53:59.299Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -224,8 +223,7 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAQwEAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-07T12:13:55.852Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -238,8 +236,7 @@
               "ViewState": "AgIAAB8AAAAAAAAAAAAgwCUAAABXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-12T11:48:32.889Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -251,8 +248,7 @@
               "RelativeToolTip": "DynamicMenu.Web\\Model\\RemoteServiceDynamicMenuAPI.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T12:48:28.153Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T12:48:28.153Z"
             },
             {
               "$type": "Document",
@@ -264,21 +260,19 @@
               "RelativeToolTip": "DynamicMenu.Web\\Model\\RemoteServiceBase.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T12:46:07.959Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T12:46:07.959Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "HomeController.cs",
               "DocumentMoniker": "D:\\Repositories\\DynamicMenu\\DynamicMenu.Web\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "DynamicMenu.Web\\Controllers\\HomeController.cs",
               "ToolTip": "D:\\Repositories\\DynamicMenu\\DynamicMenu.Web\\Controllers\\HomeController.cs",
               "RelativeToolTip": "DynamicMenu.Web\\Controllers\\HomeController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T12:43:53.37Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T12:43:53.37Z"
             },
             {
               "$type": "Document",
@@ -290,21 +284,19 @@
               "RelativeToolTip": "DynamicMenu.Web\\wwwroot\\js\\master.js",
               "ViewState": "AgIAABwAAAAAAAAAAAAUwGgAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-03-12T12:41:36.815Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T12:41:36.815Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Repositories\\DynamicMenu\\DynamicMenu.Web\\Program.cs",
               "RelativeDocumentMoniker": "DynamicMenu.Web\\Program.cs",
               "ToolTip": "D:\\Repositories\\DynamicMenu\\DynamicMenu.Web\\Program.cs",
               "RelativeToolTip": "DynamicMenu.Web\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-11T12:17:12.162Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-11T12:17:12.162Z"
             },
             {
               "$type": "Document",
@@ -314,7 +306,7 @@
               "RelativeDocumentMoniker": "DynamicMenu.Web\\Views\\Home\\Index.cshtml",
               "ToolTip": "D:\\Repositories\\DynamicMenu\\DynamicMenu.Web\\Views\\Home\\Index.cshtml",
               "RelativeToolTip": "DynamicMenu.Web\\Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADwAAAAAAAAAAAAAAEsAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-03-11T12:24:34.27Z",
               "EditorCaption": ""
@@ -329,8 +321,7 @@
               "RelativeToolTip": "DynamicMenu.API\\Controllers\\MenuItemsController.cs",
               "ViewState": "AgIAABQAAAAAAAAAAAAMwCcAAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T09:03:58.849Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T09:03:58.849Z"
             },
             {
               "$type": "Document",
@@ -342,8 +333,7 @@
               "RelativeToolTip": "DynamicMenu.Infrastructure\\Data\\Configurations\\MenuItemConfiguration.cs",
               "ViewState": "AgIAABMAAAAAAAAAAAAnwCwAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-06T07:50:01.112Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-06T07:50:01.112Z"
             },
             {
               "$type": "Document",
@@ -355,8 +345,7 @@
               "RelativeToolTip": "DynamicMenu.Infrastructure\\Repositories\\MenuItemRepository.cs",
               "ViewState": "AgIAADEAAAAAAAAAAAAewEwAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T11:48:10.568Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T11:48:10.568Z"
             },
             {
               "$type": "Document",
@@ -368,8 +357,7 @@
               "RelativeToolTip": "DynamicMenu.Core\\Entities\\MenuItem.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwBsAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T09:04:26.348Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T09:04:26.348Z"
             },
             {
               "$type": "Document",
@@ -381,8 +369,7 @@
               "RelativeToolTip": "DynamicMenu.Web\\wwwroot\\js\\main.js",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-03-12T10:56:30.844Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T10:56:30.844Z"
             },
             {
               "$type": "Document",
@@ -394,8 +381,7 @@
               "RelativeToolTip": "DynamicMenu.Core\\Entities\\Menu.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwA4AAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-06T07:48:36.644Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-06T07:48:36.644Z"
             },
             {
               "$type": "Document",
@@ -407,8 +393,7 @@
               "RelativeToolTip": "DynamicMenu.API\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAABXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T12:22:59.679Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T12:22:59.679Z"
             },
             {
               "$type": "Document",
@@ -420,8 +405,7 @@
               "RelativeToolTip": "DynamicMenu.Core\\Models\\MenuItemExport.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T11:56:33.877Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T11:56:33.877Z"
             },
             {
               "$type": "Document",
@@ -433,8 +417,7 @@
               "RelativeToolTip": "DynamicMenu.Infrastructure\\Data\\DynamicMenuDbContext.cs",
               "ViewState": "AgIAAA0AAAAAAAAAAAASwDYAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T12:11:09.856Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T12:11:09.856Z"
             },
             {
               "$type": "Document",
@@ -446,8 +429,7 @@
               "RelativeToolTip": "DynamicMenu.Core\\Interfaces\\IMenuItemRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwA0AAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-12T12:10:33.455Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T12:10:33.455Z"
             },
             {
               "$type": "Document",
@@ -459,8 +441,7 @@
               "RelativeToolTip": "DynamicMenu.Core\\Entities\\RemoteMenuConfig.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-07T12:16:42.234Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-07T12:16:42.234Z"
             },
             {
               "$type": "Document",
@@ -472,8 +453,7 @@
               "RelativeToolTip": ".gitignore",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-03-12T11:40:00.472Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T11:40:00.472Z"
             },
             {
               "$type": "Document",
@@ -485,8 +465,7 @@
               "RelativeToolTip": "DynamicMenu.Application\\MenuConfigResponse.cs",
               "ViewState": "AgIAAAQAAAAAAAAAAAAawBIAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-07T12:13:37.963Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-07T12:13:37.963Z"
             },
             {
               "$type": "Document",
@@ -498,8 +477,7 @@
               "RelativeToolTip": "DynamicMenu.Core\\Entities\\MenuItemRole.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T09:03:36.816Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T09:03:36.816Z"
             },
             {
               "$type": "Document",
@@ -511,8 +489,7 @@
               "RelativeToolTip": "DynamicMenu.Application\\RemoteConfigManager.cs",
               "ViewState": "AgIAAIcAAAAAAAAAAAAnwKAAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-10T12:36:19.694Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-10T12:36:19.694Z"
             },
             {
               "$type": "Document",
@@ -524,8 +501,7 @@
               "RelativeToolTip": "DynamicMenu.Core\\Models\\MenuImport.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T09:02:56.35Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T09:02:56.35Z"
             },
             {
               "$type": "Document",
@@ -537,21 +513,19 @@
               "RelativeToolTip": "DynamicMenu.API\\DTOs\\MenuItemDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T09:03:28.593Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T09:03:28.593Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 26,
-              "Title": "DynamicMenu.API",
+              "Title": "DynamicMenu.API.csproj",
               "DocumentMoniker": "D:\\Repositories\\DynamicMenu\\DynamicMenu.API\\DynamicMenu.API.csproj",
               "RelativeDocumentMoniker": "DynamicMenu.API\\DynamicMenu.API.csproj",
               "ToolTip": "D:\\Repositories\\DynamicMenu\\DynamicMenu.API\\DynamicMenu.API.csproj",
               "RelativeToolTip": "DynamicMenu.API\\DynamicMenu.API.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-03-12T11:43:31.153Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T11:43:31.153Z"
             },
             {
               "$type": "Document",
@@ -559,12 +533,11 @@
               "Title": "DynamicMenu.Web.csproj",
               "DocumentMoniker": "D:\\Repositories\\DynamicMenu\\DynamicMenu.Web\\DynamicMenu.Web.csproj",
               "RelativeDocumentMoniker": "DynamicMenu.Web\\DynamicMenu.Web.csproj",
-              "ToolTip": "D:\\Repositories\\DynamicMenu\\DynamicMenu.Web\\DynamicMenu.Web.csproj*",
-              "RelativeToolTip": "DynamicMenu.Web\\DynamicMenu.Web.csproj*",
+              "ToolTip": "D:\\Repositories\\DynamicMenu\\DynamicMenu.Web\\DynamicMenu.Web.csproj",
+              "RelativeToolTip": "DynamicMenu.Web\\DynamicMenu.Web.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-03-11T12:18:26.386Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-11T12:18:26.386Z"
             },
             {
               "$type": "Document",
@@ -576,8 +549,7 @@
               "RelativeToolTip": "DynamicMenu.Infrastructure\\DynamicMenu.Infrastructure.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-03-11T12:19:35.166Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-11T12:19:35.166Z"
             },
             {
               "$type": "Document",
@@ -589,8 +561,7 @@
               "RelativeToolTip": "DynamicMenu.Web\\Views\\_ViewStart.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-11T12:20:41.765Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-11T12:20:41.765Z"
             },
             {
               "$type": "Document",
@@ -602,8 +573,7 @@
               "RelativeToolTip": "DynamicMenu.Web\\Views\\_ViewImports.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-11T12:20:43.942Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-11T12:20:43.942Z"
             },
             {
               "$type": "Document",
@@ -615,8 +585,7 @@
               "RelativeToolTip": "DynamicMenu.Web\\wwwroot\\css\\style.css",
               "ViewState": "AgIAALoAAAAAAAAAAADgv9UAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-03-12T11:15:17.488Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-12T11:15:17.488Z"
             },
             {
               "$type": "Document",
@@ -626,8 +595,7 @@
               "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
               "ViewState": "AgIAAEYHAAAAAAAAAAAgwGAHAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
-              "WhenOpened": "2025-03-11T12:18:23.961Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-11T12:18:23.961Z"
             },
             {
               "$type": "Document",
@@ -639,8 +607,7 @@
               "RelativeToolTip": "DynamicMenu.Web\\Views\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-11T12:20:46.905Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-11T12:20:46.905Z"
             },
             {
               "$type": "Document",
@@ -652,8 +619,7 @@
               "RelativeToolTip": "DynamicMenu.Infrastructure\\Repositories\\MenuRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-10T08:05:00.943Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-10T08:05:00.943Z"
             },
             {
               "$type": "Document",
@@ -665,8 +631,7 @@
               "RelativeToolTip": "DynamicMenu.Core\\Interfaces\\IMenuRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAgAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-10T08:04:36.448Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-10T08:04:36.448Z"
             },
             {
               "$type": "Document",
@@ -678,8 +643,7 @@
               "RelativeToolTip": "DynamicMenu.Infrastructure\\Repositories\\RemoteMenuConfigRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-07T13:21:41.446Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-07T13:21:41.446Z"
             },
             {
               "$type": "Document",
@@ -691,8 +655,7 @@
               "RelativeToolTip": "DynamicMenu.Infrastructure\\Extensions\\ServiceCollectionExtensions.cs",
               "ViewState": "AgIAABwAAAAAAAAAAAAgwD0AAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-06T09:25:03.971Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-06T09:25:03.971Z"
             },
             {
               "$type": "Document",
@@ -704,8 +667,7 @@
               "RelativeToolTip": "DynamicMenu.Core\\Interfaces\\IRemoteMenusRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-10T07:54:25.324Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-10T07:54:25.324Z"
             },
             {
               "$type": "Document",
@@ -717,8 +679,7 @@
               "RelativeToolTip": "DynamicMenu.Infrastructure\\Repositories\\RemoteMenusRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-10T07:56:54.813Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-10T07:56:54.813Z"
             },
             {
               "$type": "Document",
@@ -730,8 +691,7 @@
               "RelativeToolTip": "DynamicMenu.Infrastructure\\Data\\Configurations\\RemoteMenuConfigConfiguration.cs",
               "ViewState": "AgIAACYAAAAAAAAAAAAvwDEAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-07T12:41:21.087Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-07T12:41:21.087Z"
             },
             {
               "$type": "Document",
@@ -743,8 +703,7 @@
               "RelativeToolTip": "DynamicMenu.Infrastructure\\Note.txt",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2025-03-04T11:45:54.205Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T11:45:54.205Z"
             },
             {
               "$type": "Document",
@@ -756,8 +715,7 @@
               "RelativeToolTip": "DynamicMenu.API\\DTOs\\CreateMenuItemDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAsAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T09:03:25.209Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T09:03:25.209Z"
             },
             {
               "$type": "Document",
@@ -769,8 +727,7 @@
               "RelativeToolTip": "DynamicMenu.API\\Models\\Dtos\\MenuItemDtos.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAsAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T09:03:32.849Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T09:03:32.849Z"
             },
             {
               "$type": "Document",
@@ -782,8 +739,7 @@
               "RelativeToolTip": "DynamicMenu.Infrastructure\\Data\\Configurations\\MenuItemRoleConfiguration.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T09:05:19.908Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T09:05:19.908Z"
             },
             {
               "$type": "Document",
@@ -795,8 +751,7 @@
               "RelativeToolTip": "DynamicMenu.API\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-03-04T09:08:14.716Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T09:08:14.716Z"
             },
             {
               "$type": "Document",
@@ -808,8 +763,7 @@
               "RelativeToolTip": "DynamicMenu.Core\\Models\\AuthSettings.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-04T09:02:55.677Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-04T09:02:55.677Z"
             }
           ]
         }

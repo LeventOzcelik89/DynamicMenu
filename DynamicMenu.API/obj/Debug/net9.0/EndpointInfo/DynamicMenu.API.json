@@ -780,6 +780,10 @@
       "MenuItemExport": {
         "type": "object",
         "properties": {
+          "parent": {
+            "type": "string",
+            "nullable": true
+          },
           "key": {
             "type": "string",
             "nullable": true
