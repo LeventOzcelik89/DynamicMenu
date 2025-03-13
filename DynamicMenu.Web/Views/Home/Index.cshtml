@@ -4,8 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mobile Banking Menu</title>
+    <link href="~/lib/jquery-ui-1.13.3.custom/jquery-ui.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="~/lib/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style type="text/css">
+        .buttons{
+            
+        }
+    </style>
+
 </head>
 <body>
 
@@ -15,7 +24,7 @@
         </div>
 
         <nav class="bottom-nav">
-            <div class="nav-item active">
+            <div class="nav-item">
                 <i class="fas fa-home"></i>
                 <span>Ana Sayfa</span>
             </div>
@@ -23,7 +32,7 @@
                 <i class="fas fa-wallet"></i>
                 <span>Hesap/Kart</span>
             </div>
-            <div class="nav-item">
+            <div class="nav-item active">
                 <i class="fas fa-list"></i>
                 <span>İşlemler</span>
             </div>
@@ -36,6 +45,10 @@
                 <span>Varlıklar</span>
             </div>
         </nav>
+
+        @* <div class="buttons">
+            <a href="#" class="btn btn-xs btn-primary">+</a>
+        </div> *@
 
     </div>
 
@@ -64,6 +77,7 @@
     </script>
 
     <script src="~/lib/jquery/jquery-3.7.1.min.js"></script>
+    <script src="~/lib/jquery-ui-1.13.3.custom/jquery-ui.min.js"></script>
     <script src="~/lib/loadingmodal/jquery.loadingmodal.min.js"></script>
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/master.js"></script>
@@ -150,6 +164,7 @@
 
                     $('.page').hide();
                     $('.page[data-page="root"]').show();
+                    $('.page .menu-container').sortable();
 
                 });
 
