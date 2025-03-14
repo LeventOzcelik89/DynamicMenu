@@ -86,12 +86,13 @@ header h1 {
         background-color: #f8f8f8;
     }
 
-    .menu-item i:first-child {
-        color: var(--primary-color);
+    .menu-item > img {
         margin-right: 1rem;
-        width: 20px;
-        text-align: center;
     }
+
+        .menu-item > img.error {
+            z-index: -1;
+        }
 
     .menu-item span {
         flex-grow: 1;

@@ -1,0 +1,97 @@
+﻿:root {
+    --primary-blue: #0072bc;
+    --hover-blue: #005a94;
+    --white: #ffffff;
+}
+
+.toolbar-wrapper {
+    margin-bottom: 10px;
+}
+
+    .toolbar-wrapper .btn-toolbar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .toolbar-wrapper .btn-primary {
+        background-color: var(--primary-blue);
+        border-color: var(--primary-blue);
+        color: var(--white);
+        padding: 4px 8px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .toolbar-wrapper .btn-primary:hover,
+        .toolbar-wrapper .btn-primary:focus {
+            background-color: var(--hover-blue);
+            border-color: var(--hover-blue);
+            transform: translateY(-1px);
+        }
+
+        .toolbar-wrapper .btn-primary:active {
+            transform: translateY(0);
+        }
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .toolbar-wrapper .button-text {
+        display: none;
+    }
+
+    .toolbar-wrapper .btn-primary {
+        padding: 8px 12px;
+    }
+
+        .toolbar-wrapper .btn-primary i {
+            margin: 0;
+        }
+
+    .toolbar-wrapper .btn-group {
+        margin-bottom: 8px;
+    }
+}
+
+/* Improved focus styles for accessibility */
+.toolbar-wrapper .btn-primary:focus {
+    box-shadow: 0 0 0 0.25rem rgba(0, 114, 188, 0.25);
+    outline: none;
+}
+
+/* Button group styling */
+.toolbar-wrapper .btn-group .btn:not(:last-child) {
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Smooth transitions */
+.toolbar-wrapper .btn-primary * {
+    transition: all 0.2s ease-in-out;
+}
+
+.btns {
+    position: absolute;
+    right: 30px;
+    top: 15px;
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
+}
+
+    .btns .btn {
+        padding: 2px 6px;
+    }
+
+
+.menu-item:hover > .btns {
+    opacity: 1;
+}
+
+.btns .btn > i {
+    font-size: 14px;
+}

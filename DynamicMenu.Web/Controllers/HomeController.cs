@@ -22,8 +22,18 @@ namespace DynamicMenu.Web.Controllers
         public async Task<ActionResult<IEnumerable<MenuItemExport>>> GetMenu(int menuId)
         {
 
-            var url = "Present?menuId=" + menuId;
+            var url = "Present/getall/" + menuId;
             var res = await _remoteServiceDynamicMenuAPI.GetData<MenuItemExport[]>(url);
+
+            return Ok(res);
+
+        }
+
+        public async Task<ActionResult<IEnumerable<string>>> GetIcons(int menuId)
+        {
+
+            var url = "Present/geticons";
+            var res = await _remoteServiceDynamicMenuAPI.GetData<string[]>(url);
 
             return Ok(res);
 

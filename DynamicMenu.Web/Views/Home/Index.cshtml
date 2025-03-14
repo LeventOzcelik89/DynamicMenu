@@ -6,22 +6,97 @@
     <title>Mobile Banking Menu</title>
     <link href="~/lib/jquery-ui-1.13.3.custom/jquery-ui.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+    <!-- Bootstrap 5 CSS -->
     <link href="~/lib/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet" />
 
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="~/css/toolbar.css" rel="stylesheet">
+
     <style type="text/css">
-        .buttons{
-            
+
+        .modal-backdrop {
+            z-index: 1040;
         }
+
+        .modal {
+            z-index: 1050;
+        }
+
+        #iconsModal .modal-body > img {
+            width: 44px;
+            cursor: pointer;
+            border: 1px solid #fff;
+            border-radius: 6px;
+        }
+
+            #iconsModal .modal-body > img:hover {
+                border-color: #333;
+            }
+
+        #editMenuItemForm .iconDisplay {
+            width: 38px;
+        }
+
     </style>
 
 </head>
 <body>
 
+    <div class="container-fluid">
+        <div class="toolbar-wrapper">
+            <div class="btn-toolbar" role="toolbar" aria-label="İşlem araç çubuğu">
+                <div class="btn-group me-2" role="group">
+                    <button type="button" class="btn btn-primary" title="Ekle">
+                        <i class="fas fa-plus"></i>
+                        <span class="button-text">Ekle</span>
+                    </button>
+                    <button type="button" class="btn btn-primary" title="Sil">
+                        <i class="fas fa-trash-alt"></i>
+                        <span class="button-text">Sil</span>
+                    </button>
+                    <button type="button" class="btn btn-primary" title="Düzenle">
+                        <i class="fas fa-edit"></i>
+                        <span class="button-text">Düzenle</span>
+                    </button>
+                    <button type="button" class="btn btn-primary" title="İconlar">
+                        <i class="fas fa-icons"></i>
+                        <span class="button-text">İconlar</span>
+                    </button>
+                </div>
+
+                <div class="btn-group me-2" role="group">
+                    <button type="button" class="btn btn-primary" title="Yukarı Taşı">
+                        <i class="fas fa-arrow-up"></i>
+                        <span class="button-text">Yukarı Taşı</span>
+                    </button>
+                    <button type="button" class="btn btn-primary" title="Aşağı Taşı">
+                        <i class="fas fa-arrow-down"></i>
+                        <span class="button-text">Aşağı Taşı</span>
+                    </button>
+                </div>
+
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-primary" title="Kaydet">
+                        <i class="fas fa-save"></i>
+                        <span class="button-text">Kaydet</span>
+                    </button>
+                    <button type="button" class="btn btn-primary" title="Yeniden Yükle">
+                        <i class="fas fa-sync-alt"></i>
+                        <span class="button-text">Yeniden Yükle</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="mobilContainer">
 
-        <div id="app" class="app">
-        </div>
+        <div id="app" class="app"></div>
 
         <nav class="bottom-nav">
             <div class="nav-item">
@@ -52,6 +127,90 @@
 
     </div>
 
+    <!-- Edit Menu Item Modal -->
+    <div class="modal modal-lg fade" id="editMenuItemModal" tabindex="-1" aria-labelledby="editMenuItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editMenuItemModalLabel">Menü Düzenle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editMenuItemForm">
+
+                        @* <input type="hidden" id="id" /> *@
+                        <input type="text" id="id" />
+
+                        <div class="row mb-3">
+                            <div class="col-4">
+                                <label class="form-label" for="text">Menü Text</label>
+                            </div>
+                            <div class="col">
+                                <input placeholder="Görünecek ismi giriniz..." type="text" class="form-control" id="text" name="text" required="">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-4">
+                                <label class="form-label" for="icon">Menü İkonu</label>
+                            </div>
+                            <div class="col">
+                                <input placeholder="Görünecek simgeyi seçiniz..." readonly="true" type="text" class="form-control" id="icon" name="icon" required="">
+                            </div>
+                            <div class="col-1">
+                                <img data-task="iconDisplay" class="iconDisplay" src="" />
+                            </div>
+                            <div class="col-1">
+                                <a href="#" data-task="iconSearch" class="iconSearch btn btn-sm btn-info"><i class="fa fa-search"></i> </a>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-4">
+                                <label class="form-label" for="key">Menü Key</label>
+                            </div>
+                            <div class="col">
+                                <input placeholder="Görünecek ismi giriniz..." type="text" class="form-control" id="key" name="key" required="">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-4">
+                                <label class="form-label" for="isNew">Yeni mi?</label>
+                            </div>
+                            <div class="col">
+                                <input type="checkbox" class="form-check-input" id="isNew" name="isNew">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                    <button type="button" class="btn btn-primary" id="saveMenuItem">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Icons Modal -->
+    <div class="modal modal-xl fade" id="iconsModal" tabindex="-1" aria-labelledby="iconsModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="iconsModal">İconlar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                </div>
+                @*<div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                    <button type="button" class="btn btn-primary" id="saveMenuItem">Kaydet</button>
+                </div> *@
+            </div>
+        </div>
+    </div>
+
     <script type="text/template" id="menuTemplate">
         <div class="page" data-page="{{key}}">
             <header>
@@ -69,25 +228,109 @@
     </script>
 
     <script type="text/template" id="menuItemTemplate">
-        <div class="menu-item" data-page="{{target}}">
-            <i class="fas fa-exchange-alt"></i>
-            <span>{{text}}</span>
-            <i class="fas fa-chevron-right" data-target="go"></i>
-        </div>
+                <div class="menu-item" data-page="{{target}}">
+        @* <img src="{{icon}}" onerror="imgError(this)"> *@
+                    <img src="{{icon}}" />
+                    <span>{{text}}</span>
+                    <i class="fas fa-chevron-right" data-target="go"></i>
+
+                    <div class="btns btn-group">
+        @*                 <button type="button" class="btn btn-primary" title="Ekle">
+                    <i class="fas fa-plus"></i>
+                </button> *@
+
+                        <button data-task="edit_menu" type="button" class="btn btn-primary" title="Düzenle" data-bs-toggle="modal" data-bs-target="#editMenuItemModal">
+                            <i class="fas fa-edit"></i>
+                        </button>
+
+        @*                 <button type="button" class="btn btn-primary" title="Sil">
+                    <i class="fas fa-trash-alt"></i>
+                </button> *@
+                    </div>
+                </div>
     </script>
 
     <script src="~/lib/jquery/jquery-3.7.1.min.js"></script>
     <script src="~/lib/jquery-ui-1.13.3.custom/jquery-ui.min.js"></script>
+    <script src="~/lib/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/loadingmodal/jquery.loadingmodal.min.js"></script>
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/master.js"></script>
 
     <script type="text/javascript">
 
+        function imgError(e){
+            e.style.opacity = '0';
+        }
+
+        function openEditModal(menuItem) {
+                $('#text').val(menuItem.text || '');
+                $('#icon').val(menuItem.icon || '');
+                $('#key').val(menuItem.key || '');
+                $('[data-task="iconDisplay"]').attr('src', 'img/icons/' + menuItem.icon + '.svg');
+                $('#isNew').prop('checked', menuItem.isNew || false);
+                $('#id').val(menuItem.id);
+                $('#editMenuItemModal').modal('show');
+            }
+
+            //             // Kaydet butonuna tıklandığında
+            // $('#saveMenuItem').click(function() {
+            //     const menuItem = {
+            //         text: $('#menuText').val(),
+            //         icon: $('#menuIcon').val(),
+            //         key: $('#menuKey').val(),
+            //         isNew: $('#isNew').is(':checked')
+            //     };
+
+            //     // Burada kaydetme işlemi yapılacak
+            //     console.log('Kaydedilecek veri:', menuItem);
+            //     $('#editMenuItemModal').modal('hide');
+            // });
+
         var page = {
+            getData: function(id){
+
+                var res = page.data.filter(function(im){ return im.id == id })[0];
+                if(res != undefined){
+                    return res;
+                }
+
+                $.each(page.data, function(i,item){
+                    res = page.searchData(item.items, id);
+
+                    if(res != undefined){
+                        return false;
+                    }
+                });
+
+                return res;
+
+            },
+            searchData: function(list, id){
+
+                var res = list.filter(function(item){ return item.id == id })[0];
+                if(res != undefined){
+                    return res;
+                }
+
+                $.each(list, function(i,item){
+                    if(item.items?.length > 0){
+                        res = page.searchData(item.items, id);
+
+                        if(res != undefined){
+                            return false;
+                        }
+
+                    }
+                });
+
+                return res;
+
+            },
+            dataList: {},
             menuContainerElem: $('#app'),
             data: null,
-            menus: {},
+            icons: null,
             getList: function(item){
 
                 var menuTemplate = $('#menuTemplate').html();
@@ -105,45 +348,38 @@
                     var menuItemTemplate = $('#menuItemTemplate').html();
                         menuItemTemplate = menuItemTemplate
                             .replace(/{{text}}/g, subitem.text)
+                            .replace(/{{icon}}/g, ('img/icons/' + subitem.icon + '.svg'))
                             .replace(/{{target}}/g, subitem.key);
 
                     menuItemTemplate = $(menuItemTemplate);
-
+                    
                     if(subitem.items == null || subitem.items.length == 0){
                         menuItemTemplate.find('[data-target="go"]').remove();
                     }
 
                     menuTemplate.find('[data-target="menuItems"]').append(menuItemTemplate);
+
+                    subitem.render = function(newItem){
+                        //  todo: Burası formData update edildiğinde çalışacak bölüm.
+                        menuItemTemplate.hide();
+                    };
+
+                    menuItemTemplate.data('data', subitem);
+
                 });
 
                 return $(menuTemplate);
-
-            },
-            makeList: function(item){
-
-                if(item == null){
-                    item = { key: 'root', text: 'İşlemler', items: page.data };
-                }
-
-                if(page.menus[item.key] != undefined){
-                    page.menuContainerElem.append(page.menus[item.key]);
-                    return ;
-                }
-
-                page.menus[item.key] = page.getList(item);
-                page.menuContainerElem.append(page.menus[item.key]);
 
             },
             ready: function () {
 
                 var makeSubMenu = function(item){
 
-                    page.makeList(item);
+                    page.menuContainerElem.append(page.getList(item));
 
                     $.each(item.items, function(ix,itemx){
 
                         if(itemx.items != null && itemx.items.length > 0){
-                            //  page.makeList(itemx);
                             makeSubMenu(itemx);
                         }
 
@@ -151,12 +387,12 @@
 
                 };
 
-                ReadData('/Home/GetMenu?menuId=1', null, function (items) {
+                ReadData('/Home/GetMenu', { menuId: '1' }, function (items) {
 
                     page.data = items;
-                    page.makeList(null);
+                    page.menuContainerElem.append(page.getList({ key: 'root', text: 'İşlemler', items: page.data }));
 
-                    $.each(page.data, function(i,item){
+                    $.each(page.data, function(i, item){
                         if(item.items != null && item.items.length > 0){
                             makeSubMenu(item);
                         }
@@ -165,6 +401,16 @@
                     $('.page').hide();
                     $('.page[data-page="root"]').show();
                     $('.page .menu-container').sortable();
+
+                });
+
+                ReadData('/Home/GetIcons', null, function (items) {
+
+                    page.icons = items;
+
+                    $.each(page.icons, function(i,item){
+                        $('#iconsModal .modal-body').append($('<img data-name="' + item + '" src="img/icons/' + item + '.svg" />'));
+                    });
 
                 });
 
@@ -183,6 +429,64 @@
             .ready(function () {
 
                 page.ready();
+
+            })
+
+            .on('click', '#saveMenuItem', function(e){
+
+                e.preventDefault();
+
+                var formData = {
+                    id: $('#id').val(),
+                    text: $('#text').val(),
+                    key: $('#key').val(),
+                    isNew: $('#isNew').prop('checked'),
+                    icon: $('#icon').val()
+                };
+
+                var pageData = page.getData(formData.id);
+                pageData.text = formData.text;
+                pageData.key = formData.key;
+                pageData.isNew = formData.isNew;
+                pageData.icon = formData.icon;
+
+                $('#editMenuItemModal').modal('hide');
+
+                return false;
+
+            })
+
+            .on('click', '#iconsModal .modal-body > img', function(e){
+
+                e.preventDefault();
+
+                var val = $(this).attr('data-name');
+                $('#editMenuItemModal [data-task="iconDisplay"]').attr('src', 'img/icons/' + val + '.svg');
+                $('#editMenuItemModal #icon').val(val);
+                $('#iconsModal').modal('hide');
+
+                return false;
+
+            })
+
+            .on('click', '[data-task="iconSearch"]', function(e){
+
+                e.preventDefault();
+
+                $('#iconsModal').modal('show');
+
+                return false;
+
+            })
+
+            .on('click', '[data-task="edit_menu"]', function(e){
+
+                e.preventDefault();
+
+                var data = $($(this).parents('.menu-item')[0]).data('data');
+                openEditModal(data);
+
+                return false;
 
             })
 

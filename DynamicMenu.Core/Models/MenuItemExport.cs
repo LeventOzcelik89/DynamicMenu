@@ -2,7 +2,8 @@ namespace DynamicMenu.Core.Models
 {
     public class MenuItemExport
     {
-        public string parent {  get; set; }
+        public int id { get; set; }
+        public string parent { get; set; }
         public string key { get; set; }
         public string text { get; set; }
         public bool isNew { get; set; }
