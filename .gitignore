@@ -23,7 +23,7 @@ Version.cs
 Version.h
 Version.cpp
 /.vs
- 
+.vs
 **/bin/**
 **/obj/**
 [Dd]ebug/
@@ -65,3 +65,10 @@ publish/
  
 # Publish Web Output
 *.Publish.xml
+/.vs/ProjectEvaluation/dynamicmenu.metadata.v9.bin
+/.vs/ProjectEvaluation/dynamicmenu.projects.v9.bin
+/.vs/ProjectEvaluation/dynamicmenu.strings.v9.bin
+/.vs/DynamicMenu/v17/.futdcache.v2
+/.vs/DynamicMenu/v17/.suo
+/.vs/DynamicMenu/v17/DocumentLayout.backup.json
+/.vs/DynamicMenu/v17/DocumentLayout.json
