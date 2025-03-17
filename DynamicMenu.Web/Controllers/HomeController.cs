@@ -1,3 +1,4 @@
+﻿using DynamicMenu.API.DTOs;
 using DynamicMenu.Core.Models;
 using DynamicMenu.Web.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,11 @@ namespace DynamicMenu.Web.Controllers
 
             return Ok(res);
 
+        }
+
+        public async Task<ActionResult<ResultStatus<bool>>> Save(MenuItemDto[] items)
+        {
+            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = true });
         }
 
     }

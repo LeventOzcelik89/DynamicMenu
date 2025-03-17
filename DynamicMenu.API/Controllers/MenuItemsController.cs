@@ -100,8 +100,6 @@ namespace DynamicMenu.API.Controllers
                 Pid = createDto.Pid,
                 Text = createDto.Text,
                 TextEn = createDto.TextEn,
-                Description = createDto.Description,
-                DescriptionEn = createDto.DescriptionEn,
                 //DisplayType = createDto.DisplayType,
                 //AppId = (AppType)createDto.AppId,
                 NewTag = createDto.NewTag,
@@ -138,8 +136,6 @@ namespace DynamicMenu.API.Controllers
             existingItem.Keyword = updateDto.Keyword;
             existingItem.Text = updateDto.Text;
             existingItem.TextEn = updateDto.TextEn;
-            existingItem.Description = updateDto.Description;
-            existingItem.DescriptionEn = updateDto.DescriptionEn;
             //existingItem.DisplayType = updateDto.DisplayType;
             //existingItem.AppId = (AppType)updateDto.AppId;
             existingItem.NewTag = updateDto.NewTag;
@@ -225,8 +221,6 @@ namespace DynamicMenu.API.Controllers
                 Keyword = $"{sourceItem.Keyword}_copy",
                 Text = $"{sourceItem.Text} (Kopya)",
                 TextEn = sourceItem.TextEn,
-                Description = sourceItem.Description,
-                DescriptionEn = sourceItem.DescriptionEn,
                 //DisplayType = sourceItem.DisplayType,
                 //AppId = sourceItem.AppId,
                 NewTag = sourceItem.NewTag,
@@ -362,8 +356,6 @@ namespace DynamicMenu.API.Controllers
                 Pid = item.Pid,
                 Text = item.Text ?? item.Keyword ?? string.Empty,
                 TextEn = item.TextEn ?? item.Text ?? item.Keyword ?? string.Empty,
-                Description = item.Description ?? string.Empty,
-                DescriptionEn = item.DescriptionEn ?? string.Empty,
                 //DisplayType = item.DisplayType,
                 //AppId = (byte)item.AppId,
                 NewTag = item.NewTag,

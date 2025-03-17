@@ -46,7 +46,6 @@ namespace DynamicMenu.Infrastructure.Helpers
                 Pid = parentId,
                 Text = item.ItemText,
                 TextEn = item.ItemText,
-                Description = item.ItemDesc,
                 //DisplayType = item.DisplayType == 1,
                 NewTag = item.IsNew,
                 //CategoryName = item.CategoryName ?? string.Empty,

@@ -22,14 +22,6 @@ namespace DynamicMenu.Infrastructure.Data.Configurations
                 .HasMaxLength(100)
                 .IsRequired(false);
 
-            builder.Property(x => x.Description)
-                .HasMaxLength(500)
-                .IsRequired(false);
-
-            builder.Property(x => x.DescriptionEn)
-                .HasMaxLength(500)
-                .IsRequired(false);
-
             builder.Property(x => x.IconPath)
                 .HasMaxLength(200)
                 .IsRequired(false);

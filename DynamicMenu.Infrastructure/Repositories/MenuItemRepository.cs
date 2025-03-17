@@ -37,8 +37,6 @@ namespace DynamicMenu.Infrastructure.Repositories
                     Pid = x.Pid,
                     Text = x.Text ?? x.Keyword ?? string.Empty,
                     TextEn = x.TextEn ?? x.Text ?? x.Keyword ?? string.Empty,
-                    Description = x.Description ?? string.Empty,
-                    DescriptionEn = x.DescriptionEn ?? string.Empty,
                     //DisplayType = x.DisplayType,
                     //AppId = x.AppId,
                     NewTag = x.NewTag,

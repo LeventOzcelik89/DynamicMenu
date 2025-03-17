@@ -89,7 +89,7 @@ namespace DynamicMenu.API.Controllers
                 res.Add(new MenuItemExport
                 {
                     id = subItem.Id,
-                    parent = item.Keyword,
+                    parent = item.Id,
                     key = subItem.Keyword,
                     text = subItem.Text,
                     icon = subItem.IconPath,

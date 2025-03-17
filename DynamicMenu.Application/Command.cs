@@ -88,8 +88,6 @@ namespace DynamicMenu.Application
                 SortOrder = sortOrder++,
                 Text = itemx.ItemText,
                 TextEn = itemx.ItemTextEn,
-                Description = itemx.ItemDesc,
-                DescriptionEn = itemx.ItemDescEn,
                 Keyword = itemx.ItemKey,
                 IconPath = itemx.ItemKey,
                 NewTag = itemx.IsNew,

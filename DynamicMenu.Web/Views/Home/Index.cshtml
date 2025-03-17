@@ -212,7 +212,7 @@
     </div>
 
     <script type="text/template" id="menuTemplate">
-        <div class="page" data-page="{{key}}">
+        <div class="page" data-page="{{id}}">
             <header>
                 <button class="back-button" data-page="{{parent}}">
                     <i class="fas fa-arrow-left"></i>
@@ -228,10 +228,10 @@
     </script>
 
     <script type="text/template" id="menuItemTemplate">
-                <div class="menu-item" data-page="{{target}}">
+                <div class="menu-item" data-page="{{parent}}">
         @* <img src="{{icon}}" onerror="imgError(this)"> *@
-                    <img src="{{icon}}" />
-                    <span>{{text}}</span>
+                    <img data-target="icon" src="{{icon}}" />
+                    <span data-target="text">{{text}}</span>
                     <i class="fas fa-chevron-right" data-target="go"></i>
 
                     <div class="btns btn-group">
@@ -240,7 +240,7 @@
                 </button> *@
 
                         <button data-task="edit_menu" type="button" class="btn btn-primary" title="Düzenle" data-bs-toggle="modal" data-bs-target="#editMenuItemModal">
-                            <i class="fas fa-edit"></i>
+                            <i class="fas fa-pen"></i>
                         </button>
 
         @*                 <button type="button" class="btn btn-primary" title="Sil">
@@ -288,6 +288,24 @@
             // });
 
         var page = {
+            saveData: function(){
+                var res = [];
+                $.each(page.dataList, function(k,item){
+                    res.push({
+                        Id: item.id,
+                        NewTag: item.isNew, 
+                        Keyword: item.key, 
+                        SortOrder: item.sortOrder, 
+                        Text: item.text, 
+                        IconPath: item.icon 
+                    });
+                });
+
+                ReadData('/Home/Save', res, function(ress){
+                    
+                });
+
+            },
             getData: function(id){
 
                 var res = page.data.filter(function(im){ return im.id == id })[0];
@@ -336,11 +354,12 @@
                 var menuTemplate = $('#menuTemplate').html();
                 menuTemplate = menuTemplate.replace(/{{caption}}/g, item.text);
                 menuTemplate = menuTemplate.replace(/{{key}}/g, item.key);
-                menuTemplate = menuTemplate.replace(/{{parent}}/g, (item.parent ?? 'root'));
+                menuTemplate = menuTemplate.replace(/{{id}}/g, item.id);
+                menuTemplate = menuTemplate.replace(/{{parent}}/g, (item.parent ?? 0));
 
                 menuTemplate = $(menuTemplate);
 
-                if(item.key == 'root'){
+                if(item.id == 0){
                     menuTemplate.find('.back-button').remove();
                 }
 
@@ -349,19 +368,24 @@
                         menuItemTemplate = menuItemTemplate
                             .replace(/{{text}}/g, subitem.text)
                             .replace(/{{icon}}/g, ('img/icons/' + subitem.icon + '.svg'))
-                            .replace(/{{target}}/g, subitem.key);
+                            .replace(/{{parent}}/g, subitem.id);
 
                     menuItemTemplate = $(menuItemTemplate);
-                    
+
                     if(subitem.items == null || subitem.items.length == 0){
                         menuItemTemplate.find('[data-target="go"]').remove();
                     }
 
                     menuTemplate.find('[data-target="menuItems"]').append(menuItemTemplate);
 
-                    subitem.render = function(newItem){
+                    subitem.render = function(){
+                        var data = menuItemTemplate.data('data');
                         //  todo: Burası formData update edildiğinde çalışacak bölüm.
-                        menuItemTemplate.hide();
+                        menuItemTemplate.find('[data-target="text"]').html(data.text);
+                        menuItemTemplate.find('[data-target="icon"]').attr('src', ('img/icons/' + data.icon + '.svg'));
+
+                        page.dataList[data.id] = data;
+
                     };
 
                     menuItemTemplate.data('data', subitem);
@@ -390,7 +414,7 @@
                 ReadData('/Home/GetMenu', { menuId: '1' }, function (items) {
 
                     page.data = items;
-                    page.menuContainerElem.append(page.getList({ key: 'root', text: 'İşlemler', items: page.data }));
+                    page.menuContainerElem.append(page.getList({ id:0, text: 'İşlemler', items: page.data }));
 
                     $.each(page.data, function(i, item){
                         if(item.items != null && item.items.length > 0){
@@ -399,8 +423,34 @@
                     });
 
                     $('.page').hide();
-                    $('.page[data-page="root"]').show();
-                    $('.page .menu-container').sortable();
+                    $('.page[data-page="0"]').show();
+                    $('.page .menu-container').sortable({
+                        axis: "y",
+                        cursor: "move",
+                        // activate: function( event, ui ) { console.log('activate'); },
+                        // beforeStop: function( event, ui ) { console.log('beforeStop'); },
+                        // change: function( event, ui ) { console.log('change'); },
+                        // out: function( event, ui ) { console.log('out'); },
+                        // receive: function( event, ui ) { console.log('receive'); },
+                        // sort: function( event, ui ) { console.log('sort'); },
+                        // start: function( event, ui ) { console.log('start'); },
+                        // stop: function( event, ui ) { console.log('stop'); },
+                        update: function( event, ui ) {
+                            var data = ui.item.data('data');
+                            var parentData = page.getData(data.parent);
+                            var elems = $('#app .page[data-page="' + (parentData?.id ?? 0) + '"] .menu-container .menu-item');
+
+                            $.each(elems, function(e,elem){
+
+                                var elemData = $(elem).data('data');
+                                elemData.sortOrder = e + 1;
+                                page.dataList[elemData.id] = elemData;
+
+                            });
+
+                        },
+
+                    });
 
                 });
 
@@ -451,6 +501,7 @@
                 pageData.icon = formData.icon;
 
                 $('#editMenuItemModal').modal('hide');
+                pageData.render();
 
                 return false;
 
