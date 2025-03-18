@@ -26,10 +26,6 @@ namespace DynamicMenu.Infrastructure.Data.Configurations
                 .HasMaxLength(200)
                 .IsRequired(false);
 
-            //builder.Property(x => x.CategoryName)
-            //    .HasMaxLength(100)
-            //    .IsRequired(false);
-
             builder.Property(x => x.MenuId)
                 .HasDefaultValue(1);
 
@@ -42,6 +38,10 @@ namespace DynamicMenu.Infrastructure.Data.Configurations
                 .WithMany(x => x.MenuItems)
                 .HasForeignKey(x => x.MenuId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("GETUTCDATE()");
+
         }
     }
 } 

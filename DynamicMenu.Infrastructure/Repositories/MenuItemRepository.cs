@@ -17,7 +17,7 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task<MenuItem> GetByIdAsync(int id)
         {
-            return await _context.MenuItems
+            return await _context.MenuItem
                 //.Include(x => x.MenuItemRoles)
                 //  .Include(x => x.Children)
                 .FirstOrDefaultAsync(x => x.Id == id);
@@ -25,7 +25,7 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task<IEnumerable<MenuItem>> GetAllAsync()
         {
-            return await _context.MenuItems
+            return await _context.MenuItem
                 //.Include(x => x.MenuItemRoles)
                 //.Include(x => x.Children)
                 .Where(x => x.Pid == null)
@@ -52,7 +52,7 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task<IEnumerable<MenuItem>> GetByAppTypeAsync(AppType appType)
         {
-            return await _context.MenuItems
+            return await _context.MenuItem
                 //.Include(x => x.MenuItemRoles)
                 //.Include(x => x.Children)
                 //.Where(x => x.AppId == appType && x.Pid == null)
@@ -73,14 +73,14 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task<IEnumerable<MenuItem>> GetByMenuIdAsync(int menuId)
         {
-            return await _context.MenuItems
+            return await _context.MenuItem
                 .Where(x => x.MenuId == menuId)
                 .ToListAsync();
         }
 
         public async Task<MenuItem> AddAsync(MenuItem menuItem)
         {
-            await _context.MenuItems.AddAsync(menuItem);
+            await _context.MenuItem.AddAsync(menuItem);
             await _context.SaveChangesAsync();
             return menuItem;
         }
@@ -93,10 +93,10 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            var menuItem = await _context.MenuItems.FindAsync(id);
+            var menuItem = await _context.MenuItem.FindAsync(id);
             if (menuItem != null)
             {
-                _context.MenuItems.Remove(menuItem);
+                _context.MenuItem.Remove(menuItem);
                 await _context.SaveChangesAsync();
             }
         }

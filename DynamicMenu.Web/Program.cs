@@ -1,5 +1,10 @@
+using DynamicMenu.Core.Interfaces;
+using DynamicMenu.Infrastructure.Data;
+using DynamicMenu.Infrastructure.Repositories;
 using DynamicMenu.Web.Model;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation(); // Hot reload için gerekli
 
+// DbContext
+builder.Services.AddDbContext<DynamicMenuDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly("DynamicMenu.Infrastructure")
+    ), ServiceLifetime.Scoped); // Scoped lifetime eklendi
+
+builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 
 builder.Services.AddHttpClient<RemoteServiceDynamicMenuAPI>()
     .SetHandlerLifetime(TimeSpan.FromSeconds(5))

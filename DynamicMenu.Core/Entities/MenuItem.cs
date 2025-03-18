@@ -1,8 +1,10 @@
 using DynamicMenu.Core.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DynamicMenu.Core.Entities
 {
+    [Table("MenuItems")]
     public class MenuItem
     {
         [Key]
@@ -24,6 +26,5 @@ namespace DynamicMenu.Core.Entities
 
         public virtual MenuItem Parent { get; set; }
         public virtual ICollection<MenuItem> Children { get; set; }
-        //public ICollection<MenuItemRole> MenuItemRoles { get; set; }
     }
 } 

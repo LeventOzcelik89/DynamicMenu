@@ -54,7 +54,7 @@ namespace DynamicMenu.API.Controllers
 
             var res = new List<MenuItemExport>();
             var items = await _menuItemRepository.GetByMenuIdAsync(menu.Id);
-            foreach (var item in items.Where(a => a.Pid == null).ToArray())
+            foreach (var item in items.Where(a => a.Pid == null).OrderBy(a => a.SortOrder).ToArray())
             {
 
                 res.Add(new MenuItemExport
@@ -62,6 +62,7 @@ namespace DynamicMenu.API.Controllers
                     id = item.Id,
                     key = item.Keyword,
                     text = item.Text,
+                    textEn = item.TextEn,
                     icon = item.IconPath,
                     isNew = item.NewTag,
                     sortOrder = item.SortOrder,
@@ -76,7 +77,7 @@ namespace DynamicMenu.API.Controllers
         private MenuItemExport[] GetMenuItems(MenuItem[] items, MenuItem item)
         {
 
-            var itemss = items.Where(a => a.Pid == item.Id).ToArray();
+            var itemss = items.Where(a => a.Pid == item.Id).OrderBy(a => a.SortOrder).ToArray();
             if (!itemss.Any())
             {
                 return null;
@@ -89,9 +90,10 @@ namespace DynamicMenu.API.Controllers
                 res.Add(new MenuItemExport
                 {
                     id = subItem.Id,
-                    parent = item.Id,
+                    pid = item.Id,
                     key = subItem.Keyword,
                     text = subItem.Text,
+                    textEn = subItem.TextEn,
                     icon = subItem.IconPath,
                     isNew = subItem.NewTag,
                     sortOrder = subItem.SortOrder,

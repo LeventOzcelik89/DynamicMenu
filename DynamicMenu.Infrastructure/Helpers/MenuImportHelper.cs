@@ -54,7 +54,7 @@ namespace DynamicMenu.Infrastructure.Helpers
                 MenuId = menuId
             };
 
-            _context.MenuItems.Add(menuItem);
+            _context.MenuItem.Add(menuItem);
             await _context.SaveChangesAsync();
 
             if (item.SubList != null && item.SubList.Any())

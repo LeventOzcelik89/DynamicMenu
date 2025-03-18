@@ -17,21 +17,21 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task<RemoteMenuConfig> GetByIdAsync(int id)
         {
-            return await _context.RemoteMenus
+            return await _context.RemoteMenuConfig
                 //.Include(x => x.MenuItemRoles)
                 .FirstOrDefaultAsync(x => x.ID == id);
         }
 
         public async Task<IEnumerable<RemoteMenuConfig>> GetAllAsync()
         {
-            return await _context.RemoteMenus
+            return await _context.RemoteMenuConfig
                 .ToListAsync();
         }
 
 
         public async Task<RemoteMenuConfig> AddAsync(RemoteMenuConfig remoteMenu)
         {
-            await _context.RemoteMenus.AddAsync(remoteMenu);
+            await _context.RemoteMenuConfig.AddAsync(remoteMenu);
             await _context.SaveChangesAsync();
             return remoteMenu;
         }
@@ -44,10 +44,10 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            var menuItem = await _context.RemoteMenus.FindAsync(id);
+            var menuItem = await _context.RemoteMenuConfig.FindAsync(id);
             if (menuItem != null)
             {
-                _context.RemoteMenus.Remove(menuItem);
+                _context.RemoteMenuConfig.Remove(menuItem);
                 await _context.SaveChangesAsync();
             }
         }
