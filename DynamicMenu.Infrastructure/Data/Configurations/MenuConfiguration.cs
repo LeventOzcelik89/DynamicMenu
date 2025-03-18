@@ -20,10 +20,10 @@ namespace DynamicMenu.Infrastructure.Data.Configurations
             builder.Property(a => a.MenuGroupId)
                 .IsRequired();
 
-            //builder.HasOne(x => x.MenuGroup)
-            //    .WithMany(x => x.Menus)
-            //    .HasForeignKey(x => x.MenuGroupId)
-            //    .OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(x => x.MenuGroup)
+                .WithMany(x => x.Menus)
+                .HasForeignKey(x => x.MenuGroupId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Property(e => e.IsActive)
                 .HasDefaultValue(true);

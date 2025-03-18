@@ -3,6 +3,7 @@ using DynamicMenu.Core.Interfaces;
 using DynamicMenu.Core.Enums;
 using DynamicMenu.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace DynamicMenu.Infrastructure.Repositories
 {
@@ -99,6 +100,13 @@ namespace DynamicMenu.Infrastructure.Repositories
                 _context.MenuItem.Remove(menuItem);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<MenuItem>> GetByMenuIdsAsync(IEnumerable<int> menuId)
+        {
+            return await _context.MenuItem
+                .Where(x => menuId.Contains(x.MenuId))
+                .ToListAsync();
         }
     }
 } 

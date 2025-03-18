@@ -48,5 +48,10 @@ namespace DynamicMenu.Infrastructure.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<IEnumerable<Menu>> GetByMenuGroupIdAsync(int id)
+        {
+            return await _context.Menu.Where(a => a.MenuGroupId == id).ToArrayAsync();
+        }
     }
 }

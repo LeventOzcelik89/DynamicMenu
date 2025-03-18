@@ -19,6 +19,7 @@ namespace DynamicMenu.API.Controllers
     {
         private readonly IMenuItemRepository _menuItemRepository;
         private readonly IMenuRepository _menuRepository;
+        private readonly IMenuGroupRepository _menuGroupRepository;
         private readonly IRemoteMenusRepository _remoteMenuConfigRepository;
         private readonly DynamicMenuDbContext _context;
 
@@ -26,11 +27,13 @@ namespace DynamicMenu.API.Controllers
             IMenuItemRepository menuItemRepository,
             IMenuRepository menuRepository,
             IRemoteMenusRepository remoteMenuConfigRepository,
+            IMenuGroupRepository menuGroupRepository,
             DynamicMenuDbContext context)
         {
             _menuRepository = menuRepository;
             _menuItemRepository = menuItemRepository;
             _remoteMenuConfigRepository = remoteMenuConfigRepository;
+            _menuGroupRepository = menuGroupRepository;
             _context = context;
         }
 
@@ -42,22 +45,54 @@ namespace DynamicMenu.API.Controllers
             return files.Select(a => { return a.Split('\\').LastOrDefault().Split('.').FirstOrDefault(); }).ToArray();
 
         }
-        [HttpGet("getall/{menuId}")]
-        public async Task<ActionResult<IEnumerable<MenuItemExport>>> GetAll(int menuId)
+
+        [HttpGet("GetMenuGroup/{menuGroupId}")]
+        public async Task<ActionResult<MenuGroupModelResponse>> GetMenuGroup(int menuGroupId)
         {
 
-            var menu = await _menuRepository.GetByIdAsync(menuId);
-            if (menu == null)
+            var menuGroup = await _menuGroupRepository.GetByIdAsync(menuGroupId);
+            if (menuGroup == null)
             {
                 return NotFound();
             }
 
-            var res = new List<MenuItemExport>();
-            var items = await _menuItemRepository.GetByMenuIdAsync(menu.Id);
+            var menus = await _menuRepository.GetByMenuGroupIdAsync(menuGroup.Id);
+
+            var res = new MenuGroupModelResponse
+            {
+                menuGroup = new MenuGroupResponse
+                {
+                    Id = menuGroup.Id,
+                    Name = menuGroup.Name,
+                    IsActive = menuGroup.IsActive,
+                    MenuType = menuGroup.MenuType,
+                    Description = menuGroup.Description,
+                },
+                menus = new MenuTargetResponse
+                {
+                    Cards = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Cards)?.Id),
+                    Profile = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Profile)?.Id),
+                    Transactions = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Transactions)?.Id),
+                    Applications = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Applications)?.Id),
+                }
+            };
+
+            return res;
+        }
+
+        private async Task<List<MenuItemResponse>?> GetMenu(int? menuId)
+        {
+
+            if (!menuId.HasValue)
+            {
+                return null;
+            }
+
+            var menuItems = new List<MenuItemResponse>();
+            var items = await _menuItemRepository.GetByMenuIdAsync(menuId.Value);
             foreach (var item in items.Where(a => a.Pid == null).OrderBy(a => a.SortOrder).ToArray())
             {
-
-                res.Add(new MenuItemExport
+                menuItems.Add(new MenuItemResponse
                 {
                     id = item.Id,
                     key = item.Keyword,
@@ -68,13 +103,13 @@ namespace DynamicMenu.API.Controllers
                     sortOrder = item.SortOrder,
                     items = GetMenuItems(items.ToArray(), item)
                 });
-
             }
 
-            return res;
+            return menuItems;
+
         }
 
-        private MenuItemExport[] GetMenuItems(MenuItem[] items, MenuItem item)
+        private MenuItemResponse[] GetMenuItems(MenuItem[] items, MenuItem item)
         {
 
             var itemss = items.Where(a => a.Pid == item.Id).OrderBy(a => a.SortOrder).ToArray();
@@ -83,11 +118,11 @@ namespace DynamicMenu.API.Controllers
                 return null;
             }
 
-            var res = new List<MenuItemExport>();
+            var res = new List<MenuItemResponse>();
             foreach (var subItem in itemss)
             {
 
-                res.Add(new MenuItemExport
+                res.Add(new MenuItemResponse
                 {
                     id = subItem.Id,
                     pid = item.Id,

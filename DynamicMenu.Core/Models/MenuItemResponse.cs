@@ -1,6 +1,6 @@
 namespace DynamicMenu.Core.Models
 {
-    public class MenuItemExport
+    public class MenuItemResponse
     {
         public int id { get; set; }
         public int pid { get; set; }
@@ -10,7 +10,7 @@ namespace DynamicMenu.Core.Models
         public bool isNew { get; set; }
         public string icon { get; set; }
         public int sortOrder { get; set; }
-        public MenuItemExport[] items { get; set; } = null;
+        public MenuItemResponse[] items { get; set; } = null;
     }
 
 }

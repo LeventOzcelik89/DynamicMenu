@@ -13,12 +13,14 @@ namespace DynamicMenu.Web.Controllers
     {
 
         private readonly IMenuRepository _menuRepository;
+        private readonly IMenuGroupRepository _menuGroupRepository;
         private readonly IMenuItemRepository _menuItemRepository;
         private readonly RemoteServiceDynamicMenuAPI _remoteServiceDynamicMenuAPI;
-        public HomeController(RemoteServiceDynamicMenuAPI remoteServiceDynamicMenuAPI, IMenuRepository menuRepository, IMenuItemRepository menuItemRepository)
+        public HomeController(RemoteServiceDynamicMenuAPI remoteServiceDynamicMenuAPI, IMenuRepository menuRepository, IMenuItemRepository menuItemRepository, IMenuGroupRepository menuGroupRepository)
         {
             _menuRepository = menuRepository;
             _menuItemRepository = menuItemRepository;
+            _menuGroupRepository = menuGroupRepository;
             _remoteServiceDynamicMenuAPI = remoteServiceDynamicMenuAPI;
         }
 
@@ -27,11 +29,11 @@ namespace DynamicMenu.Web.Controllers
             return View();
         }
 
-        public async Task<ActionResult<IEnumerable<MenuItemExport>>> GetMenu(int menuId)
+        public async Task<ActionResult<IEnumerable<MenuItemResponse>>> GetMenuGroup(int menuGroupId)
         {
 
-            var url = "Present/getall/" + menuId;
-            var res = await _remoteServiceDynamicMenuAPI.GetData<MenuItemExport[]>(url);
+            var url = "Present/GetMenuGroup/" + menuGroupId;
+            var res = await _remoteServiceDynamicMenuAPI.GetData<MenuGroupModelResponse>(url);
 
             return Ok(res);
 
@@ -47,10 +49,12 @@ namespace DynamicMenu.Web.Controllers
 
         }
 
-        public async Task<ActionResult<ResultStatus<bool>>> Save(int menuId, MenuItemProcessDTO[] items)
+        public async Task<ActionResult<ResultStatus<bool>>> Save(int menuGroupId, MenuItemProcessDTO[] items)
         {
 
-            var menuItems = await _menuItemRepository.GetByMenuIdAsync(menuId);
+            var menuGroup = await _menuGroupRepository.GetByIdAsync(menuGroupId);
+            var menus = await _menuRepository.GetByMenuGroupIdAsync(menuGroup.Id);
+            var menuItems = await _menuItemRepository.GetByMenuIdsAsync(menus.Select(a => a.Id));
 
             //  Edit
             foreach (var item in items.Where(a => a.processType == MenuItemProcessType.edit))

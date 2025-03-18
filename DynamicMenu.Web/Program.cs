@@ -20,6 +20,7 @@ builder.Services.AddDbContext<DynamicMenuDbContext>(options =>
     ), ServiceLifetime.Scoped); // Scoped lifetime eklendi
 
 builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+builder.Services.AddScoped<IMenuGroupRepository, MenuGroupRepository>();
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 
 builder.Services.AddHttpClient<RemoteServiceDynamicMenuAPI>()

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DynamicMenu.Core.Entities
 {
-    [Table("MenuItems")]
+    [Table("MenuItem")]
     public class MenuItem
     {
         [Key]

@@ -61,6 +61,7 @@ namespace DynamicMenu.Infrastructure.Extensions
             // Services
             services.AddScoped<IMenuItemRepository, MenuItemRepository>();
             services.AddScoped<IMenuRepository, MenuRepository>();
+            services.AddScoped<IMenuGroupRepository, MenuGroupRepository>();
             services.AddScoped<IRemoteMenusRepository, RemoteMenuConfigRepository>();
             services.AddScoped<IRemoteMenusRepository, RemoteMenusRepository>();
             services.AddScoped<ICacheService, InMemoryCacheService>();

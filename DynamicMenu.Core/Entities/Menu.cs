@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DynamicMenu.Core.Entities
 {
-    [Table("Menus")]
+    [Table("Menu")]
     public class Menu
     {
         [Key]
@@ -14,12 +14,12 @@ namespace DynamicMenu.Core.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
-        public MenuTarget menuTarget { get; set; }
+        public MenuTarget MenuTarget { get; set; }
         public int MenuGroupId { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public DateTime? ModifiedDate { get; set; }
 
         public virtual ICollection<MenuItem> MenuItems { get; set; }
-        //  public virtual MenuGroup MenuGroup { get; set; }
+        public virtual MenuGroup MenuGroup { get; set; }
     }
 }
