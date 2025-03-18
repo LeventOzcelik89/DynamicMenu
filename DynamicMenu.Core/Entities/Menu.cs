@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DynamicMenu.Core.Entities
 {
-    [Table("Menu")]
+    [Table("Menus")]
     public class Menu
     {
         [Key]
