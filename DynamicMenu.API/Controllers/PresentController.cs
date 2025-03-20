@@ -41,7 +41,7 @@ namespace DynamicMenu.API.Controllers
         public async Task<IEnumerable<string>> GetIcons()
         {
 
-            var files = System.IO.Directory.GetFiles(@"D:\Repositories\DynamicMenu\DynamicMenu.Web\wwwroot\img\icons");
+            var files = System.IO.Directory.GetFiles(@"Z:\DynamicMenu\DynamicMenu.Web\wwwroot\img\icons");
             return files.Select(a => { return a.Split('\\').LastOrDefault().Split('.').FirstOrDefault(); }).ToArray();
 
         }

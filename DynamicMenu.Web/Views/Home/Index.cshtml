@@ -54,6 +54,10 @@
             margin-right: 6px;
         }
 
+        .hide {
+            display: none !important;
+        }
+
     </style>
 
 </head>
@@ -67,11 +71,11 @@
                         <i class="fas fa-plus"></i>
                         <span class="button-text">Ekle</span>
                     </button>
-                    <button type="button" class="btn btn-primary" title="Sil">
+                    <button type="button" class="btn btn-primary hide" title="Sil">
                         <i class="fas fa-trash-alt"></i>
                         <span class="button-text">Sil</span>
                     </button>
-                    <button type="button" class="btn btn-primary" title="Düzenle">
+                    <button type="button" class="btn btn-primary hide" title="Düzenle">
                         <i class="fas fa-edit"></i>
                         <span class="button-text">Düzenle</span>
                     </button>
@@ -97,7 +101,7 @@
                         <i class="fas fa-save"></i>
                         <span class="button-text">Kaydet</span>
                     </button>
-                    <button type="button" class="btn btn-primary" title="Yeniden Yükle">
+                    <button type="button" class="btn btn-primary" title="Yeniden Yükle" onclick="location.reload();">
                         <i class="fas fa-sync-alt"></i>
                         <span class="button-text">Yeniden Yükle</span>
                     </button>
@@ -476,13 +480,13 @@
                 return $(menuTemplate);
 
             },
-            makeSubMenu: function(item){
+            makeSubMenu: function(item, skipChilds){
 
                 page.menuContainerElem.append(page.getElem_PageList(item));
 
                 $.each(item.items, function(ix,itemx){
 
-                    if(itemx.items != null && itemx.items.length > 0){
+                    if(itemx.items != null && itemx.items.length > 0 && skipChilds != true){
                         page.makeSubMenu(itemx);
                     }
 
@@ -573,7 +577,7 @@
             })
 
             .on('click', '.mobilContainer .bottom-nav [data-menu]', function(e){
-            
+
                 e.preventDefault();
 
                 var menu = $(this).attr('data-menu');
@@ -648,7 +652,7 @@
 
                     $('.page[data-page="' + data.id + '"]').remove();
                     data.items.push(pageData);
-                    page.makeSubMenu(data);
+                    page.makeSubMenu(data, true);
 
                     page.dataList[pageData.id] = { menuItem: pageData, processType: page.enums.processType.add };
 
