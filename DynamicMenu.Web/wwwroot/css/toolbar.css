@@ -16,16 +16,19 @@
         gap: 8px;
     }
 
-    .toolbar-wrapper .btn-primary {
-        background-color: var(--primary-blue);
-        border-color: var(--primary-blue);
-        color: var(--white);
+    .toolbar-wrapper .btn {
         padding: 4px 8px;
         font-size: 14px;
         display: flex;
         align-items: center;
         gap: 8px;
         transition: all 0.2s ease-in-out;
+    }
+
+    .toolbar-wrapper .btn-primary {
+        background-color: var(--primary-blue);
+        border-color: var(--primary-blue);
+        color: var(--white);
     }
 
         .toolbar-wrapper .btn-primary:hover,
@@ -35,9 +38,9 @@
             transform: translateY(-1px);
         }
 
-        .toolbar-wrapper .btn-primary:active {
-            transform: translateY(0);
-        }
+    .toolbar-wrapper .btn:active {
+        transform: translateY(0);
+    }
 
 
 /* Responsive styles */
@@ -46,11 +49,11 @@
         display: none;
     }
 
-    .toolbar-wrapper .btn-primary {
+    .toolbar-wrapper .btn {
         padding: 8px 12px;
     }
 
-        .toolbar-wrapper .btn-primary i {
+        .toolbar-wrapper .btn i {
             margin: 0;
         }
 
@@ -60,7 +63,7 @@
 }
 
 /* Improved focus styles for accessibility */
-.toolbar-wrapper .btn-primary:focus {
+.toolbar-wrapper .btn:focus {
     box-shadow: 0 0 0 0.25rem rgba(0, 114, 188, 0.25);
     outline: none;
 }
@@ -71,7 +74,7 @@
 }
 
 /* Smooth transitions */
-.toolbar-wrapper .btn-primary * {
+.toolbar-wrapper .btn * {
     transition: all 0.2s ease-in-out;
 }
 

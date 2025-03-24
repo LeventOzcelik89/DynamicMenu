@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using DynamicMenu.Core.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,11 @@ builder.Services.AddControllers()
         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
     })
     .AddApplicationPart(typeof(Program).Assembly);
+
+var appSettings = new AppSettings();
+builder.Configuration.GetSection(nameof(AppSettings)).Bind(appSettings);
+
+builder.Services.AddSingleton(appSettings);
 
 // Add Infrastructure services (DbContext, Redis, JWT, etc.)
 builder.Services.AddInfrastructureServices(builder.Configuration);

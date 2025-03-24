@@ -106,6 +106,16 @@
                         <span class="button-text">Yeniden Yükle</span>
                     </button>
                 </div>
+
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-success" title="TR" data-task="lang" data-val="tr">
+                        <span class="button-text">TR</span>
+                    </button>
+                    <button type="button" class="btn btn-primary" title="TR" data-task="lang" data-val="en">
+                        <span class="button-text">EN</span>
+                    </button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -748,6 +758,24 @@
             .on('click', '[data-task="saveMenu"]', function(e){
 
                 e.preventDefault();
+
+                page.saveData();
+
+                return false;
+
+            })
+
+            .on('click', '[data-task="lang"]', function(e){
+
+                e.preventDefault();
+
+                page.defines.lang = $(this).attr('data-val');
+                $('[data-lang]').hide();
+                $('[data-lang="' + page.defines.lang + '"]').show();
+
+                $('[data-task="lang"]').removeClass('btn-success').addClass('btn-primary');
+                $(this).removeClass('btn-primary').addClass('btn-success');
+                
 
                 page.saveData();
 

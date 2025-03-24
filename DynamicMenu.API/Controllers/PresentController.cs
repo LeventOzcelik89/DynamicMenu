@@ -22,18 +22,21 @@ namespace DynamicMenu.API.Controllers
         private readonly IMenuGroupRepository _menuGroupRepository;
         private readonly IRemoteMenusRepository _remoteMenuConfigRepository;
         private readonly DynamicMenuDbContext _context;
+        private readonly AppSettings _appSettings;
 
         public PresentController(
             IMenuItemRepository menuItemRepository,
             IMenuRepository menuRepository,
             IRemoteMenusRepository remoteMenuConfigRepository,
             IMenuGroupRepository menuGroupRepository,
+            AppSettings appSettings,
             DynamicMenuDbContext context)
         {
+            _appSettings = appSettings;
             _menuRepository = menuRepository;
             _menuItemRepository = menuItemRepository;
-            _remoteMenuConfigRepository = remoteMenuConfigRepository;
             _menuGroupRepository = menuGroupRepository;
+            _remoteMenuConfigRepository = remoteMenuConfigRepository;
             _context = context;
         }
 
@@ -41,7 +44,10 @@ namespace DynamicMenu.API.Controllers
         public async Task<IEnumerable<string>> GetIcons()
         {
 
-            var files = System.IO.Directory.GetFiles(@"Z:\DynamicMenu\DynamicMenu.Web\wwwroot\img\icons");
+            var dir = string.Join("\\", System.IO.Directory.GetCurrentDirectory().Split('\\').SkipLast(1));
+            dir += "\\" + "DynamicMenu.Web" + "\\wwwroot\\img\\icons";
+
+            var files = System.IO.Directory.GetFiles(dir);
             return files.Select(a => { return a.Split('\\').LastOrDefault().Split('.').FirstOrDefault(); }).ToArray();
 
         }
