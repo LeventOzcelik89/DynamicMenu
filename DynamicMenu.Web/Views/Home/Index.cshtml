@@ -3,814 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile Banking Menu</title>
-    <link href="~/lib/jquery-ui-1.13.3.custom/jquery-ui.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/style.css">
-
-
-    <!-- Bootstrap 5 CSS -->
-    <link href="~/lib/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet" />
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="~/css/toolbar.css" rel="stylesheet">
-
-    <style type="text/css">
-
-        .modal-backdrop {
-            z-index: 1040;
-        }
-
-        .modal {
-            z-index: 1050;
-        }
-
-        #iconsModal .modal-body > img {
-            width: 44px;
-            cursor: pointer;
-            border: 1px solid #fff;
-            border-radius: 6px;
-        }
-
-            #iconsModal .modal-body > img:hover {
-                border-color: #333;
-            }
-
-        #editMenuItemForm .iconDisplay {
-            width: 38px;
-        }
-
-        .menu-item .new {
-            border: 1px solid;
-            border-radius: 5px;
-            display: inline-block;
-            flex-grow: unset;
-            font-size: 12px;
-            letter-spacing: 1px;
-            color: #39adf1;
-            padding: 1px 6px;
-            margin-right: 6px;
-        }
-
-        .hide {
-            display: none !important;
-        }
-
-    </style>
-
+    <title>Menü Yönetimi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 </head>
 <body>
-
-    <div class="container-fluid">
-        <div class="toolbar-wrapper">
-            <div class="btn-toolbar" role="toolbar" aria-label="İşlem araç çubuğu">
-                <div class="btn-group me-2" role="group">
-                    <button type="button" class="btn btn-primary" title="Ekle" data-task="add_menu" data-bs-toggle="modal" data-bs-target="#editMenuItemModal">
-                        <i class="fas fa-plus"></i>
-                        <span class="button-text">Ekle</span>
-                    </button>
-                    <button type="button" class="btn btn-primary hide" title="Sil">
-                        <i class="fas fa-trash-alt"></i>
-                        <span class="button-text">Sil</span>
-                    </button>
-                    <button type="button" class="btn btn-primary hide" title="Düzenle">
-                        <i class="fas fa-edit"></i>
-                        <span class="button-text">Düzenle</span>
-                    </button>
-                    <button type="button" class="btn btn-primary" title="İconlar" data-bs-toggle="modal" data-bs-target="#iconsModal">
-                        <i class="fas fa-icons"></i>
-                        <span class="button-text">İconlar</span>
-                    </button>
-                </div>
-
-                @* <div class="btn-group me-2" role="group">
-                    <button type="button" class="btn btn-primary" title="Yukarı Taşı">
-                        <i class="fas fa-arrow-up"></i>
-                        <span class="button-text">Yukarı Taşı</span>
-                    </button>
-                    <button type="button" class="btn btn-primary" title="Aşağı Taşı">
-                        <i class="fas fa-arrow-down"></i>
-                        <span class="button-text">Aşağı Taşı</span>
-                    </button>
-                </div> *@
-
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-primary" title="Kaydet" data-task="saveMenu">
-                        <i class="fas fa-save"></i>
-                        <span class="button-text">Kaydet</span>
-                    </button>
-                    <button type="button" class="btn btn-primary" title="Yeniden Yükle" onclick="location.reload();">
-                        <i class="fas fa-sync-alt"></i>
-                        <span class="button-text">Yeniden Yükle</span>
-                    </button>
-                </div>
-
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-success" title="TR" data-task="lang" data-val="tr">
-                        <span class="button-text">TR</span>
-                    </button>
-                    <button type="button" class="btn btn-primary" title="TR" data-task="lang" data-val="en">
-                        <span class="button-text">EN</span>
-                    </button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="mobilContainer">
-
-        <div id="app" class="app"></div>
-
-        <nav class="bottom-nav">
-            <div class="nav-item" data-menu="Profile">
-                <i class="fas fa-user"></i>
-                <span>Profil</span>
-            </div>
-            <div class="nav-item" data-menu="Cards">
-                <i class="fas fa-wallet"></i>
-                <span>Hesap/Kart</span>
-            </div>
-            <div class="nav-item active" data-menu="Transactions">
-                <i class="fas fa-list"></i>
-                <span>İşlemler</span>
-            </div>
-            <div class="nav-item" data-menu="Applications">
-                <i class="fas fa-file-alt"></i>
-                <span>Başvurular</span>
-            </div>
-        </nav>
-
-        @* <div class="buttons">
-            <a href="#" class="btn btn-xs btn-primary">+</a>
-        </div> *@
-
-    </div>
-
-    <!-- Edit Menu Item Modal -->
-    <div class="modal modal-lg fade" id="editMenuItemModal" tabindex="-1" aria-labelledby="editMenuItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editMenuItemModalLabel">Menü Düzenle</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editMenuItemForm">
-
-                        <input type="hidden" id="id" />
-                        <input type="hidden" id="pid" />
-                        <input type="hidden" id="sortOrder" />
-                        <input type="hidden" id="processType" />
-                        @* <input type="text" id="id" /> *@
-
-                        <div class="row mb-3">
-                            <div class="col-4">
-                                <label class="form-label" for="text">Menü Text</label>
-                            </div>
-                            <div class="col">
-                                <input placeholder="Görünecek ismi giriniz..." type="text" class="form-control" id="text" name="text" required="">
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-4">
-                                <label class="form-label" for="textEn">Menü Text En</label>
-                            </div>
-                            <div class="col">
-                                <input placeholder="Görünecek En ismi giriniz..." type="text" class="form-control" id="textEn" name="textEn" required="">
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-4">
-                                <label class="form-label" for="icon">Menü İkonu</label>
-                            </div>
-                            <div class="col">
-                                <input placeholder="Görünecek simgeyi seçiniz..." readonly="true" type="text" class="form-control" id="icon" name="icon" required="">
-                            </div>
-                            <div class="col-1">
-                                <img data-task="iconDisplay" class="iconDisplay" src="" />
-                            </div>
-                            <div class="col-1">
-                                <a href="#" data-task="iconSearch" class="iconSearch btn btn-sm btn-info"><i class="fa fa-search"></i> </a>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-4">
-                                <label class="form-label" for="key">Menü Key</label>
-                            </div>
-                            <div class="col">
-                                <input placeholder="Görünecek ismi giriniz..." type="text" class="form-control" id="key" name="key" required="">
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-4">
-                                <label class="form-label" for="isNew">Yeni mi?</label>
-                            </div>
-                            <div class="col">
-                                <input type="checkbox" class="form-check-input" id="isNew" name="isNew">
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveMenuItem">Kaydet</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Icons Modal -->
-    <div class="modal modal-xl fade" id="iconsModal" tabindex="-1" aria-labelledby="iconsModal" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="iconsModal">İconlar</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
-                </div>
-                <div class="modal-body">
-                </div>
-                @*<div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
-                    <button type="button" class="btn btn-primary" id="saveMenuItem">Kaydet</button>
-                </div> *@
-            </div>
-        </div>
-    </div>
-
-    <div class="modal modal-lg fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <input type="hidden" name="id" />
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="deleteConfirmModalLabel">Silmeyi Onayla</h4>
-                </div>
-
-                <div class="modal-body">
-                    <p>Seçili menu item'ı silmek istediğinizden emin misiniz?</p>
-                    <p>Devam etmek istiyor musunuz?</p>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Vazgeç</button>
-                    <a class="btn btn-danger btn-ok" id="removeMenuItem" data-bs-dismiss="modal">Sil</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script type="text/template" id="menuTemplate">
-        <div class="page" data-page="{{id}}" data-menu="{{menuTarget}}">
+    <div id="app">
+        <!-- Menü Tablosu Sayfası -->
+        <div class="page" id="menu-list" data-page="menu-list">
             <header>
-                <button class="back-button" data-page="{{pid}}">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <h1 data-lang="tr">{{caption}}</h1>
-                <h1 data-lang="en">{{captionEn}}</h1>
+
+                <h1>Menü Yönetimi</h1>
             </header>
             <main>
-                <div class="menu-container" data-target="menuItems">
+                <div class="action-buttons top-buttons">
+                    <button class="action-button" id="new-menu">
+                        <i class="fas fa-plus"></i>
+                        <span>Yeni Menü Ekle</span>
+                    </button>
+                </div>
 
+                <div class="data-table-container">
+                    <table id="menu-table" class="display">
+                        <thead>
+                            <tr>
+                                <th>Menü ID</th>
+                                <th>Menü Adı</th>
+                                <th>Menü Sayısı</th>
+                                <th>Oluşturulma Tarihi</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-menu-id="menu-personel">
+                                <td>1</td>
+                                <td>Personel Menüsü</td>
+                                <td>48</td>
+                                <td>2025-03-01</td>
+                                <td class="action-buttons-cell">
+                                    <button class="edit-button" data-target="menu-editor" data-menu-id="menu-personel">
+                                        <i class="fas fa-edit"></i> Düzenle
+                                    </button>
+                                    <button class="copy-button" data-menu-id="menu-personel">
+                                        <i class="fas fa-copy"></i> Kopya
+                                    </button>
+                                    <button class="delete-button" data-menu-id="menu-personel">
+                                        <i class="fas fa-trash"></i> Sil
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr data-menu-id="menu-cocuk">
+                                <td>2</td>
+                                <td>Çocuk Menüsü</td>
+                                <td>12</td>
+                                <td>2025-03-05</td>
+                                <td class="action-buttons-cell">
+                                    <button class="edit-button" data-target="menu-editor" data-menu-id="menu-cocuk">
+                                        <i class="fas fa-edit"></i> Düzenle
+                                    </button>
+                                    <button class="copy-button" data-menu-id="menu-cocuk">
+                                        <i class="fas fa-copy"></i> Kopya
+                                    </button>
+                                    <button class="delete-button" data-menu-id="menu-cocuk">
+                                        <i class="fas fa-trash"></i> Sil
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr data-menu-id="menu-mobile">
+                                <td>3</td>
+                                <td>Mobil Menü</td>
+                                <td>156</td>
+                                <td>2025-03-10</td>
+                                <td class="action-buttons-cell">
+                                    <button class="edit-button" data-target="menu-editor" data-menu-id="menu-mobile">
+                                        <i class="fas fa-edit"></i> Düzenle
+                                    </button>
+                                    <button class="copy-button" data-menu-id="menu-mobile">
+                                        <i class="fas fa-copy"></i> Kopya
+                                    </button>
+                                    <button class="delete-button" data-menu-id="menu-mobile">
+                                        <i class="fas fa-trash"></i> Sil
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </main>
         </div>
-    </script>
 
-    <script type="text/template" id="menuItemTemplate">
-                <div class="menu-item" data-page="{{pid}}">
-        @* <img src="{{icon}}" onerror="imgError(this)"> *@
-                    <img data-target="icon" src="{{icon}}" />
-                    <span data-lang="tr" data-target="text">{{text}}</span>
-                    <span data-lang="en" data-target="textEn">{{textEn}}</span>
-                    <span data-target="isNew" class="new">Yeni</span>
-                    <i class="fas fa-chevron-right" data-target="go"></i>
-
-                    <div class="btns btn-group">
-        @*                 <button type="button" class="btn btn-primary" title="Ekle">
-                    <i class="fas fa-plus"></i>
-                </button> *@
-
-                        <button data-task="edit_menu" type="button" class="btn btn-primary" title="Düzenle" data-bs-toggle="modal" data-bs-target="#editMenuItemModal">
-                            <i class="fas fa-pen"></i>
+        <!-- Menü Düzenleme Sayfası -->
+        <div class="page hidden" id="menu-editor" data-page="menu-editor">
+            <header>
+                <button class="back-button" data-target="menu-list">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1 id="menu-editor-title">Menü Düzenleme</h1>
+            </header>
+            <main>
+                <div class="menu-editor-container">
+                    <div class="menu-editor-actions">
+                        <button class="action-button" id="add-menu-item">
+                            <i class="fas fa-plus"></i>
+                            <span>Menü Öğesi Ekle</span>
                         </button>
-
-                        <button data-task="remove_menu" type="button" class="btn btn-danger" title="Sil" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">
-                             <i class="fas fa-trash-alt"></i>
+                        <button class="action-button" id="create-submenu">
+                            <i class="fas fa-sitemap"></i>
+                            <span>Alt Menü Oluştur</span>
                         </button>
+                        <button class="action-button" id="delete-menu-item">
+                            <i class="fas fa-trash"></i>
+                            <span>Menü Öğesini Sil</span>
+                        </button>
+                    </div>
 
-        @*                 <button type="button" class="btn btn-primary" title="Sil">
-                    <i class="fas fa-trash-alt"></i>
-                </button> *@
+                    <div id="menu-preview">
+                        <!-- Bu bölüm, seçilen menünün önizlemesi için dinamik olarak doldurulacak -->
                     </div>
                 </div>
-    </script>
-
-    <script src="~/lib/jquery/jquery-3.7.1.min.js"></script>
-    <script src="~/lib/jquery-ui-1.13.3.custom/jquery-ui.min.js"></script>
-    <script src="~/lib/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/loadingmodal/jquery.loadingmodal.min.js"></script>
-    <script src="~/lib/toastr/toastr.min.js"></script>
-    <script src="~/js/master.js"></script>
-
-    <script type="text/javascript">
-
-        function imgError(e){
-            e.style.opacity = '0';
-        }
-
-        var page = {
-            defines: {
-                menuGroupId: '1',
-                menuGroup: null,
-                lang: 'tr',
-            },
-            enums: {
-                processType: {
-                    'add': 1,
-                    'edit': 2,
-                    'remove': 3
-                },
-                menuTarget: {
-                    'Transactions': 1,
-                    'Cards': 2,
-                    'Profile': 3,
-                    'Applications': 4
-                }
-            },
-            saveData: function(){
-                var res = [];
-                $.each(page.dataList, function(k,item){
-                    res.push({
-                        processType: item.processType,
-                        menuItem: {
-                            Id: item.menuItem.id,
-                            NewTag: item.menuItem.isNew,
-                            Keyword: item.menuItem.key,
-                            SortOrder: item.menuItem.sortOrder,
-                            Text: item.menuItem.text,
-                            TextEn: item.menuItem.textEn,
-                            IconPath: item.menuItem.icon,
-                            Pid: item.menuItem.pid == 0 ? null : item.menuItem.pid
-                        }
-                    });
-                });
-
-                ReadData('/Home/Save', { menuGroupId: page.defines.menuGroup.id, items: res }, function(ress){
-
-                });
-
-            },
-            getData: function(id){
-
-                var gRes;
-
-                $.each(page.data, function(d,data){
-
-                    var res = data.filter(function(im){ return im.id == id })[0];
-
-                    if(res != undefined){
-                        gRes = res;
-                        return false;
-                    }
-
-                    $.each(data, function(i,item){
-                        if(item.items != null){
-                            res = page.searchData(item.items, id);
-                        }
-
-                        if(res != undefined){
-                            gRes = res;
-                            return false;
-                        }
-                    });
-
-                });
-
-                return gRes;
-
-            },
-            searchData: function(list, id){
-
-                var res = list.filter(function(item){ return item.id == id })[0];
-                if(res != undefined){
-                    return res;
-                }
-
-                $.each(list, function(i,item){
-                    if(item.items?.length > 0){
-                        res = page.searchData(item.items, id);
-
-                        if(res != undefined){
-                            return false;
-                        }
-
-                    }
-                });
-
-                return res;
-
-            },
-            dataList: {},
-            menuContainerElem: $('#app'),
-            data: null,
-            icons: null,
-            getElem_PageList: function(item){
-
-                var menuTemplate = $('#menuTemplate').html();
-                menuTemplate = menuTemplate.replace(/{{caption}}/g, item.text);
-                menuTemplate = menuTemplate.replace(/{{captionEn}}/g, item.textEn);
-                menuTemplate = menuTemplate.replace(/{{key}}/g, item.key);
-                menuTemplate = menuTemplate.replace(/{{id}}/g, item.id);
-                menuTemplate = menuTemplate.replace(/{{pid}}/g, (item.pid ?? 0));
-                menuTemplate = menuTemplate.replace(/{{menuTarget}}/g, (item.menuTarget ?? ''));
-
-                menuTemplate = $(menuTemplate);
-
-                menuTemplate.data('data', item);
-
-                if(item.id == 0){
-                    menuTemplate.find('.back-button').remove();
-                }
-
-                if(item.menuTarget == null){
-                    menuTemplate.removeAttr('data-menu');
-                }
-
-                $.each(item.items, function(j, subitem){
-                    var menuItemTemplate = $('#menuItemTemplate').html();
-                        menuItemTemplate = menuItemTemplate
-                            .replace(/{{text}}/g, subitem.text)
-                            .replace(/{{textEn}}/g, subitem.textEn)
-                            .replace(/{{icon}}/g, ('img/icons/' + subitem.icon + '.svg'))
-                            .replace(/{{pid}}/g, subitem.id);
-
-                    menuItemTemplate = $(menuItemTemplate);
-
-                    if(subitem.items == null || subitem.items.length == 0){
-                        menuItemTemplate.find('[data-target="go"]').remove();
-                    }
-
-                    if(subitem.isNew !== true){
-                        menuItemTemplate.find('[data-target="isNew"]').hide();
-                    }
-
-                    menuTemplate.find('[data-target="menuItems"]').append(menuItemTemplate);
-                    menuTemplate.find('[data-lang]').hide();
-                    menuTemplate.find('[data-lang="' + page.defines.lang + '"]').show();
-
-                    subitem.render = function(){
-
-                        var data = menuItemTemplate.data('data');
-                        //  todo: Burası formData update edildiğinde çalışacak bölüm.
-                        menuItemTemplate.find('[data-target="text"]').html(data.text);
-                        menuItemTemplate.find('[data-target="textEn"]').html(data.textEn);
-                        menuItemTemplate.find('[data-target="icon"]').attr('src', ('img/icons/' + data.icon + '.svg'));
-                        if(data.isNew == true){
-                            menuItemTemplate.find('[data-target="isNew"]').show();
-                        }else{
-                            menuItemTemplate.find('[data-target="isNew"]').hide();
-                        }
-
-                    };
-
-                    menuItemTemplate.data('data', subitem);
-
-                });
-
-                return $(menuTemplate);
-
-            },
-            makeSubMenu: function(item, skipChilds){
-
-                page.menuContainerElem.append(page.getElem_PageList(item));
-
-                $.each(item.items, function(ix,itemx){
-
-                    if(itemx.items != null && itemx.items.length > 0 && skipChilds != true){
-                        page.makeSubMenu(itemx);
-                    }
-
-                });
-
-            },
-            ready: function () {
-
-                ReadData('/Home/GetMenuGroup', { menuGroupId: page.defines.menuGroupId }, function (res) {
-
-                    page.defines.menuGroup = res.menuGroup;
-
-                    page.data = res.menus;
-                    page.menuContainerElem.append(page.getElem_PageList({ id:0, menuTarget: 'Transactions', text: 'İşlemler', textEn: 'Transactions', items: page.data.transactions }));
-                    page.menuContainerElem.append(page.getElem_PageList({ id:0, menuTarget: 'Cards', text: 'Kart Menü', textEn: 'Cards', items: page.data.cards }));
-                    page.menuContainerElem.append(page.getElem_PageList({ id:0, menuTarget: 'Profile', text: 'Profil', textEn: 'Profile', items: page.data.profile }));
-                    page.menuContainerElem.append(page.getElem_PageList({ id:0, menuTarget: 'Applications', text: 'Başvurular', textEn: 'Applications', items: page.data.applications }));
-
-                    $.each(page.data, function(d, data){
-                        $.each(data, function(i, item){
-                            if(item.items != null && item.items.length > 0){
-                                page.makeSubMenu(item);
-                            }
-                        });
-                    });
-
-                    $('.page').hide();
-                    $('.page[data-page="0"]:first').show();
-                    $('.page .menu-container').sortable({
-                        axis: "y",
-                        cursor: "move",
-                        // activate: function( event, ui ) { console.log('activate'); },
-                        // beforeStop: function( event, ui ) { console.log('beforeStop'); },
-                        // change: function( event, ui ) { console.log('change'); },
-                        // out: function( event, ui ) { console.log('out'); },
-                        // receive: function( event, ui ) { console.log('receive'); },
-                        // sort: function( event, ui ) { console.log('sort'); },
-                        // start: function( event, ui ) { console.log('start'); },
-                        // stop: function( event, ui ) { console.log('stop'); },
-                        update: function( event, ui ) {
-                            var elemData = ui.item.data('data');
-                            var parentData = page.getData(elemData.pid);
-                            var elems = $('#app .page[data-page="' + (parentData?.id ?? 0) + '"] .menu-container .menu-item');
-
-                            $.each(elems, function(e,elem){
-
-                                var data = $(elem).data('data');
-                                data.sortOrder = e + 1;
-                                page.dataList[data.id] = { menuItem: data, processType: page.enums.processType.edit };
-
-                            });
-
-                        }
-
-                    });
-
-                });
-
-                ReadData('/Home/GetIcons', null, function (items) {
-
-                    page.icons = items;
-
-                    $.each(page.icons, function(i,item){
-                        $('#iconsModal .modal-body').append($('<img data-name="' + item + '" src="img/icons/' + item + '.svg" />'));
-                    });
-
-                });
-
-            },
-            getId: function(){
-                return Math.round(Math.random() * 100000) + 100000;
-            },
-            showMenu: function (item) {
-
-
-            },
-            backMenu: function (item) {
-
-            }
-        }
-
-        $(document)
-
-            .ready(function () {
-
-                page.ready();
-
-            })
-
-            .on('click', '.mobilContainer .bottom-nav [data-menu]', function(e){
-
-                e.preventDefault();
-
-                var menu = $(this).attr('data-menu');
-                $('.page[data-page]').hide();
-                $('.page[data-page="0"][data-menu="' + menu + '"]').show();
-
-                $('.mobilContainer .bottom-nav .nav-item').removeClass('active');
-                $(this).addClass('active');
-
-                return false;
-
-            })
-
-            .on('click', '#removeMenuItem', function(e){
-
-                e.preventDefault();
-
-                var data = $('#deleteConfirmModal').data('data');
-
-                page.dataList[data.id] = { menuItem: data, processType: page.enums.processType.remove };
-                $('.menu-item[data-page="' + data.id + '"]').remove();
-
-                var pData = $('#app .page:visible').data('data');
-                pData.items = pData.items.filter(function(a){ return a.id != data.id });
-
-                return false;
-
-            })
-
-            .on('click', '#saveMenuItem', function(e){
-
-                e.preventDefault();
-
-                var formData = {
-                    pid: $('#pid').val(),
-                    sortOrder: $('#sortOrder').val(),
-                    processType: $('#processType').val(),
-
-                    id: $('#id').val(),
-                    text: $('#text').val(),
-                    textEn: $('#textEn').val(),
-                    key: $('#key').val(),
-                    isNew: $('#isNew').prop('checked'),
-                    icon: $('#icon').val()
-                };
-
-                if(formData.processType == page.enums.processType.edit){
-                    var pageData = page.getData(formData.id);
-                    pageData.text = formData.text;
-                    pageData.textEn = formData.textEn;
-                    pageData.key = formData.key;
-                    pageData.isNew = formData.isNew;
-                    pageData.icon = formData.icon;
-                    pageData.render();
-
-                    page.dataList[pageData.id] = { menuItem: pageData, processType: page.enums.processType.edit };
-
-                }else if(formData.processType == page.enums.processType.add){
-
-                    var data = $('#app .page:visible').data('data')
-
-                    var pageData ={
-                        "id": page.getId(),
-                        "pid": formData.pid,
-                        "key": formData.key,
-                        "text": formData.text,
-                        "textEn": formData.textEn,
-                        "isNew": formData.isNew,
-                        "icon": formData.icon,
-                        "sortOrder": formData.sortOrder
-                    }
-
-                    $('.page[data-page="' + data.id + '"]').remove();
-                    data.items.push(pageData);
-                    page.makeSubMenu(data, true);
-
-                    page.dataList[pageData.id] = { menuItem: pageData, processType: page.enums.processType.add };
-
-                }
-
-                //  $('#editMenuItemModal').modal('hide');
-
-
-                return false;
-
-            })
-
-            .on('click', '#iconsModal .modal-body > img', function(e){
-
-                e.preventDefault();
-
-                var val = $(this).attr('data-name');
-                $('#editMenuItemModal [data-task="iconDisplay"]').attr('src', 'img/icons/' + val + '.svg');
-                $('#editMenuItemModal #icon').val(val);
-                $('#iconsModal').modal('hide');
-
-                return false;
-
-            })
-
-            .on('click', '[data-task="iconSearch"]', function(e){
-
-                e.preventDefault();
-
-                $('#iconsModal').modal('show');
-
-                return false;
-
-            })
-
-            .on('click', '[data-task="edit_menu"]', function(e){
-
-                e.preventDefault();
-
-                var data = $($(this).parents('.menu-item')[0]).data('data');
-                $('#processType').val(page.enums.processType.edit);
-                $('#sortOrder').val(data.sortOrder || '');
-                $('#pid').val(data.pid || '');
-
-                $('#text').val(data.text || '');
-                $('#textEn').val(data.textEn || '');
-                $('#icon').val(data.icon || '');
-                $('#key').val(data.key || '');
-                $('[data-task="iconDisplay"]').attr('src', 'img/icons/' + data.icon + '.svg');
-                $('#isNew').prop('checked', data.isNew || false);
-                $('#id').val(data.id);
-                //  $('#editMenuItemModal').modal('show');
-
-                return false;
-
-            })
-
-            .on('click', '[data-task="add_menu"]', function(e){
-
-                e.preventDefault();
-
-                var data = $('#app .page:visible').data('data');
-
-                $('#pid').val(data.id || '');
-                $('#sortOrder').val(data.items.length + 1 || '');
-                $('#processType').val(page.enums.processType.add);
-
-                $('#text').val('');
-                $('#textEn').val('');
-                $('#icon').val('');
-                $('#key').val('');
-                //  $('[data-task="iconDisplay"]').attr('src', 'img/icons/' + data.icon + '.svg');
-                $('#isNew').prop('checked', false);
-                $('#id').val('');
-
-                return false;
-
-            })
-
-            .on('click', '[data-task="remove_menu"]', function(e){
-
-                e.preventDefault();
-
-                var data = $($(this).parents('.menu-item')[0]).data('data');
-                $('#deleteConfirmModal').find('input[name="id"]').val(data.id);
-                $('#deleteConfirmModal').data('data', data);
-                //  $('#deleteConfirmModal').modal('show');
-
-                return false;
-
-            })
-
-            .on('click', '[data-task="saveMenu"]', function(e){
-
-                e.preventDefault();
-
-                page.saveData();
-
-                return false;
-
-            })
-
-            .on('click', '[data-task="lang"]', function(e){
-
-                e.preventDefault();
-
-                page.defines.lang = $(this).attr('data-val');
-                $('[data-lang]').hide();
-                $('[data-lang="' + page.defines.lang + '"]').show();
-
-                $('[data-task="lang"]').removeClass('btn-success').addClass('btn-primary');
-                $(this).removeClass('btn-primary').addClass('btn-success');
-                
-
-                page.saveData();
-
-                return false;
-
-            })
-
-            .on('click', '.menu-item', function (e) {
-
-                e.preventDefault();
-
-                var page = $('.page[data-page="' + $(this).attr('data-page') + '"]');
-                if(page.length > 0){
-                    $('.page').hide();
-                    page.show();
-                }
-
-                return false;
-
-            })
-
-            .on('click', '.back-button', function (e) {
-
-                e.preventDefault();
-
-                $('.page').hide();
-                $('.page[data-page="' + $(this).attr('data-page') + '"]').show();
-
-                return false;
-
-            })
-
-            ;
-
-    </script>
-
+            </main>
+        </div>
+
+        <!-- Menü Şablonu - Personel Menüsü -->
+        <div id="template-menu-personel" class="menu-template hidden">
+            <div class="menu-container">
+                <div class="menu-item" data-menu-id="personel-bilgileri">
+                    <i class="fas fa-user"></i>
+                    <span>Personel Bilgileri</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item" data-menu-id="izin-islemleri">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>İzin İşlemleri</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item" data-menu-id="bordro">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span>Bordro Görüntüleme</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item" data-menu-id="mesai">
+                    <i class="fas fa-business-time"></i>
+                    <span>Mesai Bilgileri</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item" data-menu-id="egitimler">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Eğitimler</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menü Şablonu - Çocuk Menüsü -->
+        <div id="template-menu-cocuk" class="menu-template hidden">
+            <div class="menu-container">
+                <div class="menu-item" data-menu-id="oyunlar">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Oyunlar</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item" data-menu-id="aktiviteler">
+                    <i class="fas fa-running"></i>
+                    <span>Aktiviteler</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item" data-menu-id="kumbaralar">
+                    <i class="fas fa-piggy-bank"></i>
+                    <span>Kumbaralar</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item" data-menu-id="videolar">
+                    <i class="fas fa-film"></i>
+                    <span>Eğitici Videolar</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menü Şablonu - Mobil Menü -->
+        <div id="template-menu-mobile" class="menu-template hidden">
+            <div class="menu-container">
+                <div class="menu-item" data-menu-id="para-transferleri">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Para Transferleri</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item" data-menu-id="odemeler">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Ödemeler</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item" data-menu-id="kart-islemleri">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Kart İşlemleri</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item" data-menu-id="yatirim">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Yatırım ve Hisse Senedi</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="menu-item" data-menu-id="doviz">
+                    <i class="fas fa-coins"></i>
+                    <span>Döviz ve Altın</span>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dinamik olarak oluşturulacak alt menüler için container -->
+        <div id="dynamic-pages-container"></div>
+    </div>
+
+    <!-- Başlangıç Rehberi Overlay -->
+    <div class="tutorial-overlay" id="tutorial-overlay">
+        <div class="tutorial-container">
+            <div class="tutorial-header">
+                <h2>Menü Yönetim Sistemi'ne Hoş Geldiniz!</h2>
+                <button class="tutorial-close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="tutorial-content">
+                <div class="tutorial-step active" data-step="1">
+                    <div class="tutorial-step-number">1</div>
+                    <h3>Menü Yönetimi</h3>
+                    <p>Bu sistem ile mobil ve web uygulamalarınız için menüler oluşturabilir, düzenleyebilir ve yönetebilirsiniz.</p>
+                    <img src="{{ url_for('static', filename='images/tutorial-1.png') }}" alt="Menü Yönetimi" class="tutorial-image">
+                </div>
+                <div class="tutorial-step" data-step="2">
+                    <div class="tutorial-step-number">2</div>
+                    <h3>Menü Listesi</h3>
+                    <p>Mevcut menüleriniz burada listelenir. Düzenlemek için "Düzenle" butonuna tıklayın.</p>
+                    <img src="{{ url_for('static', filename='images/tutorial-2.png') }}" alt="Menü Listesi" class="tutorial-image">
+                </div>
+                <div class="tutorial-step" data-step="3">
+                    <div class="tutorial-step-number">3</div>
+                    <h3>Menü Düzenleme</h3>
+                    <p>Düzenleme ekranında menü öğeleri ekleyebilir, silebilir ve alt menüler oluşturabilirsiniz.</p>
+                    <img src="{{ url_for('static', filename='images/tutorial-3.png') }}" alt="Menü Düzenleme" class="tutorial-image">
+                </div>
+                <div class="tutorial-step" data-step="4">
+                    <div class="tutorial-step-number">4</div>
+                    <h3>Başlayalım!</h3>
+                    <p>Hazırsanız, "Başla" butonuna tıklayarak menü yönetim sistemini kullanmaya başlayabilirsiniz.</p>
+                    <p>İşiniz bittiğinde rehberi tekrar görmek için sağ üstteki "Yardım" butonuna tıklayabilirsiniz.</p>
+                </div>
+            </div>
+            <div class="tutorial-footer">
+                <button class="tutorial-btn" id="tutorial-prev-btn" disabled>Geri</button>
+                <div class="tutorial-indicators">
+                    <span class="tutorial-indicator active" data-step="1"></span>
+                    <span class="tutorial-indicator" data-step="2"></span>
+                    <span class="tutorial-indicator" data-step="3"></span>
+                    <span class="tutorial-indicator" data-step="4"></span>
+                </div>
+                <button class="tutorial-btn" id="tutorial-next-btn">İleri</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sağ üst köşe yardım butonu -->
+    <div class="help-button" id="help-button">
+        <i class="fas fa-question-circle"></i>
+    </div>
+
+    <!-- jQuery ve DataTables Scriptleri -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tutorial.js') }}"></script>
 </body>
 </html>

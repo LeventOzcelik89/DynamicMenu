@@ -29,6 +29,12 @@ namespace DynamicMenu.Web.Controllers
             return View();
         }
 
+        public async Task<IActionResult> MenuUpdate(int menuGroupId)
+        {
+            var model = await _menuGroupRepository.GetByIdAsync(menuGroupId);
+            return View(model);
+        }
+
         public async Task<ActionResult<IEnumerable<MenuItemResponse>>> GetMenuGroup(int menuGroupId)
         {
 
