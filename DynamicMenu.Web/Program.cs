@@ -1,4 +1,5 @@
 using DynamicMenu.Core.Interfaces;
+using DynamicMenu.Core.Models;
 using DynamicMenu.Infrastructure.Data;
 using DynamicMenu.Infrastructure.Repositories;
 using DynamicMenu.Web.Model;
@@ -22,6 +23,11 @@ builder.Services.AddDbContext<DynamicMenuDbContext>(options =>
 builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
 builder.Services.AddScoped<IMenuGroupRepository, MenuGroupRepository>();
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+
+var appSettings = new AppSettings();
+builder.Configuration.GetSection(nameof(AppSettings)).Bind(appSettings);
+
+builder.Services.AddSingleton(appSettings);
 
 builder.Services.AddHttpClient<RemoteServiceDynamicMenuAPI>()
     .SetHandlerLifetime(TimeSpan.FromSeconds(5))

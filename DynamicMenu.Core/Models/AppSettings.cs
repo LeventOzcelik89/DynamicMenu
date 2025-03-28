@@ -9,5 +9,6 @@ namespace DynamicMenu.Core.Models
     public class AppSettings
     {
         public string iconPath { get; set; }
+        public string baseUrl { get; set; }
     }
 }

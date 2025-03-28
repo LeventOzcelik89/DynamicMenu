@@ -35,6 +35,16 @@ namespace DynamicMenu.Web.Controllers
             return View(model);
         }
 
+        public async Task<ActionResult<IEnumerable<MenuGroup>>> GetMenuGroups()
+        {
+
+            var url = "Present/GetMenuGroups";
+            var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<MenuGroup>>(url);
+
+            return Ok(res);
+
+        }
+
         public async Task<ActionResult<IEnumerable<MenuItemResponse>>> GetMenuGroup(int menuGroupId)
         {
 

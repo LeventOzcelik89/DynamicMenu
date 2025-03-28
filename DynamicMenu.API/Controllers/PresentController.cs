@@ -52,6 +52,13 @@ namespace DynamicMenu.API.Controllers
 
         }
 
+        [HttpGet("GetMenuGroups")]
+        public async Task<IEnumerable<MenuGroup>> GetMenuGroup()
+        {
+            var menuGroup = await _menuGroupRepository.GetAllAsync();
+            return menuGroup;
+        }
+
         [HttpGet("GetMenuGroup/{menuGroupId}")]
         public async Task<ActionResult<MenuGroupModelResponse>> GetMenuGroup(int menuGroupId)
         {

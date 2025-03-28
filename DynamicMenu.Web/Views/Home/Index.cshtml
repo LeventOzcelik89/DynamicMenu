@@ -4,16 +4,180 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menü Yönetimi</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+    <style type="text/css">
+
+        :root {
+            --primary-color: #0077be;
+            --secondary-color: #f5f5f5;
+            --text-color: #333;
+            --border-color: #e0e0e0;
+            --active-color: #0066a6;
+            --submenu-color: #f8f8f8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+        }
+
+            header h1 {
+                flex: 1;
+                font-size: 1.2rem;
+                font-weight: 500;
+            }
+
+        /* DataTable Container Styles */
+        .data-table-container {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        table.dataTable {
+            width: 100% !important;
+            margin-bottom: 1rem !important;
+            border-collapse: collapse !important;
+        }
+
+            table.dataTable thead th {
+                background-color: var(--primary-color);
+                color: white;
+                padding: 0.75rem !important;
+                border-bottom: 1px solid var(--border-color) !important;
+            }
+
+            table.dataTable tbody tr {
+                background-color: white;
+                transition: background-color 0.2s;
+            }
+
+                table.dataTable tbody tr:hover {
+                    background-color: #f5f5f5;
+                }
+
+            table.dataTable tbody td {
+                padding: 0.75rem !important;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+        /* Table Action Buttons Styles */
+        .action-buttons-cell {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .edit-button, .copy-button, .delete-button {
+            border: none;
+            border-radius: 4px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            white-space: nowrap;
+        }
+
+        .edit-button {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+            .edit-button:hover {
+                background-color: var(--active-color);
+            }
+
+        .copy-button {
+            background-color: #4caf50;
+            color: white;
+        }
+
+            .copy-button:hover {
+                background-color: #3d8b40;
+            }
+
+        .delete-button {
+            background-color: #f44336;
+            color: white;
+        }
+
+            .delete-button:hover {
+                background-color: #d32f2f;
+            }
+
+            .edit-button i, .copy-button i, .delete-button i {
+                margin-right: 0.5rem;
+            }
+
+        /* Action buttons styles */
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 1rem;
+            gap: 0.5rem;
+        }
+
+        .action-button {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+            .action-button:hover, .action-button:active {
+                background-color: #f0f0f0;
+            }
+
+            .action-button i {
+                color: var(--primary-color);
+                margin-right: 0.5rem;
+                width: 20px;
+                text-align: center;
+            }
+
+            .action-button span {
+            }
+
+    </style>
+
+    <link href="~/lib/fontawesome/css/fawesome6.min.css" rel="stylesheet" />
+
+    <link href="~/lib/datatables/datatables.min.css" rel="stylesheet" />
 </head>
 <body>
     <div id="app">
         <!-- Menü Tablosu Sayfası -->
         <div class="page" id="menu-list" data-page="menu-list">
             <header>
-
                 <h1>Menü Yönetimi</h1>
             </header>
             <main>
@@ -25,7 +189,26 @@
                 </div>
 
                 <div class="data-table-container">
-                    <table id="menu-table" class="display">
+
+                    <table id="tbl" class="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Adı</th>
+                                <th>Açıklama</th>
+                                <th>Aktif mi</th>
+                                <th>Menü Tipi</th>
+                                <th>Oluşturma Tarihi</th>
+                                <th>Düzenleme Tarihi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="data-table-container" style="margin-top: 50px;">
+                    <table id="menu-table" class="display hidden">
                         <thead>
                             <tr>
                                 <th>Menü ID</th>
@@ -90,188 +273,78 @@
                         </tbody>
                     </table>
                 </div>
+
+
             </main>
         </div>
 
-        <!-- Menü Düzenleme Sayfası -->
-        <div class="page hidden" id="menu-editor" data-page="menu-editor">
-            <header>
-                <button class="back-button" data-target="menu-list">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <h1 id="menu-editor-title">Menü Düzenleme</h1>
-            </header>
-            <main>
-                <div class="menu-editor-container">
-                    <div class="menu-editor-actions">
-                        <button class="action-button" id="add-menu-item">
-                            <i class="fas fa-plus"></i>
-                            <span>Menü Öğesi Ekle</span>
-                        </button>
-                        <button class="action-button" id="create-submenu">
-                            <i class="fas fa-sitemap"></i>
-                            <span>Alt Menü Oluştur</span>
-                        </button>
-                        <button class="action-button" id="delete-menu-item">
-                            <i class="fas fa-trash"></i>
-                            <span>Menü Öğesini Sil</span>
-                        </button>
-                    </div>
-
-                    <div id="menu-preview">
-                        <!-- Bu bölüm, seçilen menünün önizlemesi için dinamik olarak doldurulacak -->
-                    </div>
-                </div>
-            </main>
-        </div>
-
-        <!-- Menü Şablonu - Personel Menüsü -->
-        <div id="template-menu-personel" class="menu-template hidden">
-            <div class="menu-container">
-                <div class="menu-item" data-menu-id="personel-bilgileri">
-                    <i class="fas fa-user"></i>
-                    <span>Personel Bilgileri</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="menu-item" data-menu-id="izin-islemleri">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>İzin İşlemleri</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="menu-item" data-menu-id="bordro">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                    <span>Bordro Görüntüleme</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="menu-item" data-menu-id="mesai">
-                    <i class="fas fa-business-time"></i>
-                    <span>Mesai Bilgileri</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="menu-item" data-menu-id="egitimler">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span>Eğitimler</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-            </div>
-        </div>
-
-        <!-- Menü Şablonu - Çocuk Menüsü -->
-        <div id="template-menu-cocuk" class="menu-template hidden">
-            <div class="menu-container">
-                <div class="menu-item" data-menu-id="oyunlar">
-                    <i class="fas fa-gamepad"></i>
-                    <span>Oyunlar</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="menu-item" data-menu-id="aktiviteler">
-                    <i class="fas fa-running"></i>
-                    <span>Aktiviteler</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="menu-item" data-menu-id="kumbaralar">
-                    <i class="fas fa-piggy-bank"></i>
-                    <span>Kumbaralar</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="menu-item" data-menu-id="videolar">
-                    <i class="fas fa-film"></i>
-                    <span>Eğitici Videolar</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-            </div>
-        </div>
-
-        <!-- Menü Şablonu - Mobil Menü -->
-        <div id="template-menu-mobile" class="menu-template hidden">
-            <div class="menu-container">
-                <div class="menu-item" data-menu-id="para-transferleri">
-                    <i class="fas fa-exchange-alt"></i>
-                    <span>Para Transferleri</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="menu-item" data-menu-id="odemeler">
-                    <i class="fas fa-money-bill-wave"></i>
-                    <span>Ödemeler</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="menu-item" data-menu-id="kart-islemleri">
-                    <i class="fas fa-credit-card"></i>
-                    <span>Kart İşlemleri</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="menu-item" data-menu-id="yatirim">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Yatırım ve Hisse Senedi</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="menu-item" data-menu-id="doviz">
-                    <i class="fas fa-coins"></i>
-                    <span>Döviz ve Altın</span>
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-            </div>
-        </div>
-
-        <!-- Dinamik olarak oluşturulacak alt menüler için container -->
-        <div id="dynamic-pages-container"></div>
     </div>
 
-    <!-- Başlangıç Rehberi Overlay -->
-    <div class="tutorial-overlay" id="tutorial-overlay">
-        <div class="tutorial-container">
-            <div class="tutorial-header">
-                <h2>Menü Yönetim Sistemi'ne Hoş Geldiniz!</h2>
-                <button class="tutorial-close-btn"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="tutorial-content">
-                <div class="tutorial-step active" data-step="1">
-                    <div class="tutorial-step-number">1</div>
-                    <h3>Menü Yönetimi</h3>
-                    <p>Bu sistem ile mobil ve web uygulamalarınız için menüler oluşturabilir, düzenleyebilir ve yönetebilirsiniz.</p>
-                    <img src="{{ url_for('static', filename='images/tutorial-1.png') }}" alt="Menü Yönetimi" class="tutorial-image">
-                </div>
-                <div class="tutorial-step" data-step="2">
-                    <div class="tutorial-step-number">2</div>
-                    <h3>Menü Listesi</h3>
-                    <p>Mevcut menüleriniz burada listelenir. Düzenlemek için "Düzenle" butonuna tıklayın.</p>
-                    <img src="{{ url_for('static', filename='images/tutorial-2.png') }}" alt="Menü Listesi" class="tutorial-image">
-                </div>
-                <div class="tutorial-step" data-step="3">
-                    <div class="tutorial-step-number">3</div>
-                    <h3>Menü Düzenleme</h3>
-                    <p>Düzenleme ekranında menü öğeleri ekleyebilir, silebilir ve alt menüler oluşturabilirsiniz.</p>
-                    <img src="{{ url_for('static', filename='images/tutorial-3.png') }}" alt="Menü Düzenleme" class="tutorial-image">
-                </div>
-                <div class="tutorial-step" data-step="4">
-                    <div class="tutorial-step-number">4</div>
-                    <h3>Başlayalım!</h3>
-                    <p>Hazırsanız, "Başla" butonuna tıklayarak menü yönetim sistemini kullanmaya başlayabilirsiniz.</p>
-                    <p>İşiniz bittiğinde rehberi tekrar görmek için sağ üstteki "Yardım" butonuna tıklayabilirsiniz.</p>
-                </div>
-            </div>
-            <div class="tutorial-footer">
-                <button class="tutorial-btn" id="tutorial-prev-btn" disabled>Geri</button>
-                <div class="tutorial-indicators">
-                    <span class="tutorial-indicator active" data-step="1"></span>
-                    <span class="tutorial-indicator" data-step="2"></span>
-                    <span class="tutorial-indicator" data-step="3"></span>
-                    <span class="tutorial-indicator" data-step="4"></span>
-                </div>
-                <button class="tutorial-btn" id="tutorial-next-btn">İleri</button>
-            </div>
-        </div>
-    </div>
+    <script src="~/lib/jquery/jquery-3.7.1.min.js"></script>
+    <script src="~/lib/jquery-ui-1.13.3.custom/jquery-ui.min.js"></script>
+    <script src="~/lib/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/loadingmodal/jquery.loadingmodal.min.js"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    <script src="~/js/master.js"></script>
 
-    <!-- Sağ üst köşe yardım butonu -->
-    <div class="help-button" id="help-button">
-        <i class="fas fa-question-circle"></i>
-    </div>
+    <script type="text/template" id="tblRow">
 
-    <!-- jQuery ve DataTables Scriptleri -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/tutorial.js') }}"></script>
+        <tr>
+            <td>{{}}</td>
+        </tr>
+
+    </script>
+
+    <script type="text/javascript">
+
+        var page = {
+
+            tbl: null,
+            ready: function(){
+
+                ReadData('/Home/GetMenuGroups', null, function(res){
+
+                    //  "id": 1,
+                    //  "name": "Master",
+                    //  "description": "Asil Menü",
+                    //  "isActive": true,
+                    //  "menuType": 1,
+                    //  "createdDate": "2025-03-18T08:58:24.2966667",
+                    //  "modifiedDate": null,
+                    //  "menus": null
+
+                    console.log(res);
+
+                });
+
+                // page.tbl = new DataTable('#tbl', {
+                //     //  fixedColumns: true,
+                //     //  fixedColumns: {
+                //     //      start: 4
+                //     //  },
+                //     paging: false,
+                //     scrollCollapse: true,
+                //     scrollY: '770px',
+                //     scrollX: true,
+                //     order: []
+                // });
+
+            }
+
+        };
+
+
+        $(document)
+
+        .ready(function () {
+
+            page.ready();
+
+        })
+
+        ;
+
+    </script>
+
 </body>
 </html>

@@ -196,3 +196,20 @@ var cookies = {
         cookies.set(name, "", -1);
     }
 };
+
+var TemplateEngine = {
+
+    Render: function (templateElement, data) {
+
+        var template = templateElement.html();
+        $.each(data, function (i, item) {
+            template = template.replace(new RegExp('{{' + i + '}}'), item);
+        });
+
+        template = $(template);
+
+        return template;
+
+    }
+
+};
