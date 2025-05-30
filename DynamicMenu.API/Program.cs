@@ -94,6 +94,13 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+//  todo: Burada loop olusuyor ama sorunu çözmedi. Nesneleri kontrol eddeceğim.
+JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+{
+    Formatting = Newtonsoft.Json.Formatting.Indented,
+    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+};
+
 app.UseCors("AllowAll");
 
 app.UseAuthentication();

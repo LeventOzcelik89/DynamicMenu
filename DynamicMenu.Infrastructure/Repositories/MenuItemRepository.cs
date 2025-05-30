@@ -75,6 +75,7 @@ namespace DynamicMenu.Infrastructure.Repositories
         {
             return await _context.MenuItem
                 .Where(x => x.MenuGroupId == menuId)
+                .Include(a => a.MenuBaseItem)
                 .ToListAsync();
         }
 
