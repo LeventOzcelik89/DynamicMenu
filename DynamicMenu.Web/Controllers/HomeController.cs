@@ -78,11 +78,12 @@ namespace DynamicMenu.Web.Controllers
                 var menuItem = menuItems.FirstOrDefault(a => a.Id == item.menuItem.Id);
                 if (menuItem != null)
                 {
-                    menuItem.Text = item.menuItem.Text;
+                    //  menuItem.Text = item.menuItem.Text;
+                    //  menuItem.IconPath = item.menuItem.IconPath;
+                    menuItem.MenuBaseItemId = item.menuItem.MenuBaseItemId; //  todo: kontrol et.
                     menuItem.Keyword = item.menuItem.Keyword;
                     menuItem.SortOrder = item.menuItem.SortOrder;
-                    menuItem.IconPath = item.menuItem.IconPath;
-                    menuItem.NewTag = item.menuItem.NewTag;
+                    menuItem.IsNew = item.menuItem.IsNew;
                     menuItem.Pid = item.menuItem.Pid;
                     menuItem.ModifiedDate = DateTime.Now;
 
@@ -106,12 +107,13 @@ namespace DynamicMenu.Web.Controllers
             {
                 var menuItem = new MenuItem
                 {
-                    Text = item.menuItem.Text,
-                    TextEn = item.menuItem.TextEn,
+                    //  Text = item.menuItem.Text,
+                    //  TextEn = item.menuItem.TextEn,
+                    //  IconPath = item.menuItem.IconPath,
+                    MenuBaseItemId = item.menuItem.MenuBaseItemId,  //  todo: bak
                     Keyword = item.menuItem.Keyword,
                     SortOrder = item.menuItem.SortOrder,
-                    IconPath = item.menuItem.IconPath,
-                    NewTag = item.menuItem.NewTag,
+                    IsNew = item.menuItem.IsNew,
                     Pid = item.menuItem.Pid,
                     CreatedDate = DateTime.Now
                 };

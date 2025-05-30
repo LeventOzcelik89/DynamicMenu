@@ -36,17 +36,16 @@ namespace DynamicMenu.Infrastructure.Repositories
                     Id = x.Id,
                     Keyword = x.Keyword ?? string.Empty,
                     Pid = x.Pid,
-                    Text = x.Text ?? x.Keyword ?? string.Empty,
-                    TextEn = x.TextEn ?? x.Text ?? x.Keyword ?? string.Empty,
-                    //DisplayType = x.DisplayType,
-                    //AppId = x.AppId,
-                    NewTag = x.NewTag,
-                    IconPath = x.IconPath ?? string.Empty,
+                    //  Text = x.Text ?? x.Keyword ?? string.Empty,
+                    //  TextEn = x.TextEn ?? x.Text ?? x.Keyword ?? string.Empty,
+                    //  IconPath = x.IconPath ?? string.Empty,
+                    IsNew = x.IsNew,
                     SortOrder = x.SortOrder,
                     CreatedDate = x.CreatedDate,
                     ModifiedDate = x.ModifiedDate,
                     //MenuItemRoles = x.MenuItemRoles ?? new List<MenuItemRole>(),
-                    Children = x.Children ?? new List<MenuItem>()
+                    Children = x.Children ?? new List<MenuItem>(),
+                    MenuBaseItem = x.MenuBaseItem       //  todo: ?? sonuç ne olacak bir bak.
                 })
                 .ToListAsync();
         }
@@ -75,7 +74,7 @@ namespace DynamicMenu.Infrastructure.Repositories
         public async Task<IEnumerable<MenuItem>> GetByMenuIdAsync(int menuId)
         {
             return await _context.MenuItem
-                .Where(x => x.MenuId == menuId)
+                .Where(x => x.MenuGroupId == menuId)
                 .ToListAsync();
         }
 
@@ -105,8 +104,8 @@ namespace DynamicMenu.Infrastructure.Repositories
         public async Task<IEnumerable<MenuItem>> GetByMenuIdsAsync(IEnumerable<int> menuId)
         {
             return await _context.MenuItem
-                .Where(x => menuId.Contains(x.MenuId))
+                .Where(x => menuId.Contains(x.MenuGroupId))
                 .ToListAsync();
         }
     }
-} 
+}

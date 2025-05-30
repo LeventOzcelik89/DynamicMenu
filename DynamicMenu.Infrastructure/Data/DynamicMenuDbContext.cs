@@ -22,6 +22,7 @@ namespace DynamicMenu.Infrastructure.Data
 
         public DbSet<Menu> Menu { get; set; }
         public DbSet<MenuItem> MenuItem { get; set; }
+        public DbSet<MenuBaseItem> MenuBaseItem { get; set; }
         public DbSet<MenuGroup> MenuGroup { get; set; }
         public DbSet<RemoteMenuConfig> RemoteMenuConfig { get; set; }
 

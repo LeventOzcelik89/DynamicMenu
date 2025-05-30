@@ -16,6 +16,7 @@ namespace DynamicMenu.API.Controllers
     public class MenuItemsController : ControllerBase
     {
         private readonly IMenuItemRepository _menuItemRepository;
+        private readonly IMenuBaseItemRepository _menuBaseItemRepository;
         private readonly IMenuRepository _menuRepository;
         private readonly IRemoteMenusRepository _remoteMenuConfigRepository;
         private readonly ICacheService _cacheService;
@@ -91,21 +92,26 @@ namespace DynamicMenu.API.Controllers
             return items.Select(MapToDto).ToList();
         }
 
+        //  todo Buraya gelmeden bir adım önce MenuBaseItem Add yapmamız gerekiyor.
         [HttpPost]
         public async Task<ActionResult<MenuItemDto>> Create(CreateMenuItemDto createDto)
         {
+
+            var menuBaseItem = await _menuBaseItemRepository.GetByIdAsync(createDto.MenuBaseItemId);
+
             var menuItem = new MenuItem
             {
                 Keyword = createDto.Keyword,
                 Pid = createDto.Pid,
-                Text = createDto.Text,
-                TextEn = createDto.TextEn,
+                //  Text = createDto.Text,
+                //  TextEn = createDto.TextEn,
                 //DisplayType = createDto.DisplayType,
                 //AppId = (AppType)createDto.AppId,
-                NewTag = createDto.NewTag,
-                IconPath = createDto.IconPath,
+                IsNew = createDto.IsNew,
+                //  IconPath = createDto.IconPath,
                 SortOrder = createDto.SortOrder,
                 CreatedDate = DateTime.UtcNow,
+                MenuBaseItemId = createDto.MenuBaseItemId,
                 //MenuItemRoles = createDto.RoleIds.Select(roleId => new MenuItemRole { RoleId = roleId }).ToList()
             };
 
@@ -134,12 +140,11 @@ namespace DynamicMenu.API.Controllers
 
             existingItem.Pid = updateDto.Pid;
             existingItem.Keyword = updateDto.Keyword;
-            existingItem.Text = updateDto.Text;
-            existingItem.TextEn = updateDto.TextEn;
-            //existingItem.DisplayType = updateDto.DisplayType;
-            //existingItem.AppId = (AppType)updateDto.AppId;
-            existingItem.NewTag = updateDto.NewTag;
-            existingItem.IconPath = updateDto.IconPath;
+            existingItem.MenuBaseItemId = updateDto.MenuBaseItemId;
+            //  existingItem.Text = updateDto.Text;
+            //  existingItem.TextEn = updateDto.TextEn;
+            existingItem.IsNew = updateDto.NewTag;
+            //  existingItem.IconPath = updateDto.IconPath;
             existingItem.SortOrder = updateDto.SortOrder;
             existingItem.ModifiedDate = DateTime.UtcNow;
 
@@ -219,15 +224,14 @@ namespace DynamicMenu.API.Controllers
             var duplicate = new MenuItem
             {
                 Keyword = $"{sourceItem.Keyword}_copy",
-                Text = $"{sourceItem.Text} (Kopya)",
-                TextEn = sourceItem.TextEn,
-                //DisplayType = sourceItem.DisplayType,
-                //AppId = sourceItem.AppId,
-                NewTag = sourceItem.NewTag,
-                IconPath = sourceItem.IconPath,
+                //  Text = $"{sourceItem.Text} (Kopya)",
+                //  TextEn = sourceItem.TextEn,
+                IsNew = sourceItem.IsNew,
+                //  IconPath = sourceItem.IconPath,
                 SortOrder = sourceItem.SortOrder + 1,
                 Pid = sourceItem.Pid,
-                MenuId = sourceItem.MenuId,
+                MenuBaseItemId = sourceItem.MenuBaseItemId,
+                MenuGroupId = sourceItem.MenuGroupId,
                 CreatedDate = DateTime.UtcNow
             };
 
@@ -254,11 +258,11 @@ namespace DynamicMenu.API.Controllers
             var menuItem = new MenuItem
             {
                 Keyword = dto.Keyword,
-                Text = dto.Text,
+                //  Text = dto.Text,
                 Pid = dto.ParentId,
                 //DisplayType = dto.DisplayType,
-                NewTag = dto.NewTag,
-                MenuId = dto.MenuId ?? 1,
+                IsNew = dto.NewTag,
+                MenuGroupId = dto.MenuId ?? 1,
                 CreatedDate = DateTime.UtcNow
             };
 
@@ -276,7 +280,7 @@ namespace DynamicMenu.API.Controllers
                 new MenuItem
                 {
                     Keyword = "dashboard",
-                    Text = "Ana Sayfa",
+                    //  Text = "Ana Sayfa",
                     //DisplayType = true,
                     SortOrder = 0,
                     CreatedDate = DateTime.UtcNow,
@@ -286,7 +290,7 @@ namespace DynamicMenu.API.Controllers
                 new MenuItem
                 {
                     Keyword = "transactions",
-                    Text = "İşlemler",
+                    //  Text = "İşlemler",
                     //DisplayType = true,
                     SortOrder = 1,
                     CreatedDate = DateTime.UtcNow,
@@ -297,10 +301,10 @@ namespace DynamicMenu.API.Controllers
                         new()
                         {
                             Keyword = "PT0101",
-                            Text = "Para Transferi",
+                            //  Text = "Para Transferi",
                             //DisplayType = true,
                             SortOrder = 0,
-                            NewTag = true,
+                            IsNew = true,
                             CreatedDate = DateTime.UtcNow,
                             //CategoryName = "Transfers",
                             //MenuItemRoles = new List<MenuItemRole> { new() { RoleId = 1 } }
@@ -308,7 +312,7 @@ namespace DynamicMenu.API.Controllers
                         new()
                         {
                             Keyword = "OD0108",
-                            Text = "Ödemeler",
+                            //  Text = "Ödemeler",
                             //DisplayType = true,
                             SortOrder = 1,
                             CreatedDate = DateTime.UtcNow,
@@ -319,7 +323,7 @@ namespace DynamicMenu.API.Controllers
                 new MenuItem
                 {
                     Keyword = "settings",
-                    Text = "Ayarlar",
+                    //  Text = "Ayarlar",
                     //DisplayType = true,
                     SortOrder = 2,
                     CreatedDate = DateTime.UtcNow,
@@ -354,13 +358,14 @@ namespace DynamicMenu.API.Controllers
                 Id = item.Id,
                 Keyword = item.Keyword ?? string.Empty,
                 Pid = item.Pid,
-                Text = item.Text ?? item.Keyword ?? string.Empty,
-                TextEn = item.TextEn ?? item.Text ?? item.Keyword ?? string.Empty,
+                MenuBaseItemId = item.MenuBaseItemId,
+                //  Text = item.Text ?? item.Keyword ?? string.Empty,
+                //  TextEn = item.TextEn ?? item.Text ?? item.Keyword ?? string.Empty,
                 //DisplayType = item.DisplayType,
                 //AppId = (byte)item.AppId,
-                NewTag = item.NewTag,
-                IconPath = item.IconPath ?? string.Empty,
-                SortOrder = item.SortOrder,
+                NewTag = item.IsNew,
+                //  IconPath = item.IconPath ?? string.Empty,
+                //  SortOrder = item.SortOrder,
                 //RoleIds = item.MenuItemRoles?.Select(r => r.RoleId).ToList() ?? new List<int>(),
                 Children = item.Children?.Select(MapToDto).Where(x => x != null).ToList() ?? new List<MenuItemDto>()
             };

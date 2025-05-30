@@ -1,4 +1,4 @@
-using DynamicMenu.API.DTOs;
+﻿using DynamicMenu.API.DTOs;
 using DynamicMenu.Core.Entities;
 using DynamicMenu.Core.Interfaces;
 using DynamicMenu.Core.Enums;
@@ -109,10 +109,11 @@ namespace DynamicMenu.API.Controllers
                 {
                     id = item.Id,
                     key = item.Keyword,
-                    text = item.Text,
-                    textEn = item.TextEn,
-                    icon = item.IconPath,
-                    isNew = item.NewTag,
+                    //  text = item.Text,
+                    //  textEn = item.TextEn,
+                    //  icon = item.IconPath,
+                    MenuBaseItem = item.MenuBaseItem,   //  todo:   dolacak mı kontrol et
+                    isNew = item.IsNew,
                     sortOrder = item.SortOrder,
                     items = GetMenuItems(items.ToArray(), item)
                 });
@@ -140,10 +141,11 @@ namespace DynamicMenu.API.Controllers
                     id = subItem.Id,
                     pid = item.Id,
                     key = subItem.Keyword,
-                    text = subItem.Text,
-                    textEn = subItem.TextEn,
-                    icon = subItem.IconPath,
-                    isNew = subItem.NewTag,
+                    //  text = subItem.Text,
+                    //  textEn = subItem.TextEn,
+                    //  icon = subItem.IconPath,
+                    MenuBaseItem = subItem.MenuBaseItem,
+                    isNew = subItem.IsNew,
                     sortOrder = subItem.SortOrder,
                     items = GetMenuItems(items, subItem)
                 });
