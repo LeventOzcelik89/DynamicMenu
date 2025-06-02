@@ -202,8 +202,14 @@ var TemplateEngine = {
     Render: function (templateElement, data) {
 
         var template = templateElement.html();
-        $.each(data, function (i, item) {
-            template = template.replace(new RegExp('{{' + i + '}}'), item);
+        var matches = template.match(/{{(.*?)}}/g);
+        
+        $.each(matches, function (m, match) {
+
+            var replaced = eval(match);
+            template = template.replace(match, replaced);
+
+            //  template = eval(template.replace(new RegExp('#' + i + ''), item)).replace('}}', '').replace('{{', '');
         });
 
         template = $(template);

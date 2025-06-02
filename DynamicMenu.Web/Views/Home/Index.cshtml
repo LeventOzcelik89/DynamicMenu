@@ -1,9 +1,14 @@
-﻿<!DOCTYPE html>
+﻿@model IEnumerable<DynamicMenu.Core.Entities.MenuGroup>
+
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menü Yönetimi</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="~/lib/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <style type="text/css">
 
@@ -189,9 +194,8 @@
                 </div>
 
                 <div class="data-table-container">
-
-                    <table id="tbl" class="dataTable">
-                        <thead>
+                    <table class="table table-bordered table-hover align-middle" id="tbl">
+                        <thead class="table-light">
                             <tr>
                                 <th>Adı</th>
                                 <th>Açıklama</th>
@@ -199,85 +203,52 @@
                                 <th>Menü Tipi</th>
                                 <th>Oluşturma Tarihi</th>
                                 <th>Düzenleme Tarihi</th>
+                                <th style="width: 120px;">İşlemler</th>
                             </tr>
                         </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-
-                </div>
-
-                <div class="data-table-container" style="margin-top: 50px;">
-                    <table id="menu-table" class="display hidden">
-                        <thead>
-                            <tr>
-                                <th>Menü ID</th>
-                                <th>Menü Adı</th>
-                                <th>Menü Sayısı</th>
-                                <th>Oluşturulma Tarihi</th>
-                                <th>İşlemler</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-menu-id="menu-personel">
-                                <td>1</td>
-                                <td>Personel Menüsü</td>
-                                <td>48</td>
-                                <td>2025-03-01</td>
-                                <td class="action-buttons-cell">
-                                    <button class="edit-button" data-target="menu-editor" data-menu-id="menu-personel">
-                                        <i class="fas fa-edit"></i> Düzenle
-                                    </button>
-                                    <button class="copy-button" data-menu-id="menu-personel">
-                                        <i class="fas fa-copy"></i> Kopya
-                                    </button>
-                                    <button class="delete-button" data-menu-id="menu-personel">
-                                        <i class="fas fa-trash"></i> Sil
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr data-menu-id="menu-cocuk">
-                                <td>2</td>
-                                <td>Çocuk Menüsü</td>
-                                <td>12</td>
-                                <td>2025-03-05</td>
-                                <td class="action-buttons-cell">
-                                    <button class="edit-button" data-target="menu-editor" data-menu-id="menu-cocuk">
-                                        <i class="fas fa-edit"></i> Düzenle
-                                    </button>
-                                    <button class="copy-button" data-menu-id="menu-cocuk">
-                                        <i class="fas fa-copy"></i> Kopya
-                                    </button>
-                                    <button class="delete-button" data-menu-id="menu-cocuk">
-                                        <i class="fas fa-trash"></i> Sil
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr data-menu-id="menu-mobile">
-                                <td>3</td>
-                                <td>Mobil Menü</td>
-                                <td>156</td>
-                                <td>2025-03-10</td>
-                                <td class="action-buttons-cell">
-                                    <button class="edit-button" data-target="menu-editor" data-menu-id="menu-mobile">
-                                        <i class="fas fa-edit"></i> Düzenle
-                                    </button>
-                                    <button class="copy-button" data-menu-id="menu-mobile">
-                                        <i class="fas fa-copy"></i> Kopya
-                                    </button>
-                                    <button class="delete-button" data-menu-id="menu-mobile">
-                                        <i class="fas fa-trash"></i> Sil
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
-
 
             </main>
         </div>
 
+    </div>
+
+    <!-- Menü Düzenle Modal -->
+    <div class="modal fade" id="editMenuModal" tabindex="-1" aria-labelledby="editMenuModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editMenuModalLabel">Menü Düzenle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editMenuForm">
+                        <div class="mb-3">
+                            <label for="menuText" class="form-label">Menü Text</label>
+                            <input type="text" class="form-control" id="menuText" name="menuText" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="menuIcon" class="form-label">Menü İkonu</label>
+                            <input type="text" class="form-control" id="menuIcon" name="menuIcon" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="menuKey" class="form-label">Menü Key</label>
+                            <input type="text" class="form-control" id="menuKey" name="menuKey" required />
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="isNewMenu" name="isNewMenu" />
+                            <label class="form-check-label" for="isNewMenu">Yeni mi?</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                    <button type="button" class="btn btn-primary" id="saveMenuBtn">Kaydet</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="~/lib/jquery/jquery-3.7.1.min.js"></script>
@@ -290,8 +261,22 @@
     <script type="text/template" id="tblRow">
 
         <tr>
-            <td>{{}}</td>
-        </tr>
+            <td>{{data.name}}</td>
+            <td>{{data.description}}</td>
+            <td>
+                <span class="badge bg-{{data.isActive == true ? 'success' : 'danger'}}">{{data.isActive == true ? 'Aktif' : 'Pasif'}}</span>
+            </td>
+                <td>{{data.menuType}}</td>
+                <td>{{new Date(data.createdDate).toLocaleString('tr-TR')}}</td>
+                <td>{{data.modifiedDate == null ? '-' : new Date(data.modifiedDate).toLocaleString('tr-TR')}}</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-primary edit-menu-btn"
+                            data-id="{{data.id}}" data-name="{{data.name}}" data-description="{{data.description}}" data-aktif="{{data.isActive}}" data-menutype="{{data.menuType}}">
+                        <i class="fa fa-pencil"></i> Düzenle
+                    </button>
+                    <a href="Home/MenuUpdate?menugroupId={{data.id}}" class="btn btn-sm btn-info"><i class="fa fa-wrench"></i> Yönetim</a>
+                </td>
+            </tr>
 
     </script>
 
@@ -302,18 +287,23 @@
             tbl: null,
             ready: function(){
 
-                ReadData('/Home/GetMenuGroups', null, function(res){
+                ReadData('/MenuGroup/GetAll', null, function(res){
 
-                    //  "id": 1,
-                    //  "name": "Master",
-                    //  "description": "Asil Menü",
-                    //  "isActive": true,
-                    //  "menuType": 1,
-                    //  "createdDate": "2025-03-18T08:58:24.2966667",
-                    //  "modifiedDate": null,
-                    //  "menus": null
+                    $.each(res, function(i,item){
+                        var res = TemplateEngine.Render($('#tblRow'), item);
+                        $('#tbl tbody').append(res);
+                    });
 
-                    console.log(res);
+                    // Düzenle butonuna tıklanınca modalı aç ve ilgili alanları doldur
+                    $('.edit-menu-btn').on('click', function () {
+                        var btn = $(this);
+                        $('#menuText').val(btn.data('name'));
+                        $('#menuIcon').val(''); // Menü grubu için ikon yoksa boş bırak
+                        $('#menuKey').val(btn.data('id'));
+                        $('#isNewMenu').prop('checked', btn.data('aktif') === true || btn.data('aktif') === 'True');
+                        var modal = new bootstrap.Modal(document.getElementById('editMenuModal'));
+                        modal.show();
+                    });
 
                 });
 
@@ -344,6 +334,26 @@
 
         ;
 
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            // Kaydet butonuna tıklanınca
+            $('#saveMenuBtn').on('click', function () {
+                // Burada formdan verileri alıp backend'e gönderebilirsiniz
+                var data = {
+                    menuText: $('#menuText').val(),
+                    menuIcon: $('#menuIcon').val(),
+                    menuKey: $('#menuKey').val(),
+                    isNew: $('#isNewMenu').is(':checked')
+                };
+                console.log('Kaydedilecek veri:', data);
+                // Modalı kapat
+                var modal = bootstrap.Modal.getInstance(document.getElementById('editMenuModal'));
+                modal.hide();
+            });
+        });
     </script>
 
 </body>

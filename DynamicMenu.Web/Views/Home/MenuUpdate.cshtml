@@ -290,13 +290,13 @@
     </div>
 
     <script type="text/template" id="menuTemplate">
-        <div class="page" data-page="{{id}}" data-menu="{{menuTarget}}">
+        <div class="page" data-page="{{data.id}}" data-menu="{{data.menuTarget}}">
             <header>
-                <button class="back-button" data-page="{{pid}}">
+                <button class="back-button" data-page="{{data.pid}}">
                     <i class="fas fa-arrow-left"></i>
                 </button>
-                <h1 data-lang="tr">{{text}}</h1>
-                <h1 data-lang="en">{{textEn}}</h1>
+                <h1 data-lang="tr">{{data.text}}</h1>
+                <h1 data-lang="en">{{data.textEn}}</h1>
             </header>
             <main>
                 <div class="menu-container" data-target="menuItems">
@@ -307,11 +307,11 @@
     </script>
 
     <script type="text/template" id="menuItemTemplate">
-                <div class="menu-item" data-page="{{id}}">
+                <div class="menu-item" data-page="{{data.id}}">
         @* <img src="{{icon}}" onerror="imgError(this)"> *@
-                    <img data-target="icon" src="{{iconPath}}" />
-                    <span data-lang="tr" data-target="text">{{text}}</span>
-                    <span data-lang="en" data-target="textEn">{{textEn}}</span>
+                    <img data-target="icon" src="{{data.iconPath}}" />
+                    <span data-lang="tr" data-target="text">{{data.text}}</span>
+                    <span data-lang="en" data-target="textEn">{{data.textEn}}</span>
                     <span data-target="isNew" class="new">Yeni</span>
                     <i class="fas fa-chevron-right" data-target="go"></i>
 
