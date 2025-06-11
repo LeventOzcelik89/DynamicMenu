@@ -60,21 +60,26 @@ namespace DynamicMenu.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        //public async Task<IEnumerable<MenuItem>> GetByRoleIdAsync(int roleId)
-        //{
-        //    return await _context.MenuItems
-        //        .Include(x => x.MenuItemRoles)
-        //        .Include(x => x.Children)
-        //        .Where(x => x.MenuItemRoles.Any(r => r.RoleId == roleId) && x.Pid == null)
-        //        .OrderBy(x => x.SortOrder)
-        //        .ToListAsync();
-        //}
-
+        public async Task<IEnumerable<MenuItem>> GetByMenuGroupIdAsync(int menuGroupId)
+        {
+            return await _context.MenuItem
+                .Where(x => x.MenuGroupId == menuGroupId)
+                .Include(a => a.MenuBaseItem)
+                .ToListAsync();
+        }
 
         public async Task<IEnumerable<MenuItem>> GetByMenuIdAsync(int menuId)
         {
             return await _context.MenuItem
-                .Where(x => x.MenuGroupId == menuId)
+                .Where(x => x.MenuId == menuId)
+                .Include(a => a.MenuBaseItem)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<MenuItem>> GetByMenuGroupIdMenuIdAsync(int menuGroupId, int menuId)
+        {
+            return await _context.MenuItem
+                .Where(x => x.MenuId == menuId && x.MenuGroupId == menuGroupId)
                 .Include(a => a.MenuBaseItem)
                 .ToListAsync();
         }

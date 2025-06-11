@@ -199,11 +199,11 @@ var cookies = {
 
 var TemplateEngine = {
 
-    Render: function (templateElement, data) {
+    Render: function (templateElement, data, target) {
 
         var template = templateElement.html();
         var matches = template.match(/{{(.*?)}}/g);
-        
+
         $.each(matches, function (m, match) {
 
             var replaced = eval(match);
@@ -214,7 +214,16 @@ var TemplateEngine = {
 
         template = $(template);
 
-        return template;
+        target.append(template);
+
+    },
+
+    RenderAll: function (templateElement, data, target) {
+
+        $.each(data, function (i, item) {
+            var res = TemplateEngine.Render(templateElement, item);
+            target.append(res);
+        });
 
     }
 

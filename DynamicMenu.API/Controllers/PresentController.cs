@@ -83,26 +83,28 @@ namespace DynamicMenu.API.Controllers
                 },
                 menus = new MenuTargetResponse
                 {
-                    Cards = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Cards)?.Id),
-                    Profile = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Profile)?.Id),
-                    Transactions = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Transactions)?.Id),
-                    Applications = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Applications)?.Id),
+                    Cards = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Cards)?.Id ?? 0, 1),
+                    Profile = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Profile)?.Id ?? 0, 1),
+                    Transactions = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Transactions)?.Id ?? 0, 1),
+                    Applications = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Applications)?.Id ?? 0, 1),
                 }
             };
 
             return res;
         }
 
-        private async Task<List<MenuItemResponse>?> GetMenu(int? menuId)
+        [HttpGet("GetMenuItemsByMenu/{menuGroupId}/{menuId}")]
+        public async Task<ActionResult<List<MenuItemResponse>?>> GetMenuItemsByMenu(int menuGroupId, int menuId)
+        {
+            var res = await GetMenu(menuGroupId, menuId);
+            return res;
+        }
+
+        private async Task<List<MenuItemResponse>?> GetMenu(int menuGroupId, int menuId)
         {
 
-            if (!menuId.HasValue)
-            {
-                return null;
-            }
-
             var menuItems = new List<MenuItemResponse>();
-            var items = await _menuItemRepository.GetByMenuIdAsync(menuId.Value);
+            var items = await _menuItemRepository.GetByMenuGroupIdMenuIdAsync(menuGroupId, menuId);
             foreach (var item in items.Where(a => a.Pid == null).OrderBy(a => a.SortOrder).ToArray())
             {
                 menuItems.Add(new MenuItemResponse

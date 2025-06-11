@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DynamicMenu.Web.Controllers
 {
-    public class MenuGroupController : Controller
+    public class MenuController : Controller
     {
         private readonly IMenuGroupRepository _menuGroupRepository;
         private readonly RemoteServiceDynamicMenuAPI _remoteServiceDynamicMenuAPI;
 
-        public MenuGroupController(IMenuGroupRepository menuGroupRepository, RemoteServiceDynamicMenuAPI remoteServiceDynamicMenuAPI)
+        public MenuController(IMenuGroupRepository menuGroupRepository, RemoteServiceDynamicMenuAPI remoteServiceDynamicMenuAPI)
         {
             _menuGroupRepository = menuGroupRepository;
             _remoteServiceDynamicMenuAPI = remoteServiceDynamicMenuAPI;
@@ -24,7 +24,8 @@ namespace DynamicMenu.Web.Controllers
 
         public async Task<ActionResult<IEnumerable<MenuGroup>>> GetAll()
         {
-            var url = "MenuGroup/GetAll";
+
+            var url = "Present/GetMenuGroups";
             var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<MenuGroup>>(url);
 
             return Ok(res);

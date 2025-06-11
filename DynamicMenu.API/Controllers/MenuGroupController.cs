@@ -16,7 +16,7 @@ namespace DynamicMenu.API.Controllers
         }
 
         // Listeleme
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<MenuGroup>>> GetAll()
         {
             var menuGroups = await _menuGroupRepository.GetAllAsync();

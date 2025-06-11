@@ -88,7 +88,7 @@ namespace DynamicMenu.API.Controllers
         [HttpGet("by-menuId/{menuId}")]
         public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetByRole(int menuId)
         {
-            var items = await _menuItemRepository.GetByMenuIdAsync(menuId);
+            var items = await _menuItemRepository.GetByMenuGroupIdAsync(menuId);
             return items.Select(MapToDto).ToList();
         }
 

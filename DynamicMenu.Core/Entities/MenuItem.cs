@@ -16,8 +16,9 @@ namespace DynamicMenu.Core.Entities
         public int SortOrder { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
+        public int MenuId { get; set; }
         public int MenuGroupId { get; set; }
-        
+
         public virtual MenuGroup? MenuGroup { get; set; }
         public MenuBaseItem MenuBaseItem { get; set; }
         public virtual MenuItem? Parent { get; set; }

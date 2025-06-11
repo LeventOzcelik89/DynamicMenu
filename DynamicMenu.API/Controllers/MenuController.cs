@@ -16,12 +16,21 @@ namespace DynamicMenu.API.Controllers
         }
 
         // Listeleme
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<Menu>>> GetAll()
         {
             var menus = await _menuRepository.GetAllAsync();
             return Ok(menus);
         }
+
+        // Listeleme
+        [HttpGet("GetByMenuGroup/{id}")]
+        public async Task<ActionResult<IEnumerable<Menu>>> GetByMenuGroup(int id)
+        {
+            var menus = await _menuRepository.GetByMenuGroupIdAsync(id);
+            return Ok(menus);
+        }
+
 
         // Tekil Getir
         [HttpGet("{id}")]
