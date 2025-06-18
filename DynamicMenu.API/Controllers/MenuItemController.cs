@@ -1,19 +1,20 @@
 using DynamicMenu.API.DTOs;
-using DynamicMenu.Core.Entities;
-using DynamicMenu.Core.Interfaces;
-using DynamicMenu.Core.Enums;
-using DynamicMenu.Infrastructure.Data;
-using Microsoft.AspNetCore.Mvc;
-using DynamicMenu.Infrastructure.Helpers;
 using DynamicMenu.API.Models.Dtos;
 using DynamicMenu.Application;
+using DynamicMenu.Core.Entities;
+using DynamicMenu.Core.Enums;
+using DynamicMenu.Core.Interfaces;
+using DynamicMenu.Core.Models;
+using DynamicMenu.Infrastructure.Data;
+using DynamicMenu.Infrastructure.Helpers;
 using DynamicMenu.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DynamicMenu.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MenuItemsController : ControllerBase
+    public class MenuItemController : ControllerBase
     {
         private readonly IMenuItemRepository _menuItemRepository;
         private readonly IMenuBaseItemRepository _menuBaseItemRepository;
@@ -23,7 +24,7 @@ namespace DynamicMenu.API.Controllers
         private const string CacheKeyPrefix = "menu_";
         private readonly DynamicMenuDbContext _context;
 
-        public MenuItemsController(
+        public MenuItemController(
             IMenuItemRepository menuItemRepository,
             IMenuRepository menuRepository,
             IRemoteMenusRepository remoteMenuConfigRepository,
@@ -370,5 +371,74 @@ namespace DynamicMenu.API.Controllers
                 Children = item.Children?.Select(MapToDto).Where(x => x != null).ToList() ?? new List<MenuItemDto>()
             };
         }
+
+
+
+
+
+
+
+
+        [HttpGet("GetMenuItemsByMenu/{menuGroupId}/{menuId}")]
+        public async Task<ActionResult<List<MenuItemResponse>?>> GetMenuItemsByMenu(int menuGroupId, int menuId)
+        {
+            var res = await GetMenu(menuGroupId, menuId);
+            return res;
+        }
+
+        private async Task<List<MenuItemResponse>?> GetMenu(int menuGroupId, int menuId)
+        {
+
+            var menuItems = new List<MenuItemResponse>();
+            var items = await _menuItemRepository.GetByMenuGroupIdMenuIdAsync(menuGroupId, menuId);
+            foreach (var item in items.Where(a => a.Pid == null).OrderBy(a => a.SortOrder).ToArray())
+            {
+                menuItems.Add(new MenuItemResponse
+                {
+                    id = item.Id,
+                    key = item.Keyword,
+                    text = item.MenuBaseItem.Text,
+                    textEn = item.MenuBaseItem.TextEn,
+                    icon = item.MenuBaseItem.IconPath,
+                    isNew = item.IsNew,
+                    items = GetMenuItems(items.ToArray(), item)
+                });
+            }
+
+            return menuItems;
+
+        }
+
+        private MenuItemResponse[] GetMenuItems(MenuItem[] items, MenuItem item)
+        {
+
+            var itemss = items.Where(a => a.Pid == item.Id).OrderBy(a => a.SortOrder).ToArray();
+            if (!itemss.Any())
+            {
+                return null;
+            }
+
+            var res = new List<MenuItemResponse>();
+            foreach (var subItem in itemss)
+            {
+
+                res.Add(new MenuItemResponse
+                {
+                    id = subItem.Id,
+                    pid = item.Id,
+                    key = subItem.Keyword,
+                    text = subItem.MenuBaseItem.Text,
+                    textEn = subItem.MenuBaseItem.TextEn,
+                    icon = subItem.MenuBaseItem.IconPath,
+                    isNew = subItem.IsNew,
+                    items = GetMenuItems(items, subItem)
+                });
+
+            }
+
+            return res.ToArray();
+
+        }
+
     }
 }

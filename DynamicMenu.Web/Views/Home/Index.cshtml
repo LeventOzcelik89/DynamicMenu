@@ -201,6 +201,7 @@
                                 <th>Açıklama</th>
                                 <th>Aktif mi</th>
                                 <th>Menü Tipi</th>
+                                <th>Menü Grupları</th>
                                 <th>Oluşturma Tarihi</th>
                                 <th>Düzenleme Tarihi</th>
                                 <th style="width: 120px;">İşlemler</th>
@@ -214,6 +215,31 @@
         </div>
 
     </div>
+
+    <script type="text/template" id="tblRow">
+
+        <tr>
+            <td>{{data.name}}</td>
+            <td>{{data.description}}</td>
+            <td>
+                <span class="badge bg-{{data.isActive == true ? 'success' : 'danger'}}">{{data.isActive == true ? 'Aktif' : 'Pasif'}}</span>
+            </td>
+                <td>{{data.menuType}}</td>
+                <td>{{new Date(data.createdDate).toLocaleString('tr-TR')}}</td>
+                <td>{{data.modifiedDate == null ? '-' : new Date(data.modifiedDate).toLocaleString('tr-TR')}}</td>
+                <td>{{data.menus.map(function(item){ return '<a href="Menu/Update?MenuGroupId=' + data.id + '&MenuId=' + item.id + '" class="btn btn-sm btn-info">' + item.name + '</a>'; }).join(''); }}</td>
+                @* <td>{{data.menus.map(function(item){ return '<span class="badge bg-success menuTarget' + item.menuTarget + '">' + item.name + '</span>'; }).join(''); }}</td> *@
+                <td>
+                    <button type="button" class="btn btn-sm btn-primary edit-menu-btn"
+                            data-id="{{data.id}}" data-name="{{data.name}}" data-description="{{data.description}}" data-aktif="{{data.isActive}}" data-menutype="{{data.menuType}}">
+                        <i class="fa fa-pencil"></i> Düzenle
+                    </button>
+                    <a href="MenuGroup/Update?menugroupId={{data.id}}" class="btn btn-sm btn-info"><i class="fa fa-wrench"></i> Yönetim</a>
+                </td>
+            </tr>
+
+    </script>
+
 
     <!-- Menü Düzenle Modal -->
     <div class="modal fade" id="editMenuModal" tabindex="-1" aria-labelledby="editMenuModalLabel" aria-hidden="true">
@@ -258,28 +284,6 @@
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/js/master.js"></script>
 
-    <script type="text/template" id="tblRow">
-
-        <tr>
-            <td>{{data.name}}</td>
-            <td>{{data.description}}</td>
-            <td>
-                <span class="badge bg-{{data.isActive == true ? 'success' : 'danger'}}">{{data.isActive == true ? 'Aktif' : 'Pasif'}}</span>
-            </td>
-                <td>{{data.menuType}}</td>
-                <td>{{new Date(data.createdDate).toLocaleString('tr-TR')}}</td>
-                <td>{{data.modifiedDate == null ? '-' : new Date(data.modifiedDate).toLocaleString('tr-TR')}}</td>
-                <td>
-                    <button type="button" class="btn btn-sm btn-primary edit-menu-btn"
-                            data-id="{{data.id}}" data-name="{{data.name}}" data-description="{{data.description}}" data-aktif="{{data.isActive}}" data-menutype="{{data.menuType}}">
-                        <i class="fa fa-pencil"></i> Düzenle
-                    </button>
-                    <a href="Home/MenuUpdate?menugroupId={{data.id}}" class="btn btn-sm btn-info"><i class="fa fa-wrench"></i> Yönetim</a>
-                </td>
-            </tr>
-
-    </script>
-
     <script type="text/javascript">
 
         var page = {
@@ -290,8 +294,7 @@
                 ReadData('/MenuGroup/GetAll', null, function(res){
 
                     $.each(res, function(i,item){
-                        var res = TemplateEngine.Render($('#tblRow'), item);
-                        $('#tbl tbody').append(res);
+                        TemplateEngine.RenderTo($('#tblRow'), item, $('#tbl tbody'));
                     });
 
                     // Düzenle butonuna tıklanınca modalı aç ve ilgili alanları doldur

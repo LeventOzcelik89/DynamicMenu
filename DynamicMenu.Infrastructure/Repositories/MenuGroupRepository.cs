@@ -23,7 +23,7 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task<IEnumerable<MenuGroup>> GetAllAsync()
         {
-            return await _context.MenuGroup.ToListAsync();
+            return await _context.MenuGroup.Include(a => a.Menus).ToListAsync();
         }
 
         public async Task<MenuGroup> AddAsync(MenuGroup menuGroupItem)

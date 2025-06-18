@@ -1,4 +1,4 @@
-﻿@model MenuGroup;
+﻿@model DynamicMenu.Web.Model.VMMenuItemUpdate;
 @inject DynamicMenu.Core.Models.AppSettings appSettings
 <!DOCTYPE html>
 <html lang="tr">
@@ -144,7 +144,7 @@
 
         <div id="app" class="app"></div>
 
-        <nav class="bottom-nav">
+        <nav class="bottom-nav hide">
             <div class="nav-item" data-menu="profile">
                 <i class="fas fa-user"></i>
                 <span>Profil</span>
@@ -351,7 +351,7 @@
         var page = {
             defines: {
                 baseUrl: '@Html.Raw(appSettings.baseUrl)',
-                menuGroup: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)),
+                model: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)),
                 lang: 'tr',
             },
             enums: {
@@ -385,7 +385,7 @@
                     });
                 });
 
-                ReadData('/Home/Save', { menuGroupId: page.defines.menuGroup.id, items: res }, function(ress){
+                ReadData('/Menu/Save', { menuId: page.defines.model.MenuId, items: res }, function(ress){
 
                 });
 
@@ -449,7 +449,7 @@
                 var menuTemplate = TemplateEngine.Render($('#menuTemplate'), item);
                 menuTemplate.data('data', item);
 
-                if(isNaN(item.id)){
+                if(item.isBase == true){
                     menuTemplate.find('.back-button').remove();
                 }
 
@@ -458,7 +458,7 @@
                 }
 
                 $.each(item.items, function(j, subitem){
-                    
+
                     subitem.iconPath = (page.defines.baseUrl + 'img/icons/' + subitem.icon + '.svg');
                     var menuItemTemplate = TemplateEngine.Render($('#menuItemTemplate'), subitem);
 
@@ -509,30 +509,9 @@
                 });
 
             },
-            ready: function () {
-
-                ReadData('/Home/GetMenuGroup', { menuGroupId: page.defines.menuGroup.Id }, function (res) {
-
-                    page.defines.menuGroup = res.menuGroup;
-
-                    page.data = res.menus;
-                    page.menuContainerElem.append(page.getElem_PageList({ id: 'transactions', menuTarget: 'Transactions', text: 'İşlemler', textEn: 'Transactions', items: page.data.transactions }));
-                    page.menuContainerElem.append(page.getElem_PageList({ id: 'cards', menuTarget: 'Cards', text: 'Kart Menü', textEn: 'Cards', items: page.data.cards }));
-                    page.menuContainerElem.append(page.getElem_PageList({ id: 'profile', menuTarget: 'Profile', text: 'Profil', textEn: 'Profile', items: page.data.profile }));
-                    page.menuContainerElem.append(page.getElem_PageList({ id: 'applications', menuTarget: 'Applications', text: 'Başvurular', textEn: 'Applications', items: page.data.applications }));
-
-                    $.each(page.data, function(d, data){
-                        $.each(data, function(i, item){
-                            item.pid = d;
-                            if(item.items != null && item.items.length > 0){
-                                page.makeSubMenu(item);
-                            }
-                        });
-                    });
-
-                    $('.page').hide();
-                    $('.page[data-page="transactions"]').show();
-                    $('.page .menu-container').sortable({
+            makeSortable: function(){
+            
+                $('.page .menu-container:not(.ui-sortable)').sortable({
                         axis: "y",
                         cursor: "move",
                         // activate: function( event, ui ) { console.log('activate'); },
@@ -564,9 +543,30 @@
 
                     });
 
+            },
+            ready: function () {
+
+                ReadData('/MenuItem/GetMenuItemsByMenu', { menuGroupId: page.defines.model.MenuGroupId, menuId: page.defines.model.MenuId }, function (res) {
+
+                    page.data = res;
+                    page.menuContainerElem.append(page.getElem_PageList({ isBase: true, id: '0', menuTarget: 'Transactions', text: 'Menü Detayı', textEn: 'Menu Detail', items: page.data }));
+                    //  page.menuContainerElem.append(page.getElem_PageList({ id: 'cards', menuTarget: 'Cards', text: 'Kart Menü', textEn: 'Cards', items: page.data.cards }));
+                    //  page.menuContainerElem.append(page.getElem_PageList({ id: 'profile', menuTarget: 'Profile', text: 'Profil', textEn: 'Profile', items: page.data.profile }));
+                    //  page.menuContainerElem.append(page.getElem_PageList({ id: 'applications', menuTarget: 'Applications', text: 'Başvurular', textEn: 'Applications', items: page.data.applications }));
+
+                    $.each(page.data, function(i, item){
+                        if(item.items != null && item.items.length > 0){
+                            page.makeSubMenu(item);
+                        }
+                    });
+
+                    $('.page').hide();
+                    $('.page[data-page="0"]').show();
+                    page.makeSortable();
+
                 });
 
-                ReadData('/Home/GetIcons', null, function (items) {
+                ReadData('/Menu/GetIcons', null, function (items) {
 
                     page.icons = items;
 
@@ -680,7 +680,7 @@
                 }
 
                 //  $('#editMenuItemModal').modal('hide');
-
+                page.makeSortable();
 
                 return false;
 

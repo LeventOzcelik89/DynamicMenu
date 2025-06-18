@@ -199,7 +199,23 @@ var cookies = {
 
 var TemplateEngine = {
 
-    Render: function (templateElement, data, target) {
+    RenderTo: function (templateElement, data, target) {
+
+        var template = TemplateEngine.Render(templateElement, data);
+        target.append(template);
+
+    },
+
+    RenderAll: function (templateElement, data, target) {
+
+        $.each(data, function (i, item) {
+            var res = TemplateEngine.Render(templateElement, item);
+            target.append(res);
+        });
+
+    },
+
+    Render: function (templateElement, data) {
 
         var template = templateElement.html();
         var matches = template.match(/{{(.*?)}}/g);
@@ -214,17 +230,8 @@ var TemplateEngine = {
 
         template = $(template);
 
-        target.append(template);
+        return template;
 
     },
-
-    RenderAll: function (templateElement, data, target) {
-
-        $.each(data, function (i, item) {
-            var res = TemplateEngine.Render(templateElement, item);
-            target.append(res);
-        });
-
-    }
 
 };
