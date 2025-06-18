@@ -20,9 +20,10 @@ builder.Services.AddDbContext<DynamicMenuDbContext>(options =>
         b => b.MigrationsAssembly("DynamicMenu.Infrastructure")
     ), ServiceLifetime.Scoped); // Scoped lifetime eklendi
 
+builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
 builder.Services.AddScoped<IMenuGroupRepository, MenuGroupRepository>();
-builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+builder.Services.AddScoped<IMenuBaseItemRepository, MenuBaseItemRepository>();
 
 var appSettings = new AppSettings();
 builder.Configuration.GetSection(nameof(AppSettings)).Bind(appSettings);

@@ -59,11 +59,13 @@ namespace DynamicMenu.Infrastructure.Extensions
             });
 
             // Services
-            services.AddScoped<IMenuItemRepository, MenuItemRepository>();
             services.AddScoped<IMenuRepository, MenuRepository>();
+            services.AddScoped<IMenuItemRepository, MenuItemRepository>();
             services.AddScoped<IMenuGroupRepository, MenuGroupRepository>();
-            services.AddScoped<IRemoteMenusRepository, RemoteMenuConfigRepository>();
             services.AddScoped<IRemoteMenusRepository, RemoteMenusRepository>();
+            services.AddScoped<IMenuBaseItemRepository, MenuBaseItemRepository>();
+            services.AddScoped<IRemoteMenusRepository, RemoteMenuConfigRepository>();
+            
             services.AddScoped<ICacheService, InMemoryCacheService>();
             services.AddScoped<JwtService>();
 
