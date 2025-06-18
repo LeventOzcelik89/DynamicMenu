@@ -111,12 +111,10 @@ namespace DynamicMenu.API.Controllers
                 {
                     id = item.Id,
                     key = item.Keyword,
-                    //  text = item.Text,
-                    //  textEn = item.TextEn,
-                    //  icon = item.IconPath,
-                    MenuBaseItem = item.MenuBaseItem,   //  todo:   dolacak mı kontrol et
+                    text = item.MenuBaseItem.Text,
+                    textEn = item.MenuBaseItem.TextEn,
+                    icon = item.MenuBaseItem.IconPath,
                     isNew = item.IsNew,
-                    sortOrder = item.SortOrder,
                     items = GetMenuItems(items.ToArray(), item)
                 });
             }
@@ -143,12 +141,10 @@ namespace DynamicMenu.API.Controllers
                     id = subItem.Id,
                     pid = item.Id,
                     key = subItem.Keyword,
-                    //  text = subItem.Text,
-                    //  textEn = subItem.TextEn,
-                    //  icon = subItem.IconPath,
-                    MenuBaseItem = subItem.MenuBaseItem,
+                    text = subItem.MenuBaseItem.Text,
+                    textEn = subItem.MenuBaseItem.TextEn,
+                    icon = subItem.MenuBaseItem.IconPath,
                     isNew = subItem.IsNew,
-                    sortOrder = subItem.SortOrder,
                     items = GetMenuItems(items, subItem)
                 });
 

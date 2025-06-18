@@ -80,7 +80,7 @@ namespace DynamicMenu.Infrastructure.Repositories
         {
             return await _context.MenuItem
                 .Where(x => x.MenuId == menuId && x.MenuGroupId == menuGroupId)
-                .Include(a => a.MenuBaseItem)
+                .Include(a => a.MenuBaseItem).IgnoreAutoIncludes()
                 .ToListAsync();
         }
 

@@ -15,7 +15,7 @@ namespace DynamicMenu.Core.Entities
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
 
-        public virtual ICollection<MenuItem> MenuItems { get; set; }
+        //  public virtual ICollection<MenuItem> MenuItems { get; set; }
 
     }
 }

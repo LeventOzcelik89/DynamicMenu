@@ -17,10 +17,10 @@ namespace DynamicMenu.Infrastructure.Data.Configurations
             builder.Property(a => a.MenuBaseItemId)
                 .IsRequired(true);
 
-            builder.HasOne(a => a.MenuBaseItem)
-                .WithMany(a => a.MenuItems)
-                .HasForeignKey(a => a.MenuBaseItemId)
-                .OnDelete(DeleteBehavior.Restrict);
+            //builder.HasOne(a => a.MenuBaseItem)
+            //    .WithMany(a => a.MenuItems)
+            //    .HasForeignKey(a => a.MenuBaseItemId)
+            //    .OnDelete(DeleteBehavior.Restrict);
             
             builder.Property(x => x.MenuGroupId)
                 .HasDefaultValue(1);

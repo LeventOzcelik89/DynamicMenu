@@ -31,7 +31,7 @@ namespace DynamicMenu.Infrastructure.Repositories
                     CreatedDate = x.CreatedDate,
                     ModifiedDate = x.ModifiedDate,
                     IconPath = x.IconPath,
-                    MenuItems = x.MenuItems,
+                    //  MenuItems = x.MenuItems,
                     Text = x.Text,
                     TextEn = x.TextEn,
                 })
