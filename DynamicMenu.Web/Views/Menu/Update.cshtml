@@ -25,7 +25,7 @@
             </button>
         </div>
 
-        <div class="btn-group me-2" role="group">
+@*         <div class="btn-group me-2" role="group">
             <button type="button" class="btn btn-primary" title="Yukarı Taşı">
                 <i class="fas fa-arrow-up"></i>
                 <span class="button-text">Yukarı Taşı</span>
@@ -35,7 +35,7 @@
                 <span class="button-text">Aşağı Taşı</span>
             </button>
         </div>
-
+ *@
         <div class="btn-group" role="group">
             <button type="button" class="btn btn-primary" title="Kaydet" data-task="saveMenu">
                 <i class="fas fa-save"></i>
@@ -283,7 +283,7 @@
                     });
                 });
 
-                ReadData('/Menu/Save', { menuId: page.defines.model.MenuId, items: res }, function(ress){
+                ReadData('/Menu/Save', { menuId: page.defines.model.MenuId, menuGroupId: page.defines.model.MenuGroupId, items: res }, function(ress){
 
                 });
 
@@ -294,23 +294,24 @@
 
                 $.each(page.data, function(d,data){
 
-                    var res = data.filter(function(im){ return im.id == id })[0];
-
-                    if(res != undefined){
-                        gRes = res;
+                    if(data.id == id){
+                        gRes = data;
                         return false;
                     }
 
-                    $.each(data, function(i,item){
-                        if(item.items != null){
-                            res = page.searchData(item.items, id);
-                        }
+                    //  var res = data.filter(function(im){ return im.id == id })[0];
 
-                        if(res != undefined){
-                            gRes = res;
+                    //  if(res != undefined){
+                    //      gRes = res;
+                    //      return false;
+                    //  }
+
+                    if(data.items != null){
+                        gRes = page.searchData(data.items, id);
+                        if(gRes != undefined){
                             return false;
                         }
-                    });
+                    }
 
                 });
 
@@ -378,7 +379,7 @@
                         //  todo: Burası formData update edildiğinde çalışacak bölüm.
                         menuItemTemplate.find('[data-target="text"]').html(data.text);
                         menuItemTemplate.find('[data-target="textEn"]').html(data.textEn);
-                        menuItemTemplate.find('[data-target="icon"]').attr('src', ('img/icons/' + data.icon + '.svg'));
+                        menuItemTemplate.find('[data-target="icon"]').attr('src', (page.defines.baseUrl + 'img/icons/' + data.icon + '.svg'));
                         if(data.isNew == true){
                             menuItemTemplate.find('[data-target="isNew"]').show();
                         }else{
