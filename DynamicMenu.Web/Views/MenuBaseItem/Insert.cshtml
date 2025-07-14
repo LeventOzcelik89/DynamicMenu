@@ -1,0 +1,29 @@
+﻿@model DynamicMenu.API.DTOs.CreateMenuBaseItemDto
+
+<div class="form-container">
+    <form id="customForm" data-formType="ajax" novalidate="true">
+        @Html.HiddenFor(a => a.Id)
+
+        <div class="mb-3">
+            <label for="text" class="form-label">Text</label>
+            @Html.TextBoxFor(a => a.Text, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
+        </div>
+
+        <div class="mb-3">
+            <label for="textEn" class="form-label">Text En</label>
+            @Html.TextBoxFor(a => a.TextEn, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
+        </div>
+
+        <div class="mb-3">
+            <label for="iconPath" class="form-label">Icon Path</label>
+            @Html.TextBoxFor(a => a.IconPath, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-secondary">Vazgeç</button>
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        </div>
+
+    </form>
+</div>
+

@@ -45,5 +45,11 @@ namespace DynamicMenu.Web.Controllers
             return res;
         }
 
+        [HttpGet]
+        public async Task<ActionResult> Insert()
+        {
+            return View();
+        }
+
     }
 }

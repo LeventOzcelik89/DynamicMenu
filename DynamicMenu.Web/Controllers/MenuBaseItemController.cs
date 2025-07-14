@@ -1,4 +1,5 @@
-﻿using DynamicMenu.API.Models;
+﻿using DynamicMenu.API.DTOs;
+using DynamicMenu.API.Models;
 using DynamicMenu.Core.Entities;
 using DynamicMenu.Core.Interfaces;
 using DynamicMenu.Core.Models;
@@ -44,6 +45,12 @@ namespace DynamicMenu.Web.Controllers
             var url = $"MenuItem/GetMenuItemsByMenu/{menuGroupId}/{menuId}";
             var res = await _remoteServiceDynamicMenuAPI.GetData<List<MenuItemResponse>>(url);
             return res;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Insert()
+        {
+            return View(new CreateMenuBaseItemDto());
         }
 
     }
