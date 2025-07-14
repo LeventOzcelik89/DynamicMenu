@@ -35,5 +35,34 @@ namespace DynamicMenu.Web.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<ActionResult> Insert()
+        {
+            return View(new MenuGroup());
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<MenuGroup>> Insert(MenuGroup item)
+        {
+            //  API giderek işletmemiz gerekecek.
+            var result = await _menuGroupRepository.AddAsync(item);
+            return result;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<MenuGroup>> Update(int id)
+        {
+            var dbItem = _menuGroupRepository.GetByIdAsync(id);
+            return View(dbItem);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<MenuGroup>> Update(MenuGroup item)
+        {
+            //  API giderek işletmemiz gerekecek.
+            var result = await _menuGroupRepository.UpdateAsync(item);
+            return result;
+        }
+
     }
 }

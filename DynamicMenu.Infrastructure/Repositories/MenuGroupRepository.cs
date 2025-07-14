@@ -33,10 +33,11 @@ namespace DynamicMenu.Infrastructure.Repositories
             return menuGroupItem;
         }
 
-        public async Task UpdateAsync(MenuGroup menuGroupItem)
+        public async Task<MenuGroup> UpdateAsync(MenuGroup menuGroupItem)
         {
             _context.Entry(menuGroupItem).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+            return menuGroupItem;
         }
 
         public async Task DeleteAsync(int id)
