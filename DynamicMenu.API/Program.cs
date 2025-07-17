@@ -16,6 +16,10 @@ builder.Services.AddControllers()
     {
         options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        options.SerializerSettings.ContractResolver = new DefaultContractResolver
+        {
+            NamingStrategy = new DefaultNamingStrategy()
+        };
     })
     .AddApplicationPart(typeof(Program).Assembly);
 

@@ -1,0 +1,92 @@
+﻿<!-- Menü Tablosu Sayfası -->
+<div class="page" id="list" data-page="menu-list">
+    <main>
+        <div class="action-buttons top-buttons">
+            <a data-href="/MenuBaseItem/Insert" class="action-button" id="new-menu" data-modal="" >
+                <i class="fas fa-plus"></i>
+                <span>Yeni Menü Ekle</span>
+            </a>
+        </div>
+
+        <div class="data-table-container">
+            <table class="uk-table uk-table-hover uk-table-striped" id="tbl">
+                <thead class="table-light">
+                    <tr>
+                        <th>Adı</th>
+                        <th>Adı (En)</th>
+                        <th>icon</th>
+                        <th>Oluşturma Tarihi</th>
+                        <th>Düzenleme Tarihi</th>
+                        <th style="width: 120px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </main>
+</div>
+
+<script type="text/template" id="tblRow">
+
+    <tr>
+        <td>{{data.Text}}</td>
+        <td>{{data.TextEn}}</td>
+        <td>{{data.IconPath}}</td>
+        <td>{{data.CreatedDate == null ? '-' : new Date(data.CreatedDate).toLocaleString('tr-TR')}}</td>
+        <td>{{data.ModifiedDate == null ? '-' : new Date(data.ModifiedDate).toLocaleString('tr-TR')}}</td>
+        <td>
+            <div class="btn-group" role="group">
+                <a href="/MenuBaseItem/Update/{{data.Id}}" type="button" class="btn btn-sm btn-primary" data-id="{{data.Id}}">Düzenle</a>
+                <a href="/MenuGroup/Delete?menugroupId={{data.Id}}" class="btn btn-sm btn-info">Sil</a>
+            </div>
+            </td>
+        </tr>
+
+</script>
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        var page = {
+
+            tbl: null,
+            ready: function(){
+
+                ReadData('/MenuBaseItem/GetAll', null, function(res){
+
+                    $.each(res, function(i,item){
+                        TemplateEngine.RenderTo($('#tblRow'), item, $('#tbl tbody'));
+                    });
+
+                    $('#tbl').dataTable({
+                    responsive: true,
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/tr.json'
+                    },
+                    //     columnDefs: [
+                    //         { targets: -1, orderable: false }
+                    //     ]
+                    });
+
+                });
+
+            }
+
+        };
+
+
+        $(document)
+
+        .ready(function () {
+
+            page.ready();
+
+        })
+
+        ;
+
+    </script>
+
+}

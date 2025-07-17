@@ -8,7 +8,7 @@
         e.preventDefault();
 
         var _this = $(this);
-        var button = _this.find('.active[type="submit"]');
+        var button = _this.find('[type="submit"]');
         var action = button.attr("formaction") || _this.attr("action");
         var method = button.attr("formmethod") || _this.attr("method");
         var target = button.attr("formtarget") || _this.attr("target");
@@ -22,14 +22,13 @@
             _this.attr("action", action);
             _this.attr("target", "_blank");
             _this.trigger("submit");
-            _this.attr("data-formType", "Ajax");
+            _this.attr("data-formType", "ajax");
             _this.removeAttr("target");
             return;
         }
 
-
-        _this.find('.active[type="submit"]').each(function (c) {
-            if ($(this).attr("value") != "" && $(this).attr("name") != "") {
+        _this.find('[type="submit"]').each(function (c) {
+            if ($(this).attr("value") !== undefined && $(this).attr("name") !== undefined && $(this).attr("value") != "" && $(this).attr("name") != "") {
                 stringData.push({ name: $(this).attr("name"), value: $(this).attr("value") });
             }
         });
@@ -62,7 +61,7 @@
                 $('body').loadingModal({ text: title, animation: 'rotatingPlane', backgroundColor: 'black' });
             },
             success: function (response) {
-                feedback(response.FeedBack);
+                feedback(response.feedback);
                 if (response.Result) {
                     var modal = _this.parents(".modal");
                     if (modal.length > 0 && typeof _this.attr('data-modal-close') == "undefined") {
@@ -100,6 +99,100 @@
         fn_RunFormValidators();
 
     })
+
+    .on('click', '[data-modal]', function (e) {
+
+        e.preventDefault();
+        var _this = $(this);
+        if (_this.attr("disabled") == "disabled") { return false; }
+
+        if (_this.attr('data-href') === undefined) { return false; }
+
+        var _blank = _this.attr("data-blank") != undefined;
+        var _data = {};
+        var _grid = _this.parents('.k-grid').eq(0).data('kendoGrid');
+        var _multiple = _grid && _grid.options.selectable.indexOf('Multiple') > -1;
+        var _postArray = _multiple == undefined || _multiple == false ? false : (_this.attr('data-show') == 'single' ? false : true);
+
+        var _modal = _this.attr("data-modal") != 'false';
+        var _id = [];
+        if (_this.attr("data-show") != 'always') {
+            _id = _grid ? _grid.select().map(function (i, elem) { return _grid.dataItem(elem)[_grid.wrapper.attr('data-selection')]; }).toArray() :     //  grid varsa gridden al
+                _this.attr('data-id') ? [_this.attr('data-id')]                                                                                           //  yoksa elementten
+                    : '';
+        }
+        _data.id = _postArray == false ? _id[0] : _id;
+        var _modalType = typeof (_this.attr('data-modalType')) != 'undefined' ? ('type-' + _this.attr('data-modalType')) : ('type-info');
+        var _ask = typeof (_this.attr('data-ask')) != 'undefined';
+
+        var _extraData = _this.attr('data-extraData');
+        if (typeof (_extraData) != 'undefined') {
+            $.each(_extraData.split(','), function (i, item) {
+                _data[item] = (typeof ($('#' + item).val()) != 'undefined' ? $('#' + item).val() : '');
+            });
+        }
+
+        if (_ask) {
+
+            swal({
+                title: "Devam Et ?",
+                text: (_this.attr('data-ask') == '' || _this.attr('data-ask') == undefined)
+                    ? "İşlemi gerçekleştirmek için onay vermeniz gereklidir. Devam etmek istediğinize emin misiniz !"
+                    : _this.attr('data-ask'),
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Evet",
+                cancelButtonText: "Hayır",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }, function (isConfirm) {
+
+                if (isConfirm) {
+
+                    if (_modal) {
+                        Kendo_GetRequest(_this.attr('data-href'), _data, _this, _modalType);
+                    } else {
+                        var __data = '';
+                        $.each(_data, function (i, item) { if (item != '' && item != null) { __data += '&' + i + '=' + item; } });
+
+                        var tUrl = window.encodeURI(_this.attr('data-href') + (__data.length > 0 ? (_this.attr('data-href').indexOf('?') > -1 ? '&' : '?') + __data.substring(1) : ''));
+                        if (_blank) {
+                            window.open(tUrl, '_blank');
+                        } else {
+                            window.location.href = tUrl;
+                        }
+
+                    }
+
+                } else {
+                    //  swal("İşlem iptal edildi", "İşlem tarafınızca iptal edildi.", "warning");
+                }
+
+                swal.close();
+
+            });
+
+        } else {
+
+            if (_modal) {
+                Kendo_GetRequest(_this.attr('data-href'), _data, _this, _modalType);
+            } else {
+                var __data = '';
+                $.each(_data, function (i, item) { if (item != '' && item != null) { __data += '&' + i + '=' + item; } });
+                var tUrl = window.encodeURI(_this.attr('data-href') + (__data.length > 0 ? (_this.attr('data-href').indexOf('?') > -1 ? '&' : '?') + __data.substring(1) : ''));
+                if (_blank) {
+                    window.open(tUrl, '_blank');
+                } else {
+                    window.location.href = tUrl;
+                }
+            }
+
+        }
+
+        return false;
+
+    })
   
     ;
 
@@ -108,10 +201,9 @@
 
 function fn_RunFormValidators() {
 
-    //Bütün ek validate işlemleri burda yapılacak
-    $('form').livequery(function (e) {
+    $.each($('form'), function (f, form) {
 
-        var _this = $(this);
+        var _this = $(form);
 
         _this.validator().submit(function (e) {
 
@@ -217,7 +309,7 @@ function fn_RunFormValidators() {
 
             }
 
-            if (_this.attr('data-formType') == "Ajax") {
+            if (_this.attr('data-formType') == "ajax") {
                 if (formResult) {
                     if (location.href.indexOf('localhost') > -1) { console.log(_this); console.log('validate:submit'); }
                     _this.trigger("validate:submit");
@@ -230,5 +322,91 @@ function fn_RunFormValidators() {
         });
 
     });
+
+    ////Bütün ek validate işlemleri burda yapılacak
+    //$('form').livequery(function (e) {
+
+    //    var _this = $(this);
+
+        
+
+    //});
+
+}
+
+function Kendo_GetRequest(_url, _data, _button, _modalType, title) {
+    var _title = '';
+    var $message = $('<div class="clearfix"></div>');
+    var $isJSON = false;
+
+    if (_button == undefined) {
+        _button = $('<button data-method="GET"></button>');
+    }
+
+    $.ajax({
+        timeout: 6000000,
+        url: _url,
+        type: _button.attr('data-method'),
+        data: _data,
+        beforeSend: function () {
+            $('body').loadingModal({ text: 'Lütfen Bekleyin...', animation: 'rotatingPlane', backgroundColor: 'black' });
+            _button.attr("disabled", "disabled");
+        },
+        success: function (response) {
+
+            //  AJAX Result Control
+            if (typeof (response.FeedBack) != 'undefined' && typeof (response.Result) != 'undefined' && typeof (response.Object) != 'undefined') {
+                feedback(response.FeedBack);
+                $isJSON = true;
+                _button.parents("form").trigger("success", response);
+                return;
+            }
+
+            var tHtml = $(response).filter(function (i, e) { return $(e).attr("data-selector") == "modalContainer" });
+
+            tHtml = tHtml.length > 0 ? tHtml : $(response).find('[data-selector="modalContainer"]');
+
+            $message.append($(response).find('[data-selector="modalContainer"]'));
+            var tHtml = $(response).each(function (i, e) {
+                if ($(e).attr("data-selector") == "modalContainer") { $message.append($(e)); }
+                if ($(this)?.context?.nodeName == "TITLE") { _title = $(this).text().split(" | ")[0]; }
+            });
+
+            if (title != undefined) { _title = title; }
+
+            if (tHtml.children() == 0) { $message.html("Seçici Bulunamadı"); }
+
+        },
+        error: function (response) {
+            $message.html('<div class="text-center">İç sunucu hatası ' + response.statusText + '</div>');
+        },
+        complete: function () {
+
+            _button.removeAttr("disabled");
+            $('body').loadingModal('destroy');
+
+            if (_button.data("nothing")) //  alttaki işlemlerin yapılmaması için tanımlanmıştır.
+                return;
+
+            if (!$isJSON) {
+
+                BootstrapDialog.show({
+                    size: 'size-wide',
+                    type: _modalType ? _modalType : 'type-info',
+                    title: (_title == '' || typeof (_title) == 'undefined') ? "Kayıt Detayı" : _title,
+                    message: function (dialog) { return $message; },
+                    onshown: function (dialogRef) {
+                        _button.trigger("open:modal");
+                        $.each(haritalar, function (i, item) { item.map.updateSize(); });
+                    }
+                });
+
+
+            } else {
+                $(".k-pager-refresh.k-link").each(function (i, e) { $(e).trigger('click'); });
+            }
+
+        }
+    })
 
 }

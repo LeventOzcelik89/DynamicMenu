@@ -37,7 +37,7 @@ namespace DynamicMenu.API.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<MenuBaseItemDto>>> GetAll()
         {
             var cacheKey = $"{CacheKeyPrefix}all";
@@ -101,7 +101,7 @@ namespace DynamicMenu.API.Controllers
             existingItem.TextEn = updateDto.TextEn;
             existingItem.IconPath = updateDto.IconPath;
             existingItem.ModifiedDate = DateTime.UtcNow;
- 
+
             await _MenuBaseItemRepository.UpdateAsync(existingItem);
             await _cacheService.RemoveAsync($"{CacheKeyPrefix}all");
             await _cacheService.RemoveAsync($"{CacheKeyPrefix}{id}");
@@ -128,6 +128,8 @@ namespace DynamicMenu.API.Controllers
                 IconPath = item.IconPath,
                 Text = item.Text,
                 TextEn = item.TextEn,
+                CreatedDate = item.CreatedDate,
+                ModifiedDate = item.ModifiedDate
             };
         }
 

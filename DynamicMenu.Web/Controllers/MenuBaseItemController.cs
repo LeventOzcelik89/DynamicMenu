@@ -17,12 +17,13 @@ namespace DynamicMenu.Web.Controllers
         private readonly IMenuBaseItemRepository _menuBaseItemRepository;
         private readonly RemoteServiceDynamicMenuAPI _remoteServiceDynamicMenuAPI;
 
-        public MenuBaseItemController(IMenuGroupRepository menuGroupRepository, IMenuRepository menuRepository, IMenuItemRepository menuItemRepository, RemoteServiceDynamicMenuAPI remoteServiceDynamicMenuAPI)
+        public MenuBaseItemController(IMenuBaseItemRepository menuBaseItemRepository, IMenuGroupRepository menuGroupRepository, IMenuRepository menuRepository, IMenuItemRepository menuItemRepository, RemoteServiceDynamicMenuAPI remoteServiceDynamicMenuAPI)
         {
             _menuRepository = menuRepository;
             _menuItemRepository = menuItemRepository;
             _menuGroupRepository = menuGroupRepository;
             _remoteServiceDynamicMenuAPI = remoteServiceDynamicMenuAPI;
+            _menuBaseItemRepository = menuBaseItemRepository;
         }
 
         public IActionResult Index()
@@ -30,11 +31,11 @@ namespace DynamicMenu.Web.Controllers
             return View();
         }
 
-        public async Task<ActionResult<IEnumerable<MenuItem>>> GetAll()
+        public async Task<ActionResult<IEnumerable<MenuBaseItem>>> GetAll()
         {
 
             var url = "MenuBaseItem/GetAll";
-            var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<MenuItem>>(url);
+            var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<MenuBaseItem>>(url);
 
             return Ok(res);
 
@@ -51,6 +52,42 @@ namespace DynamicMenu.Web.Controllers
         public async Task<ActionResult> Insert()
         {
             return View(new CreateMenuBaseItemDto());
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> Insert(CreateMenuBaseItemDto item)
+        {
+            var dto = new MenuBaseItem
+            {
+                CreatedDate = DateTime.Now,
+                IconPath = item.IconPath,
+                Text = item.Text,
+                TextEn = item.TextEn
+            };
+            var res = await _menuBaseItemRepository.AddAsync(dto);
+            return Ok(new ResultStatus<MenuBaseItem> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult> Update(int id)
+        {
+            var item = await _menuBaseItemRepository.GetByIdAsync(id);
+            return View(MapToDto(item));
+        }
+
+        private static UpdateMenuBaseItemDto MapToDto(MenuBaseItem item)
+        {
+            if (item == null) return null;
+
+            return new UpdateMenuBaseItemDto
+            {
+                Id = item.Id,
+                IconPath = item.IconPath,
+                Text = item.Text,
+                TextEn = item.TextEn
+            };
         }
 
     }

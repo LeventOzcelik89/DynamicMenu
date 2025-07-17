@@ -1,7 +1,8 @@
-﻿@model DynamicMenu.API.DTOs.CreateMenuBaseItemDto
+﻿@model DynamicMenu.API.DTOs.UpdateMenuBaseItemDto
 
 <div class="form-container">
-    <form id="customForm" data-formType="ajax" novalidate="true" method="post" action="/MenuBaseItem/Insert">
+    <form id="customForm" data-formType="ajax" novalidate="true">
+        @Html.HiddenFor(a => a.Id)
 
         <div class="mb-3">
             <label for="text" class="form-label">Text</label>
