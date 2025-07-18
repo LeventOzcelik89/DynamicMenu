@@ -96,7 +96,7 @@
 
     .ready(function () {
 
-        fn_RunFormValidators();
+        //fn_RunFormValidators();
 
     })
 
@@ -390,16 +390,14 @@ function Kendo_GetRequest(_url, _data, _button, _modalType, title) {
 
             if (!$isJSON) {
 
-                BootstrapDialog.show({
-                    size: 'size-wide',
+                Dialog($message, {
                     type: _modalType ? _modalType : 'type-info',
                     title: (_title == '' || typeof (_title) == 'undefined') ? "Kayıt Detayı" : _title,
-                    message: function (dialog) { return $message; },
-                    onshown: function (dialogRef) {
+                    onShown: function (dialogRef) {
                         _button.trigger("open:modal");
-                        $.each(haritalar, function (i, item) { item.map.updateSize(); });
+                        //  $.each(haritalar, function (i, item) { item.map.updateSize(); });
                     }
-                });
+                })
 
 
             } else {
@@ -408,5 +406,18 @@ function Kendo_GetRequest(_url, _data, _button, _modalType, title) {
 
         }
     })
+
+}
+
+function Dialog(message, opts) {
+
+    var opts = $.extend(opts, {
+        message: message,
+        size: 'large',
+        locale: 'tr',
+        closeButton: true
+    });
+
+    bootbox.alert(opts);
 
 }

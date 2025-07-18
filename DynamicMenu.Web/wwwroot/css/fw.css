@@ -92,3 +92,23 @@ header {
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
 }
+
+
+.modal .modal-header {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+    .modal .modal-header .modal-title {
+        color: #fff;
+    }
+
+.modal .modal-footer {
+    display: none;
+}
+
+
+.modal .modal-body {
+    padding: 0px;
+}
