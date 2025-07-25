@@ -1,0 +1,21 @@
+﻿@model string[]
+@inject DynamicMenu.Core.Models.AppSettings appSettings
+@{
+    ViewBag.Title = "Menu Item Icons";
+}
+
+<div id="icons">
+    @foreach (var item in Model)
+    {
+        <img data-name="@item" src="@(appSettings.baseUrl + "/img/icons/" + item + ".svg")" />
+    }
+</div>
+
+<style type="text/css">
+    #icons > img {
+        width: 44px;
+        cursor: pointer;
+        border: 1px solid #fff;
+        border-radius: 6px;
+    }
+</style>

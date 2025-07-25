@@ -35,22 +35,22 @@
 <script type="text/template" id="tblRow">
 
     <tr>
-        <td>{{data.name}}</td>
-        <td>{{data.description}}</td>
+        <td>{{data.Name}}</td>
+        <td>{{data.Description}}</td>
         <td>
-            <span class="badge bg-{{data.isActive == true ? 'success' : 'danger'}}">{{data.isActive == true ? 'Aktif' : 'Pasif'}}</span>
+            <span class="badge bg-{{data.IsActive == true ? 'success' : 'danger'}}">{{data.IsActive == true ? 'Aktif' : 'Pasif'}}</span>
         </td>
-            <td>{{data.menuType}}</td>
-            <td>{{data.createdDate == null ? '-' : new Date(data.createdDate).toLocaleString('tr-TR')}}</td>
-            <td>{{data.modifiedDate == null ? '-' : new Date(data.modifiedDate).toLocaleString('tr-TR')}}</td>
-            <td>{{data.menus.map(function(item){ return '<a href="Menu/Update?MenuGroupId=' + data.id + '&MenuId=' + item.id + '" class="btn btn-sm btn-info">' + item.name + '</a>'; }).join(''); }}</td>
+            <td>{{data.MenuType}}</td>
+            <td>{{data.CreatedDate == null ? '-' : new Date(data.CreatedDate).toLocaleString('tr-TR')}}</td>
+            <td>{{data.ModifiedDate == null ? '-' : new Date(data.ModifiedDate).toLocaleString('tr-TR')}}</td>
+            <td>{{data.Menus.map(function(item){ return '<a href="Menu/Update?MenuGroupId=' + data.Id + '&MenuId=' + item.Id + '" class="btn btn-sm btn-info">' + item.Name + '</a>'; }).join(''); }}</td>
             @* <td>{{data.menus.map(function(item){ return '<span class="badge bg-success menuTarget' + item.menuTarget + '">' + item.name + '</span>'; }).join(''); }}</td> *@
             <td>
                 <button type="button" class="btn btn-sm btn-primary edit-menu-btn"
-                        data-id="{{data.id}}" data-name="{{data.name}}" data-description="{{data.description}}" data-aktif="{{data.isActive}}" data-menutype="{{data.menuType}}">
+                        data-id="{{data.Id}}" data-name="{{data.Name}}" data-description="{{data.Description}}" data-aktif="{{data.IsActive}}" data-menutype="{{data.MenuType}}">
                     <i class="fa fa-pencil"></i> Düzenle
                 </button>
-                <a href="MenuGroup/Update?menugroupId={{data.id}}" class="btn btn-sm btn-info"><i class="fa fa-wrench"></i> Yönetim</a>
+                <a href="MenuGroup/Update?menugroupId={{data.Id}}" class="btn btn-sm btn-info"><i class="fa fa-wrench"></i> Yönetim</a>
             </td>
         </tr>
 

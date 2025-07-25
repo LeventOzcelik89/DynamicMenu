@@ -50,16 +50,6 @@ namespace DynamicMenu.Web.Controllers
             return View(request);
         }
 
-        public async Task<ActionResult<IEnumerable<string>>> GetIcons(int menuId)
-        {
-
-            var url = "Present/geticons";
-            var res = await _remoteServiceDynamicMenuAPI.GetData<string[]>(url);
-
-            return Ok(res);
-
-        }
-
         public async Task<ActionResult<ResultStatus<bool>>> Save(int menuId, MenuItemProcessDTO[] items)
         {
             try

@@ -90,5 +90,25 @@ namespace DynamicMenu.Web.Controllers
             };
         }
 
+        [HttpGet]
+        public async Task<ActionResult> MenuIcons()
+        {
+            var url = "Present/geticons";
+            var res = await _remoteServiceDynamicMenuAPI.GetData<string[]>(url);
+
+            return View(res);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<string>>> GetIcons()
+        {
+
+            var url = "Present/geticons";
+            var res = await _remoteServiceDynamicMenuAPI.GetData<string[]>(url);
+
+            return Ok(res);
+
+        }
+
     }
 }

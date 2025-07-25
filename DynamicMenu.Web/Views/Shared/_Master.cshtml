@@ -1,44 +1,56 @@
-﻿<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menü Yönetimi</title>
+﻿@using Microsoft.AspNetCore.Http  
+@inject IHttpContextAccessor HttpContextAccessor  
+@using Newtonsoft.Json  
 
-    <!-- Bootstrap CSS -->
-    <link href="~/lib/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet" />
+@{  
+    var feedback = HttpContextAccessor.HttpContext.Session.GetString("feedback") != null  
+        ? JsonConvert.SerializeObject(HttpContextAccessor.HttpContext.Session.GetString("feedback"))  
+        : null;  
+    HttpContextAccessor.HttpContext.Session.Remove("feedback");  
+}  
 
-    <link href="~/lib/fontawesome/css/fawesome6.min.css" rel="stylesheet" />
-    <link href="~/lib/datatables/datatables.uikit.css" rel="stylesheet" />
-    <link href="~/lib/datatables/uikit.min.css" rel="stylesheet" />
-    <link href="~/css/fw.css" rel="stylesheet" />
+<!DOCTYPE html>  
+<html lang="tr">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>@ViewBag.Title</title>  
 
-    @RenderSection("Styles", false)
+    <!-- Bootstrap CSS -->  
+    <link href="~/lib/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet" />  
 
-</head>
-<body>
+    <link href="~/lib/fontawesome/css/fawesome6.min.css" rel="stylesheet" />  
+    <link href="~/lib/datatables/datatables.uikit.css" rel="stylesheet" />  
+    <link href="~/lib/datatables/uikit.min.css" rel="stylesheet" />  
+    <link href="~/css/fw.css" rel="stylesheet" />  
 
-    <div id="app" data-selector="modalContainer">
-        @RenderBody()
-    </div>
+    @RenderSection("Styles", false)  
 
-    <script src="~/lib/jquery/jquery-3.7.1.min.js"></script>
-    <script src="~/lib/jquery-ui-1.13.3.custom/jquery-ui.min.js"></script>
-    <script src="~/lib/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/loadingmodal/jquery.loadingmodal.min.js"></script>
-    <script src="~/lib/toastr/toastr.min.js"></script>
-    <script src="~/lib/bootbox/bootbox.min.js"></script>
-    <script src="~/lib/bootbox/bootbox.locales.min.js"></script>
+</head>  
+<body>  
 
-    <script src="~/lib/datatables/uikit.min.js"></script>
-    <script src="~/lib/datatables/datatables.min.js"></script>
-    <script src="~/lib/datatables/datatables.uikit.js"></script>
+    <div id="app" data-selector="modalContainer">  
+        @RenderBody()  
+    </div>  
 
-    <script src="~/lib/validator/validator.js"></script>
-    <script src="~/js/fw.js"></script>
-    <script src="~/js/master.js"></script>
+    <script src="~/lib/jquery/jquery-3.7.1.min.js"></script>  
+    <script src="~/lib/jquery-ui-1.13.3.custom/jquery-ui.min.js"></script>  
+    <script src="~/lib/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>  
+    <script src="~/lib/loadingmodal/jquery.loadingmodal.min.js"></script>  
+    <link href="~/lib/toastr/toastr.min.css" rel="stylesheet" />  
+    <script src="~/lib/bootbox/bootbox.min.js"></script>  
+    <script src="~/lib/bootbox/bootbox.locales.min.js"></script>  
 
-    @RenderSection("Scripts", false)
+    <script src="~/lib/datatables/uikit.min.js"></script>  
+    <script src="~/lib/datatables/datatables.min.js"></script>  
+    <script src="~/lib/datatables/datatables.uikit.js"></script>  
 
-</body>
+    <script src="~/lib/toastr/toastr.min.js"></script>  
+    @* <script src="~/lib/validator/validator.js"></script> *@  
+    <script src="~/js/fw.js"></script>  
+    <script src="~/js/master.js"></script>  
+
+    @RenderSection("Scripts", false)  
+
+</body>  
 </html>

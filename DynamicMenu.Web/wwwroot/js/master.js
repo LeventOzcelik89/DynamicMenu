@@ -236,5 +236,3 @@ var TemplateEngine = {
 
 };
 
-
-

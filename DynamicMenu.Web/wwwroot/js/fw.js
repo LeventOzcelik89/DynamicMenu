@@ -193,7 +193,7 @@
         return false;
 
     })
-  
+
     ;
 
 
@@ -328,7 +328,7 @@ function fn_RunFormValidators() {
 
     //    var _this = $(this);
 
-        
+
 
     //});
 
@@ -369,7 +369,9 @@ function Kendo_GetRequest(_url, _data, _button, _modalType, title) {
             $message.append($(response).find('[data-selector="modalContainer"]'));
             var tHtml = $(response).each(function (i, e) {
                 if ($(e).attr("data-selector") == "modalContainer") { $message.append($(e)); }
-                if ($(this)?.context?.nodeName == "TITLE") { _title = $(this).text().split(" | ")[0]; }
+                if ($(this)[0]?.outerHTML?.startsWith('<title>') && $(this)[0]?.outerHTML?.endsWith('</title>')) {
+                    _title = $(this)[0].innerHTML;
+                }
             });
 
             if (title != undefined) { _title = title; }
