@@ -112,3 +112,7 @@ header {
 .modal .modal-body {
     padding: 0px;
 }
+
+.needs-validation [type="submit"] {
+    margin-left: 5px;
+}

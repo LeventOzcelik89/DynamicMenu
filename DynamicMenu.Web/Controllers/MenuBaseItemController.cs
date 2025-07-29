@@ -110,5 +110,12 @@ namespace DynamicMenu.Web.Controllers
 
         }
 
+        [HttpPost]
+        public async Task<ActionResult> Delete(int id)
+        {
+            await _menuBaseItemRepository.DeleteAsync(id);
+            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Silme işlemi tamamlandı" }, objects = true });
+        }
+
     }
 }

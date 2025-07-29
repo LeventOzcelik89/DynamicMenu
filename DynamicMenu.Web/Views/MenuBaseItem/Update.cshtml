@@ -1,29 +1,73 @@
-﻿@model DynamicMenu.API.DTOs.UpdateMenuBaseItemDto
+﻿@inject DynamicMenu.Core.Models.AppSettings appSettings
+@model DynamicMenu.API.DTOs.UpdateMenuBaseItemDto
+@{
+    ViewBag.Title = "Menu Base Item Update";
+}
 
 <div class="form-container">
-    <form id="customForm" data-formType="ajax" novalidate="true">
-        @Html.HiddenFor(a => a.Id)
+    <form id="customForm" data-formType="ajax" method="post" action="/MenuBaseItem/Insert" class="needs-validation" novalidate>
+
 
         <div class="mb-3">
-            <label for="text" class="form-label">Text</label>
+            <label for="Text" class="form-label">Text</label>
             @Html.TextBoxFor(a => a.Text, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
+            <div class="invalid-feedback">Boş bırakılamaz</div>
         </div>
 
         <div class="mb-3">
-            <label for="textEn" class="form-label">Text En</label>
+            <label for="TextEn" class="form-label">Text En</label>
             @Html.TextBoxFor(a => a.TextEn, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
+            <div class="invalid-feedback">Boş bırakılamaz</div>
         </div>
 
         <div class="mb-3">
-            <label for="iconPath" class="form-label">Icon Path</label>
-            @Html.TextBoxFor(a => a.IconPath, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
+            <label for="IconPath" class="form-label">Icon Path</label>
+            <div class="input-group">
+                @Html.TextBoxFor(a => a.IconPath, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
+                <span class="input-group-text">
+                    <img data-task="iconDisplay" class="iconDisplay" src="/img/icons/Uygulama_Turu.svg" />
+                </span>
+                <span class="input-group-text">
+                    <a href="#" data-task="iconSearch" class="iconSearch btn btn-sm" onclick="GetMenuIcons()"><i class="fa fa-search"></i> </a>
+                </span>
+                <div class="invalid-feedback">Boş bırakılamaz</div>
+            </div>
         </div>
 
         <div class="d-flex justify-content-end">
             <button class="btn btn-secondary">Vazgeç</button>
-            <button type="submit" class="btn btn-primary">Kaydet</button>
+            <button type="submit" class="btn btn-primary">Güncelle</button>
         </div>
 
     </form>
 </div>
 
+
+<script type="text/javascript">
+
+    var baseUrl = '@Html.Raw(appSettings.baseUrl)';
+
+    function GetMenuIcons(e){
+
+        Kendo_GetRequest('/MenuBaseItem/MenuIcons');
+
+    }
+
+    $(document)
+
+        .on('click', '#icons > img', function(e){
+
+            e.preventDefault();
+
+            var val = $(this).attr('data-name');
+            $('[data-task="iconDisplay"]').attr('src', (baseUrl + 'img/icons/' + val + '.svg'));
+            $('#IconPath').val(val);
+            $('#icons').parents('.modal').find('.bootbox-close-button').trigger('click');
+
+            return false;
+
+        })
+
+        ;
+
+</script>

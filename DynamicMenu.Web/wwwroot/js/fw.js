@@ -37,7 +37,6 @@
             formData.append(input.name, input.value);
         });
 
-
         _this.find(".fileupload-container").each(function (e) {
             var table = $(this).data("table");
             var id = $(this).data("id");
@@ -50,8 +49,6 @@
                 }
             });
         });
-
-
 
         var settings = {
             url: action,
@@ -79,6 +76,7 @@
             },
             complete: function (response) {
                 $('body').loadingModal('destroy');
+                _this.parents('.modal').find('.bootbox-close-button').trigger('click');
                 _this.trigger("complete", response.responseJSON, response.responseText);
                 if (location.href.indexOf('localhost') > -1) { console.log(response.responseJSON); console.log('complete'); }
             }
@@ -96,7 +94,7 @@
 
     .ready(function () {
 
-        //fn_RunFormValidators();
+        fn_RunFormValidators();
 
     })
 
@@ -134,25 +132,27 @@
 
         if (_ask) {
 
-            swal({
+
+            Swal.fire({
                 title: "Devam Et ?",
                 text: (_this.attr('data-ask') == '' || _this.attr('data-ask') == undefined)
                     ? "İşlemi gerçekleştirmek için onay vermeniz gereklidir. Devam etmek istediğinize emin misiniz !"
                     : _this.attr('data-ask'),
-                type: "warning",
+                icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Evet",
                 cancelButtonText: "Hayır",
                 closeOnConfirm: false,
                 closeOnCancel: false
-            }, function (isConfirm) {
+            }).then((result) => {
 
-                if (isConfirm) {
+                if (result.isConfirmed) {
 
                     if (_modal) {
                         Kendo_GetRequest(_this.attr('data-href'), _data, _this, _modalType);
                     } else {
+
                         var __data = '';
                         $.each(_data, function (i, item) { if (item != '' && item != null) { __data += '&' + i + '=' + item; } });
 
@@ -164,12 +164,9 @@
                         }
 
                     }
-
-                } else {
-                    //  swal("İşlem iptal edildi", "İşlem tarafınızca iptal edildi.", "warning");
                 }
 
-                swal.close();
+                Swal.close()
 
             });
 
@@ -196,141 +193,118 @@
 
     ;
 
+var formSubmitFunc = function (e) {
 
+    var form = this;
 
+    form.classList.add('was-validated');
 
-function fn_RunFormValidators() {
+    if (!form.checkValidity()) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    }
 
-    $.each($('form'), function (f, form) {
+    var formResult = true;
+    var inputs = [];
+    var $form = $(form);
 
-        var _this = $(form);
-
-        _this.validator().submit(function (e) {
-
-            var formResult = true;
-
-            if (e.isDefaultPrevented()) {
-
-                formResult = false;
-
-            }
-            else {
-
-
-
-                var inputs = [];
-                var $form = $(this);
-
-                var inputTypes = ['input', 'textarea'];
-                $.each(inputTypes, function (_i, _item) {
-
-                    var elems = $($form).find(_item + '[data-validateurl]');
-
-                    $.each(elems, function (i, item) {
-                        inputs.push($(item)[0]);
-                    });
-                });
-
-                $.each(inputs, function (i, item) {
-
-                    var vUrl = $(item).attr('data-validateurl');
-                    var vData = $(item).attr('name') + '=' + $(item).val();
-
-                    //  URL Oluştu
-                    if (typeof ($(item).attr('data-validatefields')) != 'undefined') {
-
-                        var newData = [];
-
-                        $.each($(item).attr('data-validatefields').split(','), function (i2, item2) {
-
-                            newData.push(item2.trim() + '=' + $($form).find('#' + item2.trim()).val());
-
-                        });
-
-                        vData = newData.join('&');
-                    }
-
-                    var JsonResult = $.ajax({
-                        dataType: 'JSON',
-                        type: 'POST',
-                        async: false,
-                        url: vUrl,
-                        data: vData,
-                    }).responseJSON;
-
-                    if (!JsonResult) {
-                        return;
-                    }
-                    if (JsonResult.result == false) {
-
-                        if ($(item).parents('.form-group').find('.help-block').length < 1) {
-                            $(item).parents('div').eq(0).append('<span class="help-block with-errors"></span>');
-                        }
-
-                        $(item).parents('.form-group').find('.help-block').html('<ul class="list-unstyled with-errors"><li>' + JsonResult.message + '</li></ul>');
-
-                        $(item).parents('.form-group').addClass('has-error');
-
-                        formResult = false;
-
-                    }
-                    else {
-
-                        var elem = $(item).parents('.form-group');
-                        elem.find('.help-block').html(null);
-                        elem.removeClass('has-error');
-
-                    }
-
-                });
-
-                _this.find('.k-grid[data-required="true"]').each(function (e) {
-
-                    if ($(this).data('kendoGrid').dataSource.total() == 0) {
-                        $(this).css("border", "1px red solid");
-                        $(this).before('<div class="card-panel red" style="color:red">Lütfen Verileri Eksiksiz Giriniz</div>');
-                        formResult = false;
-                    }
-                });
-
-            }
-
-            if (formResult) {
-
-                if (typeof ($(this).attr('data-before')) != 'undefined') {
-
-                    var func = $(this).attr('data-before');
-
-                    if (typeof (window[func]) === 'function') {
-                        formResult = window[func]();
-                    }
-
-                }
-
-            }
-
-            if (_this.attr('data-formType') == "ajax") {
-                if (formResult) {
-                    if (location.href.indexOf('localhost') > -1) { console.log(_this); console.log('validate:submit'); }
-                    _this.trigger("validate:submit");
-                }
-                return false;
-            } else {
-                return formResult;
-            }
-
+    var inputTypes = ['input', 'textarea'];
+    $.each(inputTypes, function (_i, _item) {
+        var elems = $form.find(_item + '[data-validateurl]');
+        $.each(elems, function (i, item) {
+            inputs.push($(item)[0]);
         });
+    });
+
+    $.each(inputs, function (i, item) {
+
+        var vUrl = $(item).attr('data-validateurl');
+        var vData = $(item).attr('name') + '=' + $(item).val();
+
+        //  URL Oluştu
+        if (typeof ($(item).attr('data-validatefields')) != 'undefined') {
+            var newData = [];
+            $.each($(item).attr('data-validatefields').split(','), function (i2, item2) {
+                newData.push(item2.trim() + '=' + $form.find('#' + item2.trim()).val());
+            });
+            vData = newData.join('&');
+        }
+
+        var JsonResult = $.ajax({
+            dataType: 'JSON',
+            type: 'POST',
+            async: false,
+            url: vUrl,
+            data: vData,
+        }).responseJSON;
+
+        if (!JsonResult) {
+            return;
+        }
+        if (JsonResult.result == false) {
+
+            if ($(item).parents('.form-group').find('.help-block').length < 1) {
+                $(item).parents('div').eq(0).append('<span class="help-block with-errors"></span>');
+            }
+            //  Burayı düzeltebiliriz. Yeni taglara göre düzenlenecek.
+            $(item).parents('.form-group').find('.help-block').html('<ul class="list-unstyled with-errors"><li>' + JsonResult.message + '</li></ul>');
+            $(item).parents('.form-group').addClass('has-error');
+
+            formResult = false;
+
+        }
+        else {
+
+            var elem = $(item).parents('.form-group');
+            elem.find('.help-block').html(null);
+            elem.removeClass('has-error');
+
+        }
 
     });
 
-    ////Bütün ek validate işlemleri burda yapılacak
-    //$('form').livequery(function (e) {
+    $form.find('.k-grid[data-required="true"]').each(function (e) {
 
-    //    var _this = $(this);
+        if ($(this).data('kendoGrid').dataSource.total() == 0) {
+            $(this).css("border", "1px red solid");
+            $(this).before('<div class="card-panel red" style="color:red">Lütfen Verileri Eksiksiz Giriniz</div>');
+            formResult = false;
+        }
+    });
 
+    if (formResult) {
+        if (typeof ($(this).attr('data-before')) != 'undefined') {
+            var func = $(this).attr('data-before');
+            if (typeof (window[func]) === 'function') {
+                formResult = window[func]();
+            }
+        }
+    }
 
+    if ($form.attr('data-formType') == "ajax") {
+        if (formResult) {
+            if (location.href.indexOf('localhost') > -1) { console.log($form); console.log('validate:submit'); }
+            e.preventDefault();
+            e.stopPropagation();
+            $form.trigger("validate:submit");
+        }
+        return false;
+    } else {
+        return formResult;
+    }
 
-    //});
+};
+
+function fn_RunFormValidators() {
+
+    // Loop over them and prevent submission
+    $.each($('.needs-validation'), function (f, form) {
+
+        form.removeEventListener('submit', formSubmitFunc);
+        form.addEventListener('submit', formSubmitFunc, { once: true });
+
+    });
 
 }
 
@@ -346,7 +320,7 @@ function Kendo_GetRequest(_url, _data, _button, _modalType, title) {
     $.ajax({
         timeout: 6000000,
         url: _url,
-        type: _button.attr('data-method'),
+        type: _button.attr('data-method') ?? 'POST',
         data: _data,
         beforeSend: function () {
             $('body').loadingModal({ text: 'Lütfen Bekleyin...', animation: 'rotatingPlane', backgroundColor: 'black' });
@@ -355,8 +329,8 @@ function Kendo_GetRequest(_url, _data, _button, _modalType, title) {
         success: function (response) {
 
             //  AJAX Result Control
-            if (typeof (response.FeedBack) != 'undefined' && typeof (response.Result) != 'undefined' && typeof (response.Object) != 'undefined') {
-                feedback(response.FeedBack);
+            if (typeof (response.feedback) != 'undefined' && typeof (response.success) != 'undefined' && typeof (response.objects) != 'undefined') {
+                feedback(response.feedback);
                 $isJSON = true;
                 _button.parents("form").trigger("success", response);
                 return;
@@ -398,9 +372,9 @@ function Kendo_GetRequest(_url, _data, _button, _modalType, title) {
                     onShown: function (dialogRef) {
                         _button.trigger("open:modal");
                         //  $.each(haritalar, function (i, item) { item.map.updateSize(); });
+                        fn_RunFormValidators();
                     }
                 })
-
 
             } else {
                 $(".k-pager-refresh.k-link").each(function (i, e) { $(e).trigger('click'); });
@@ -423,3 +397,8 @@ function Dialog(message, opts) {
     bootbox.alert(opts);
 
 }
+
+
+
+
+

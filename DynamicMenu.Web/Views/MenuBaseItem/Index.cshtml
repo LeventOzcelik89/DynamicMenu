@@ -37,8 +37,8 @@
         <td>{{data.ModifiedDate == null ? '-' : new Date(data.ModifiedDate).toLocaleString('tr-TR')}}</td>
         <td>
             <div class="btn-group" role="group">
-                <a href="/MenuBaseItem/Update/{{data.Id}}" type="button" class="btn btn-sm btn-primary" data-id="{{data.Id}}">Düzenle</a>
-                <a href="/MenuGroup/Delete?menugroupId={{data.Id}}" class="btn btn-sm btn-info">Sil</a>
+                <a data-href="/MenuBaseItem/Update/{{data.Id}}" class="btn btn-sm btn-primary" data-id="{{data.Id}}" data-modal>Düzenle</a>
+                <a data-href="/MenuBaseItem/Delete?Id={{data.Id}}" data-modal data-ask class="btn btn-sm btn-info">Sil</a>
             </div>
             </td>
         </tr>
@@ -63,11 +63,8 @@
                     $('#tbl').dataTable({
                     responsive: true,
                     language: {
-                        url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/tr.json'
-                    },
-                    //     columnDefs: [
-                    //         { targets: -1, orderable: false }
-                    //     ]
+                        url: 'lib/dataTables/tr.json'
+                    }
                     });
 
                 });

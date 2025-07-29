@@ -11,26 +11,26 @@
         <div class="mb-3">
             <label for="Text" class="form-label">Text</label>
             @Html.TextBoxFor(a => a.Text, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
-            <div class="invalid-feedback">Boş bırakılamaz 1</div>
+            <div class="invalid-feedback">Boş bırakılamaz</div>
         </div>
 
         <div class="mb-3">
             <label for="TextEn" class="form-label">Text En</label>
             @Html.TextBoxFor(a => a.TextEn, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
-            <div class="invalid-feedback">Boş bırakılamaz 2</div>
+            <div class="invalid-feedback">Boş bırakılamaz</div>
         </div>
 
         <div class="mb-3">
             <label for="IconPath" class="form-label">Icon Path</label>
             <div class="input-group">
-                @Html.TextBoxFor(a => a.IconPath, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" }, { "readonly", "readonly" } })
-                <div class="invalid-feedback">Boş bırakılamaz 3</div>
+                @Html.TextBoxFor(a => a.IconPath, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
                 <span class="input-group-text">
                     <img data-task="iconDisplay" class="iconDisplay" src="/img/icons/Uygulama_Turu.svg" />
                 </span>
-                <span class="input-group-text" style="">
-                    <a href="#" data-task="iconSearch" class="iconSearch btn btn-sm"><i class="fa fa-search"></i> </a>
+                <span class="input-group-text">
+                    <a href="#" data-task="iconSearch" class="iconSearch btn btn-sm" onclick="GetMenuIcons()"><i class="fa fa-search"></i> </a>
                 </span>
+                <div class="invalid-feedback">Boş bırakılamaz</div>
             </div>
         </div>
 
@@ -44,152 +44,20 @@
 
 <script type="text/javascript">
 
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (function () {
-      'use strict'
-
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      var forms = document.querySelectorAll('.needs-validation')
-
-      // Loop over them and prevent submission
-      Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-          form.addEventListener('submit', function (e,f,g,h) {
-
-              debugger;
-
-              form.classList.add('was-validated');
-
-              if (!form.checkValidity()) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  return false;
-              }
-
-            var formResult = true;
-
-                var inputs = [];
-                var $form = $(form);
-
-                var inputTypes = ['input', 'textarea'];
-                $.each(inputTypes, function (_i, _item) {
-
-                    var elems = $form.find(_item + '[data-validateurl]');
-
-                    $.each(elems, function (i, item) {
-                        inputs.push($(item)[0]);
-                    });
-                });
-
-                $.each(inputs, function (i, item) {
-
-                    var vUrl = $(item).attr('data-validateurl');
-                    var vData = $(item).attr('name') + '=' + $(item).val();
-
-                    //  URL Oluştu
-                    if (typeof ($(item).attr('data-validatefields')) != 'undefined') {
-
-                        var newData = [];
-
-                        $.each($(item).attr('data-validatefields').split(','), function (i2, item2) {
-
-                            newData.push(item2.trim() + '=' + $form.find('#' + item2.trim()).val());
-
-                        });
-
-                        vData = newData.join('&');
-                    }
-
-                    var JsonResult = $.ajax({
-                        dataType: 'JSON',
-                        type: 'POST',
-                        async: false,
-                        url: vUrl,
-                        data: vData,
-                    }).responseJSON;
-
-                    if (!JsonResult) {
-                        return;
-                    }
-                    if (JsonResult.result == false) {
-
-                        if ($(item).parents('.form-group').find('.help-block').length < 1) {
-                            $(item).parents('div').eq(0).append('<span class="help-block with-errors"></span>');
-                        }
-
-                        $(item).parents('.form-group').find('.help-block').html('<ul class="list-unstyled with-errors"><li>' + JsonResult.message + '</li></ul>');
-
-                        $(item).parents('.form-group').addClass('has-error');
-
-                        formResult = false;
-
-                    }
-                    else {
-
-                        var elem = $(item).parents('.form-group');
-                        elem.find('.help-block').html(null);
-                        elem.removeClass('has-error');
-
-                    }
-
-                });
-
-                $form.find('.k-grid[data-required="true"]').each(function (e) {
-
-                    if ($(this).data('kendoGrid').dataSource.total() == 0) {
-                        $(this).css("border", "1px red solid");
-                        $(this).before('<div class="card-panel red" style="color:red">Lütfen Verileri Eksiksiz Giriniz</div>');
-                        formResult = false;
-                    }
-                });
-
-
-            if (formResult) {
-
-                if (typeof ($(this).attr('data-before')) != 'undefined') {
-
-                    var func = $(this).attr('data-before');
-
-                    if (typeof (window[func]) === 'function') {
-                        formResult = window[func]();
-                    }
-
-                }
-
-            }
-
-            if ($form.attr('data-formType') == "ajax") {
-                if (formResult) {
-                    if (location.href.indexOf('localhost') > -1) { console.log($form); console.log('validate:submit'); }
-                    e.preventDefault();
-                    e.stopPropagation();
-                    $form.trigger("validate:submit");
-                }
-                return false;
-            } else {
-                return formResult;
-            }
-
-
-
-          }, false)
-        })
-    })()
-
     var baseUrl = '@Html.Raw(appSettings.baseUrl)';
 
+    function GetMenuIcons(e){
+
+        Kendo_GetRequest('/MenuBaseItem/MenuIcons');
+
+    }
+
     $(document)
-
-        .on('click', '[data-task="iconSearch"]', function(e){
-
-            Kendo_GetRequest('/MenuBaseItem/MenuIcons');
-
-        })
 
         .on('click', '#icons > img', function(e){
 
             e.preventDefault();
-            
+
             var val = $(this).attr('data-name');
             $('[data-task="iconDisplay"]').attr('src', (baseUrl + 'img/icons/' + val + '.svg'));
             $('#IconPath').val(val);

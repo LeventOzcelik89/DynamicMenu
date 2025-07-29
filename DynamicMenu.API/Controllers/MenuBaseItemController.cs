@@ -40,34 +40,34 @@ namespace DynamicMenu.API.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<MenuBaseItemDto>>> GetAll()
         {
-            var cacheKey = $"{CacheKeyPrefix}all";
-            var cachedItems = await _cacheService.GetAsync<List<MenuBaseItemDto>>(cacheKey);
+            //var cacheKey = $"{CacheKeyPrefix}all";
+            //var cachedItems = await _cacheService.GetAsync<List<MenuBaseItemDto>>(cacheKey);
 
-            if (cachedItems != null)
-                return cachedItems;
+            //if (cachedItems != null)
+            //    return cachedItems;
 
             var items = await _MenuBaseItemRepository.GetAllAsync();
             var dtos = items.Select(MapToDto).ToList();
 
-            await _cacheService.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(30));
+            //await _cacheService.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(30));
             return dtos;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<MenuBaseItemDto>> GetById(int id)
         {
-            var cacheKey = $"{CacheKeyPrefix}{id}";
-            var cachedItem = await _cacheService.GetAsync<MenuBaseItemDto>(cacheKey);
+            //var cacheKey = $"{CacheKeyPrefix}{id}";
+            //var cachedItem = await _cacheService.GetAsync<MenuBaseItemDto>(cacheKey);
 
-            if (cachedItem != null)
-                return cachedItem;
+            //if (cachedItem != null)
+            //    return cachedItem;
 
             var item = await _MenuBaseItemRepository.GetByIdAsync(id);
             if (item == null)
                 return NotFound();
 
             var dto = MapToDto(item);
-            await _cacheService.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(30));
+            //await _cacheService.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(30));
             return dto;
         }
 
@@ -85,7 +85,7 @@ namespace DynamicMenu.API.Controllers
             };
 
             var created = await _MenuBaseItemRepository.AddAsync(menuBaseItem);
-            await _cacheService.RemoveAsync($"{CacheKeyPrefix}all");
+            //await _cacheService.RemoveAsync($"{CacheKeyPrefix}all");
 
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, MapToDto(created));
         }
@@ -103,8 +103,8 @@ namespace DynamicMenu.API.Controllers
             existingItem.ModifiedDate = DateTime.UtcNow;
 
             await _MenuBaseItemRepository.UpdateAsync(existingItem);
-            await _cacheService.RemoveAsync($"{CacheKeyPrefix}all");
-            await _cacheService.RemoveAsync($"{CacheKeyPrefix}{id}");
+            //await _cacheService.RemoveAsync($"{CacheKeyPrefix}all");
+            //await _cacheService.RemoveAsync($"{CacheKeyPrefix}{id}");
 
             return NoContent();
         }
@@ -113,8 +113,8 @@ namespace DynamicMenu.API.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await _MenuBaseItemRepository.DeleteAsync(id);
-            await _cacheService.RemoveAsync($"{CacheKeyPrefix}all");
-            await _cacheService.RemoveAsync($"{CacheKeyPrefix}{id}");
+            //await _cacheService.RemoveAsync($"{CacheKeyPrefix}all");
+            //await _cacheService.RemoveAsync($"{CacheKeyPrefix}{id}");
             return NoContent();
         }
 
