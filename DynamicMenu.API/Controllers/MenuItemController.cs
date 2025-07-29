@@ -38,8 +38,8 @@ namespace DynamicMenu.API.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetAll()
+        [HttpGet("GetAllHierarchical")]
+        public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetAllHierarchical()
         {
             var cacheKey = $"{CacheKeyPrefix}all";
             var cachedItems = await _cacheService.GetAsync<List<MenuItemDto>>(cacheKey);
@@ -47,10 +47,41 @@ namespace DynamicMenu.API.Controllers
             if (cachedItems != null)
                 return cachedItems;
 
-            var items = await _menuItemRepository.GetAllAsync();
+            var items = await _menuItemRepository.GetAllHierarchicalAsync();
             var dtos = items.Select(MapToDto).ToList();
 
             await _cacheService.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(30));
+            return dtos;
+        }
+
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetAll()
+        {
+            //var cacheKey = $"{CacheKeyPrefix}all";
+            //var cachedItems = await _cacheService.GetAsync<List<MenuItemDto>>(cacheKey);
+
+            //if (cachedItems != null)
+            //    return cachedItems;
+
+            var items = await _menuItemRepository.GetAllAsync();
+            var dtos = items.Select(a => new MenuItemDto
+            {
+                Id = a.Id,
+                Text = a.MenuBaseItem.Text,
+                TextEn = a.MenuBaseItem.TextEn,
+                IconPath = a.MenuBaseItem.IconPath,
+                Keyword = a.Keyword,
+                IsNew = a.IsNew,
+                Pid = a.Pid,
+                SortOrder = a.SortOrder,
+                MenuBaseItemId = a.MenuBaseItemId,
+                MenuId = a.MenuId,
+                MenuGroupId = a.MenuGroupId,
+                NewTag = a.IsNew
+            }).ToList();
+
+
+            //await _cacheService.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(30));
             return dtos;
         }
 
@@ -358,8 +389,11 @@ namespace DynamicMenu.API.Controllers
             {
                 Id = item.Id,
                 Keyword = item.Keyword ?? string.Empty,
+                IsNew = item.IsNew,
                 Pid = item.Pid,
                 MenuBaseItemId = item.MenuBaseItemId,
+                MenuId = item.MenuId,
+                MenuGroupId = item.MenuGroupId,
                 //  Text = item.Text ?? item.Keyword ?? string.Empty,
                 //  TextEn = item.TextEn ?? item.Text ?? item.Keyword ?? string.Empty,
                 //DisplayType = item.DisplayType,

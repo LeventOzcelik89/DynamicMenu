@@ -7,6 +7,7 @@ namespace DynamicMenu.Core.Interfaces
     {
         Task<MenuItem> GetByIdAsync(int id);
         Task<IEnumerable<MenuItem>> GetAllAsync();
+        Task<IEnumerable<MenuItem>> GetAllHierarchicalAsync();
         Task<IEnumerable<MenuItem>> GetByAppTypeAsync(AppType appType);
         //Task<IEnumerable<MenuItem>> GetByRoleIdAsync(int roleId);
         Task<IEnumerable<MenuItem>> GetByMenuGroupIdAsync(int menuGroupId);

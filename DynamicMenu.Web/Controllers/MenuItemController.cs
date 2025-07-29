@@ -1,4 +1,5 @@
-﻿using DynamicMenu.API.Models;
+﻿using DynamicMenu.API.DTOs;
+using DynamicMenu.API.Models;
 using DynamicMenu.Core.Entities;
 using DynamicMenu.Core.Interfaces;
 using DynamicMenu.Core.Models;
@@ -28,11 +29,11 @@ namespace DynamicMenu.Web.Controllers
             return View();
         }
 
-        public async Task<ActionResult<IEnumerable<MenuItem>>> GetAll()
+        public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetAll()
         {
 
             var url = "MenuItem/GetAll";
-            var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<MenuItem>>(url);
+            var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<MenuItemDto>>(url);
 
             return Ok(res);
 

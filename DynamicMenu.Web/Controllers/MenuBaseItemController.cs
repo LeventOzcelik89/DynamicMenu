@@ -31,11 +31,11 @@ namespace DynamicMenu.Web.Controllers
             return View();
         }
 
-        public async Task<ActionResult<IEnumerable<MenuBaseItem>>> GetAll()
+        public async Task<ActionResult<IEnumerable<MenuBaseItemDto>>> GetAll()
         {
 
             var url = "MenuBaseItem/GetAll";
-            var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<MenuBaseItem>>(url);
+            var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<MenuBaseItemDto>>(url);
 
             return Ok(res);
 

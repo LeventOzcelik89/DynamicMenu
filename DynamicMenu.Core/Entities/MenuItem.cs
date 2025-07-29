@@ -20,7 +20,7 @@ namespace DynamicMenu.Core.Entities
         public int MenuGroupId { get; set; }
 
         public virtual MenuGroup? MenuGroup { get; set; }
-        public MenuBaseItem MenuBaseItem { get; set; }
+        public virtual MenuBaseItem? MenuBaseItem { get; set; }
         public virtual MenuItem? Parent { get; set; }
         public virtual ICollection<MenuItem>? Children { get; set; }
     }

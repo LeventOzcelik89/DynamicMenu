@@ -26,6 +26,18 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task<IEnumerable<MenuItem>> GetAllAsync()
         {
+            var sql = _context.MenuItem
+                .IgnoreAutoIncludes()
+                .Include(a => a.MenuBaseItem)
+                //.Include(x => x.MenuItemRoles)
+                //.Include(x => x.Children)
+                .OrderBy(x => x.SortOrder);
+
+            return await sql.ToListAsync();
+        }
+
+        public async Task<IEnumerable<MenuItem>> GetAllHierarchicalAsync()
+        {
             return await _context.MenuItem
                 //.Include(x => x.MenuItemRoles)
                 //.Include(x => x.Children)
@@ -43,6 +55,7 @@ namespace DynamicMenu.Infrastructure.Repositories
                     SortOrder = x.SortOrder,
                     CreatedDate = x.CreatedDate,
                     ModifiedDate = x.ModifiedDate,
+                    MenuGroupId = x.MenuGroupId,
                     //MenuItemRoles = x.MenuItemRoles ?? new List<MenuItemRole>(),
                     Children = x.Children ?? new List<MenuItem>(),
                     MenuBaseItem = x.MenuBaseItem       //  todo: ?? sonuç ne olacak bir bak.
