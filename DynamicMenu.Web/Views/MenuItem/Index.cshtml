@@ -20,12 +20,10 @@
                         <th>Menu Base Item Id</th>
                         <th>Menu Group Id</th>
 
-                        <th>Base Adı</th>
-                        <th>Base Adı (En)</th>
-                        <th>Base icon</th>
+                        <th>Base Text</th>
+                        <th>Base Text (En)</th>
+                        <th>Base Icon</th>
 
-                        <th>Oluşturma Tarihi</th>
-                        <th>Düzenleme Tarihi</th>
                         <th style="width: 120px;">İşlemler</th>
                     </tr>
                 </thead>
@@ -39,21 +37,17 @@
 <script type="text/template" id="tblRow">
 
     <tr>
-
-        Keyword
-        Pid
-        IsNew
-        SortOrder
-        MenuId
-        MenuBaseItemId
-        MenuGroupId
-
+        <td>{{data.Keyword}}</td>
+        <td>{{data.Pid}}</td>
+        <td>{{data.IsNew}}</td>
+        <td>{{data.SortOrder}}</td>
+        <td>{{data.MenuId}}</td>
+        <td>{{data.MenuBaseItemId}}</td>
+        <td>{{data.MenuGroupId}}</td>
         <td>{{data.Text}}</td>
         <td>{{data.TextEn}}</td>
         <td>{{data.IconPath}}</td>
 
-        <td>{{data.CreatedDate == null ? '-' : new Date(data.CreatedDate).toLocaleString('tr-TR')}}</td>
-        <td>{{data.ModifiedDate == null ? '-' : new Date(data.ModifiedDate).toLocaleString('tr-TR')}}</td>
         <td>
             <div class="btn-group" role="group">
                 <a data-href="/MenuItem/Update/{{data.Id}}" class="btn btn-sm btn-primary" data-id="{{data.Id}}" data-modal>Düzenle</a>
@@ -73,7 +67,7 @@
             tbl: null,
             ready: function(){
 
-                ReadData('/MenuBaseItem/GetAll', null, function(res){
+                ReadData('/MenuItem/GetAll', null, function(res){
 
                     $.each(res, function(i,item){
                         TemplateEngine.RenderTo($('#tblRow'), item, $('#tbl tbody'));

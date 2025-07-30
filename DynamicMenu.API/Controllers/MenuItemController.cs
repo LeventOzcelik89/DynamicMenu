@@ -76,10 +76,8 @@ namespace DynamicMenu.API.Controllers
                 SortOrder = a.SortOrder,
                 MenuBaseItemId = a.MenuBaseItemId,
                 MenuId = a.MenuId,
-                MenuGroupId = a.MenuGroupId,
-                NewTag = a.IsNew
+                MenuGroupId = a.MenuGroupId
             }).ToList();
-
 
             //await _cacheService.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(30));
             return dtos;
@@ -398,7 +396,6 @@ namespace DynamicMenu.API.Controllers
                 //  TextEn = item.TextEn ?? item.Text ?? item.Keyword ?? string.Empty,
                 //DisplayType = item.DisplayType,
                 //AppId = (byte)item.AppId,
-                NewTag = item.IsNew,
                 //  IconPath = item.IconPath ?? string.Empty,
                 //  SortOrder = item.SortOrder,
                 //RoleIds = item.MenuItemRoles?.Select(r => r.RoleId).ToList() ?? new List<int>(),
