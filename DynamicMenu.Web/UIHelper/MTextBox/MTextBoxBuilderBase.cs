@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 
-namespace DynamicMenu.Web.UIHelper.MTextBox
+namespace DynamicMenu.Web.UIHelper
 {
     public class MTextBoxBuilderBase<TMapInput, TMapInputBuilder> : InputBuilderBase<TMapInput, TMapInputBuilder>, IHideMembers
         where TMapInput : InputBase
         where TMapInputBuilder : FactoryBuilderBase<TMapInput, TMapInputBuilder>
     {
-        public MapInputBuilderBase(TMapInput component) : base(component)
+        public MTextBoxBuilderBase(TMapInput component) : base(component)
         {
             base.Component = component;
         }
@@ -27,6 +27,5 @@ namespace DynamicMenu.Web.UIHelper.MTextBox
         }
 
     }
-    {
-    }
+    
 }
