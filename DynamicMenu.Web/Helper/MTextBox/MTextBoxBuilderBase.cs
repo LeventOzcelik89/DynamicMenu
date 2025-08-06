@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-
-namespace DynamicMenu.Web.UIHelper
+﻿namespace DynamicMenu.Web.Helper
 {
     public class MTextBoxBuilderBase<TMapInput, TMapInputBuilder> : InputBuilderBase<TMapInput, TMapInputBuilder>, IHideMembers
         where TMapInput : InputBase

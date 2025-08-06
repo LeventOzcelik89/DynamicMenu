@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Text;
 namespace DynamicMenu.Web.UIHelper
 {
-    public class MTextBox : FactoryBase
+    public class MTextBox2 : FactoryBase
     {
         public IDictionary<string, object> htmlAttributes { get; set; }
         public IDictionary<string, object> containerHtmlAttributes { get; set; }
@@ -15,7 +15,7 @@ namespace DynamicMenu.Web.UIHelper
         public Validation validation { get; set; }
         public bool readOnly { get; set; } = false;
 
-        public MTextBox(ViewContext viewContext, ViewDataDictionary viewData = null) : base(viewContext, viewData)
+        public MTextBox2(ViewContext viewContext, ViewDataDictionary viewData = null) : base(viewContext, viewData)
         {
             this.htmlAttributes = new Dictionary<string, object>();
         }

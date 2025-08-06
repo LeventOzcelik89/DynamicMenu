@@ -26,11 +26,11 @@ namespace DynamicMenu.Web.Helper
         public event WidgetCreatedDelegate WidgetCreated;
 
         //  Burayı yapacağım. Datasource vs çok fazla geldi.
-        public virtual NumericTextBoxBuilder<T> NumericTextBox<T>() where T : struct
+        public virtual MTextBoxBuilder<T> MTextBox<T>() where T : struct
         {
-            NumericTextBox<T> numericTextBox = new NumericTextBox<T>(HtmlHelper.ViewContext);
-            this.WidgetCreated?.Invoke(numericTextBox);
-            return new NumericTextBoxBuilder<T>(numericTextBox);
+            MTextBox<T> mTextBox = new MTextBox<T>(HtmlHelper.ViewContext);
+            this.WidgetCreated?.Invoke(mTextBox);
+            return new MTextBoxBuilder<T>(mTextBox);
         }
 
 
