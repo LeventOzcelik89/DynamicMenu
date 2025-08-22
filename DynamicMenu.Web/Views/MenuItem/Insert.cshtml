@@ -1,19 +1,52 @@
 ﻿@inject DynamicMenu.Core.Models.AppSettings appSettings
 @model DynamicMenu.API.DTOs.CreateMenuItemDto
 @{
-    ViewBag.Title = "Menu Base Item Insert";
+    ViewBag.Title = "Menu Item Insert";
 }
 
 <div class="form-container">
-    <form id="customForm" data-formType="ajax" method="post" action="/MenuBaseItem/Insert" class="needs-validation" novalidate>
-
-        
+    <form id="customForm" data-formType="ajax" method="post" action="/MenuItem/Insert" class="needs-validation" novalidate>
 
         <div class="mb-3">
-            <label for="Keyword" class="form-label">Text</label>
+            <label for="Text" class="form-label">Menu Id</label>
+            @Html.TextBoxFor(a => a.MenuId, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
+            <div class="invalid-feedback">Boş bırakılamaz</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="Text" class="form-label">Menu Group Id</label>
+            @Html.TextBoxFor(a => a.MenuGroupId, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
+            <div class="invalid-feedback">Boş bırakılamaz</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="Text" class="form-label">Menu Base Item Id</label>
+            @Html.TextBoxFor(a => a.MenuBaseItemId, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
+            <div class="invalid-feedback">Boş bırakılamaz</div>
+        </div>
+
+        @* public required string Keyword { get; set; }
+        public int? Pid { get; set; }
+        public bool IsNew { get; set; }
+        public int SortOrder { get; set; } *@
+
+        <div class="mb-3">
+            <label for="Keyword" class="form-label">Keyword</label>
             @Html.TextBoxFor(a => a.Keyword, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
             <div class="invalid-feedback">Boş bırakılamaz</div>
         </div>
+
+        <div class="mb-3">
+            <label for="Keyword" class="form-label">Pid</label>
+            @Html.TextBoxFor(a => a.Pid, null, new Dictionary<string, object> { { "class", "form-control" } })
+        </div>
+
+        <div class="mb-3 form-check">
+            <label for="IsNew" class="form-check-label">IsNew</label>
+            @Html.CheckBoxFor(a => a.IsNew, new Dictionary<string, object> { { "class", "form-check-input" } })
+        </div>
+
+        @Html.DropDownListFor()
 
         @* <div class="mb-3">
             <label for="TextEn" class="form-label">Text En</label>

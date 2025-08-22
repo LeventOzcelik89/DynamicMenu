@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Helper\**" />
+    <Compile Remove="UIHelper\**" />
+    <Content Remove="Helper\**" />
+    <Content Remove="UIHelper\**" />
+    <EmbeddedResource Remove="Helper\**" />
+    <EmbeddedResource Remove="UIHelper\**" />
+    <None Remove="Helper\**" />
+    <None Remove="UIHelper\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DynamicMenu.API\DynamicMenu.API.csproj" />
     <ProjectReference Include="..\DynamicMenu.Infrastructure\DynamicMenu.Infrastructure.csproj" />
   </ItemGroup>

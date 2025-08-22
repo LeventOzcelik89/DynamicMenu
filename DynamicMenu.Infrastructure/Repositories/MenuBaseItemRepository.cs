@@ -45,23 +45,21 @@ namespace DynamicMenu.Infrastructure.Repositories
             return MenuBaseItem;
         }
 
-        public async Task UpdateAsync(MenuBaseItem MenuBaseItem)
+        public async Task<bool> UpdateAsync(MenuBaseItem MenuBaseItem)
         {
             _context.Entry(MenuBaseItem).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task DeleteAsync(int id)
         {
-            var MenuBaseItem = await _context.MenuBaseItem.FindAsync(id);
+            var MenuBaseItem = await _context.MenuBaseItem.SingleOrDefaultAsync(a => a.Id == id);
             if (MenuBaseItem != null)
             {
                 _context.MenuBaseItem.Remove(MenuBaseItem);
                 await _context.SaveChangesAsync();
             }
         }
-
-
 
     }
 }

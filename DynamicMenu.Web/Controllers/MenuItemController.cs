@@ -49,7 +49,16 @@ namespace DynamicMenu.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> Insert()
         {
-            return View();
+            return View(new CreateMenuItemDto { Keyword = Guid.NewGuid().ToString().Substring(0, 8) });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Insert(CreateMenuItemDto item)
+        {
+
+            return Ok(new ResultStatus<MenuItemDto> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = new() });
+
+            //  return View(new CreateMenuItemDto { Keyword = Guid.NewGuid().ToString().Substring(0, 8) });
         }
 
     }

@@ -77,6 +77,21 @@ namespace DynamicMenu.Web.Controllers
             return View(MapToDto(item));
         }
 
+        [HttpPost]
+        public async Task<ActionResult> Update(UpdateMenuBaseItemDto item)
+        {
+            var dto = new MenuBaseItem
+            {
+                Id = item.Id,
+                ModifiedDate = DateTime.Now,
+                IconPath = item.IconPath,
+                Text = item.Text,
+                TextEn = item.TextEn
+            };
+            var res = await _menuBaseItemRepository.UpdateAsync(dto);
+            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Güncelleme işlemi tamamlandı" }, objects = res });
+        }
+
         private static UpdateMenuBaseItemDto MapToDto(MenuBaseItem item)
         {
             if (item == null) return null;

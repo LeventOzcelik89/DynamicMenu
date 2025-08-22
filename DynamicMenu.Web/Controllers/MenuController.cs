@@ -1,4 +1,5 @@
-﻿using DynamicMenu.API.Models;
+﻿using DynamicMenu.API.DTOs;
+using DynamicMenu.API.Models;
 using DynamicMenu.Core.Entities;
 using DynamicMenu.Core.Interfaces;
 using DynamicMenu.Core.Models;
@@ -113,6 +114,19 @@ namespace DynamicMenu.Web.Controllers
             }
         }
 
+        public async Task<MenuDto[]> GetDataSource()
+        {
+            var url = "Menu/GetAll";
+            var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<Menu>>(url);
+            var items = res.Select(a => new MenuDto
+            {
+                Id = a.Id,
+                Description = a.Description,
+                IsActive = a.IsActive,
+                Name = a.Name
+            }).ToArray();
+            return items;
+        }
 
     }
 }

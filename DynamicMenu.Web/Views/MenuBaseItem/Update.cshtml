@@ -5,8 +5,9 @@
 }
 
 <div class="form-container">
-    <form id="customForm" data-formType="ajax" method="post" action="/MenuBaseItem/Insert" class="needs-validation" novalidate>
+    <form id="customForm" data-formType="ajax" method="post" action="/MenuBaseItem/Update" class="needs-validation" novalidate>
 
+        @Html.HiddenFor(a => a.Id)
 
         <div class="mb-3">
             <label for="Text" class="form-label">Text</label>

@@ -1,5 +1,4 @@
 ﻿@inject DynamicMenu.Core.Models.AppSettings appSettings
-@using DynamicMenu.Web.UIHelper
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model DynamicMenu.API.DTOs.CreateMenuBaseItemDto
 @{
@@ -8,9 +7,6 @@
 
 <div class="form-container">
     <form id="customForm" data-formType="ajax" method="post" action="/MenuBaseItem/Insert" class="needs-validation" novalidate>
-
-
-        @Html.HalkBank().MTextBox().Name("abc").Value("123").Label("label").Validation(new Validation(true, "boş geçme"))
 
         <div class="mb-3">
             <label for="Text" class="form-label">Text</label>

@@ -2,7 +2,7 @@
 <div class="page" id="list" data-page="menu-list">
     <main>
         <div class="action-buttons top-buttons">
-            <a data-href="/MenuBaseItem/Insert" class="action-button" id="new-menu" data-modal="" >
+            <a data-href="/MenuBaseItem/Insert" class="action-button" id="new-menu" data-modal="" data-method="get">
                 <i class="fas fa-plus"></i>
                 <span>Yeni Menü Ekle</span>
             </a>
@@ -37,7 +37,7 @@
         <td>{{data.ModifiedDate == null ? '-' : new Date(data.ModifiedDate).toLocaleString('tr-TR')}}</td>
         <td>
             <div class="btn-group" role="group">
-                <a data-href="/MenuBaseItem/Update/{{data.Id}}" class="btn btn-sm btn-primary" data-id="{{data.Id}}" data-modal>Düzenle</a>
+                <a data-href="/MenuBaseItem/Update/{{data.Id}}" class="btn btn-sm btn-primary" data-id="{{data.Id}}" data-modal data-method="get">Düzenle</a>
                 <a data-href="/MenuBaseItem/Delete?Id={{data.Id}}" data-modal data-ask class="btn btn-sm btn-info">Sil</a>
             </div>
             </td>
