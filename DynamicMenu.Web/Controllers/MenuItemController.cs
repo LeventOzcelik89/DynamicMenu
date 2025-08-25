@@ -55,10 +55,63 @@ namespace DynamicMenu.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Insert(CreateMenuItemDto item)
         {
+            var dto = new MenuItem
+            {
+                CreatedDate = DateTime.Now,
+                IsNew = item.IsNew,
+                Keyword = item.Keyword,
+                MenuBaseItemId = item.MenuBaseItemId,
+                MenuGroupId = item.MenuGroupId,
+                MenuId = item.MenuId,
+                Pid = item.Pid
+            };
 
-            return Ok(new ResultStatus<MenuItemDto> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = new() });
+            var res = await _menuItemRepository.AddAsync(dto);
+            return Ok(new ResultStatus<MenuItem> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
+        }
 
-            //  return View(new CreateMenuItemDto { Keyword = Guid.NewGuid().ToString().Substring(0, 8) });
+        [HttpGet]
+        public async Task<ActionResult> Update(int id)
+        {
+            var item = await _menuItemRepository.GetByIdAsync(id);
+            var itemDto = new UpdateMenuItemDto
+            {
+                Id = item.Id,
+                Keyword = item.Keyword,
+                MenuBaseItemId = item.MenuBaseItemId,
+                MenuGroupId = item.MenuGroupId,
+                IsNew = item.IsNew,
+                MenuId = item.MenuId,
+                Pid = item.Pid,
+                SortOrder = item.SortOrder
+            };
+            return View(itemDto);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Update(UpdateMenuItemDto item)
+        {
+            var dto = new MenuItem
+            {
+                Id = item.Id,
+                CreatedDate = DateTime.Now,
+                IsNew = item.IsNew,
+                Keyword = item.Keyword,
+                MenuBaseItemId = item.MenuBaseItemId,
+                MenuGroupId = item.MenuGroupId,
+                MenuId = item.MenuId,
+                Pid = item.Pid
+            };
+
+            var res = await _menuItemRepository.UpdateAsync(dto);
+            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Delete(int id)
+        {
+            await _menuItemRepository.DeleteAsync(id);
+            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Silme işlemi tamamlandı" }, objects = true });
         }
 
     }

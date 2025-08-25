@@ -32,7 +32,7 @@ namespace DynamicMenu.Web.Controllers
         public async Task<ActionResult<IEnumerable<MenuGroup>>> GetAll()
         {
 
-            var url = "Present/GetMenuGroups";
+            var url = "Menu/GetAll";
             var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<MenuGroup>>(url);
 
             return Ok(res);

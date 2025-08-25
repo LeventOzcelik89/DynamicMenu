@@ -155,7 +155,7 @@ namespace DynamicMenu.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateMenuItemDto updateDto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateMenuItemDtox updateDto)
         {
             var existingItem = await _menuItemRepository.GetByIdAsync(id);
             if (existingItem == null)

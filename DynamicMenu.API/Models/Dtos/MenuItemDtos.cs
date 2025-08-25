@@ -1,6 +1,6 @@
 namespace DynamicMenu.API.Models.Dtos
 {
-    public class UpdateMenuItemDto
+    public class UpdateMenuItemDtox
     {
         public string Keyword { get; set; }
         public int MenuBaseItemId { get; set; }
