@@ -11,7 +11,7 @@
 
         @Html.DropDownFor(a => a.MenuId, "Menü ID", "/Menu/GetAll", "Lütfen Menü ID seçin")
 
-        @Html.DropDownFor(a => a.MenuBaseItemId, "Menü Base Item ID", "/MenuBaseItem/GetAll", "Lütfen Menü Base Item ID seçin", "item.Text + ' | ' + item.TextEn")
+        @Html.DropDownFor(a => a.MenuBaseItemId, "Menü Base Item ID", "/MenuBaseItem/GetAll", "Lütfen Menü Base Item ID seçin", null, "item.Text + ' | ' + item.TextEn")
 
         <div class="mb-3">
             <label for="Keyword" class="form-label">Keyword</label>

@@ -8,7 +8,7 @@ namespace DynamicMenu.Core.Interfaces
         Task<MenuGroup> GetByIdAsync(int id);
         Task<IEnumerable<MenuGroup>> GetAllAsync();
         Task<MenuGroup> AddAsync(MenuGroup menuItem);
-        Task<MenuGroup> UpdateAsync(MenuGroup menuItem);
+        Task<bool> UpdateAsync(MenuGroup menuItem);
         Task DeleteAsync(int id);
     }
 } 

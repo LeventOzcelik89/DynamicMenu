@@ -1,5 +1,7 @@
-﻿using DynamicMenu.API.Models;
+﻿using DynamicMenu.API.DTOs;
+using DynamicMenu.API.Models;
 using DynamicMenu.Core.Entities;
+using DynamicMenu.Core.Enums;
 using DynamicMenu.Core.Interfaces;
 using DynamicMenu.Core.Models;
 using DynamicMenu.Infrastructure.Repositories;
@@ -35,33 +37,74 @@ namespace DynamicMenu.Web.Controllers
 
         }
 
+        public async Task<ActionResult<IEnumerable<KeyValue>>> GetMenuTypes()
+        {
+            var menuTypes = Enum.GetValues(typeof(MenuType))
+                .Cast<MenuType>()
+                .Select(a => new KeyValue(((byte)a).ToString(), a.ToString()))
+                .ToArray();
+
+            return Ok(menuTypes);
+        }
+
         [HttpGet]
         public async Task<ActionResult> Insert()
         {
-            return View(new MenuGroup());
+            return View(new CreateMenuGroupDto());
         }
 
         [HttpPost]
-        public async Task<ActionResult<MenuGroup>> Insert(MenuGroup item)
+        public async Task<ActionResult<MenuGroup>> Insert(CreateMenuGroupDto item)
         {
-            //  API giderek işletmemiz gerekecek.
-            var result = await _menuGroupRepository.AddAsync(item);
-            return result;
+            var dto = new MenuGroup
+            {
+                CreatedDate = DateTime.Now,
+                Description = item.Description,
+                IsActive = item.IsActive,
+                MenuType = item.MenuType,
+                Name = item.Name
+            };
+            var res = await _menuGroupRepository.AddAsync(dto);
+            return Ok(new ResultStatus<MenuGroup> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
         }
 
         [HttpGet]
         public async Task<ActionResult<MenuGroup>> Update(int id)
         {
-            var dbItem = _menuGroupRepository.GetByIdAsync(id);
-            return View(dbItem);
+            var item = await _menuGroupRepository.GetByIdAsync(id);
+            var dto = new UpdateMenuGroupDto
+            {
+                Id = item.Id,
+                Description = item.Description,
+                IsActive = item.IsActive,
+                MenuType = item.MenuType,
+                Name = item.Name
+            };
+            return View(dto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<MenuGroup>> Update(MenuGroup item)
+        public async Task<ActionResult<MenuGroup>> Update(UpdateMenuGroupDto item)
         {
             //  API giderek işletmemiz gerekecek.
-            var result = await _menuGroupRepository.UpdateAsync(item);
-            return result;
+            var dto = new MenuGroup
+            {
+                Id = item.Id,
+                Description = item.Description,
+                IsActive = item.IsActive,
+                MenuType = item.MenuType,
+                Name = item.Name,
+                ModifiedDate = DateTime.Now
+            };
+            var res = await _menuGroupRepository.UpdateAsync(dto);
+            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Delete(int id)
+        {
+            await _menuGroupRepository.DeleteAsync(id);
+            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Silme işlemi tamamlandı" }, objects = true });
         }
 
     }

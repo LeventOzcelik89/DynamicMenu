@@ -29,11 +29,11 @@ namespace DynamicMenu.Web.Controllers
             return View();
         }
 
-        public async Task<ActionResult<IEnumerable<MenuGroup>>> GetAll()
+        public async Task<ActionResult<IEnumerable<Menu>>> GetAll()
         {
 
             var url = "Menu/GetAll";
-            var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<MenuGroup>>(url);
+            var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<Menu>>(url);
 
             return Ok(res);
 
@@ -114,19 +114,7 @@ namespace DynamicMenu.Web.Controllers
             }
         }
 
-        public async Task<MenuDto[]> GetDataSource()
-        {
-            var url = "Menu/GetAll";
-            var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<Menu>>(url);
-            var items = res.Select(a => new MenuDto
-            {
-                Id = a.Id,
-                Description = a.Description,
-                IsActive = a.IsActive,
-                Name = a.Name
-            }).ToArray();
-            return items;
-        }
+        
 
     }
 }
