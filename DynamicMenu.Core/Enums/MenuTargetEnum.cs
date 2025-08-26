@@ -1,6 +1,6 @@
 ﻿namespace DynamicMenu.Core.Enums
 {
-    public enum MenuTarget : byte
+    public enum MenuTargetEnum : byte
     {
         Transactions = 1,
         Cards = 2,

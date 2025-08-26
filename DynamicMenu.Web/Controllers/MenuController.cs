@@ -1,6 +1,7 @@
 ﻿using DynamicMenu.API.DTOs;
 using DynamicMenu.API.Models;
 using DynamicMenu.Core.Entities;
+using DynamicMenu.Core.Enums;
 using DynamicMenu.Core.Interfaces;
 using DynamicMenu.Core.Models;
 using DynamicMenu.Infrastructure.Repositories;
@@ -24,19 +25,18 @@ namespace DynamicMenu.Web.Controllers
             _remoteServiceDynamicMenuAPI = remoteServiceDynamicMenuAPI;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(VMMenuGroupDetail? MenuGroupDetail = null)
         {
-            return View();
+            return View(MenuGroupDetail);
         }
 
-        public async Task<ActionResult<IEnumerable<Menu>>> GetAll()
+        public async Task<ActionResult<IEnumerable<Menu>>> GetAll(VMMenuGroupDetail? MenuGroupDetail = null)
         {
-
-            var url = "Menu/GetAll";
+            var url = $"Menu/GetAll";
+            url = MenuGroupDetail?.MenuGroupId != null ? url + $"?menuGroupId={MenuGroupDetail.MenuGroupId}" : url;
             var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<Menu>>(url);
 
             return Ok(res);
-
         }
 
         public async Task<ActionResult<IEnumerable<Menu>>> GetByMenuGroup(int id)
@@ -45,7 +45,7 @@ namespace DynamicMenu.Web.Controllers
             return Ok(menus);
         }
 
-        public async Task<IActionResult> Update(VMMenuItemUpdate request)
+        public async Task<IActionResult> Management(VMMenuDetail request)
         {
             //var model = await _menuGroupRepository.GetByIdAsync(menuGroupId);
             return View(request);
@@ -114,7 +114,78 @@ namespace DynamicMenu.Web.Controllers
             }
         }
 
-        
+        public async Task<ActionResult<IEnumerable<KeyValue>>> GetMenuTargets()
+        {
+            var menuTypes = Enum.GetValues(typeof(MenuTargetEnum))
+                .Cast<MenuTargetEnum>()
+                .Select(a => new KeyValue(((byte)a).ToString(), a.ToString()))
+                .ToArray();
+
+            return Ok(menuTypes);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Insert(int MenuGroupId)
+        {
+            return View(new CreateMenuDto());
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Menu>> Insert(CreateMenuDto item)
+        {
+            var dto = new Menu
+            {
+                CreatedDate = DateTime.Now,
+                Description = item.Description,
+                IsActive = item.IsActive,
+                MenuTarget = item.MenuTarget,
+                MenuGroupId = item.MenuGroupId,
+                Name = item.Name
+            };
+            var res = await _menuRepository.AddAsync(dto);
+            return Ok(new ResultStatus<Menu> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<Menu>> Update(int id)
+        {
+            var item = await _menuRepository.GetByIdAsync(id);
+            var dto = new UpdateMenuDto
+            {
+                Id = item.Id,
+                Description = item.Description,
+                IsActive = item.IsActive,
+                MenuGroupId = item.MenuGroupId,
+                MenuTarget = item.MenuTarget,
+                Name = item.Name
+            };
+            return View(dto);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Menu>> Update(UpdateMenuDto item)
+        {
+            //  API giderek işletmemiz gerekecek.
+            var dto = new Menu
+            {
+                Id = item.Id,
+                Description = item.Description,
+                IsActive = item.IsActive,
+                Name = item.Name,
+                ModifiedDate = DateTime.Now,
+                MenuGroupId = item.MenuGroupId,
+                MenuTarget = item.MenuTarget
+            };
+            var res = await _menuRepository.UpdateAsync(dto);
+            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Delete(int id)
+        {
+            await _menuRepository.DeleteAsync(id);
+            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Silme işlemi tamamlandı" }, objects = true });
+        }
 
     }
 }

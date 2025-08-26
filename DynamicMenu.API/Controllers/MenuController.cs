@@ -17,9 +17,12 @@ namespace DynamicMenu.API.Controllers
 
         // Listeleme
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<Menu>>> GetAll()
+        public async Task<ActionResult<IEnumerable<Menu>>> GetAll(int? MenuGroupId = null)
         {
-            var menus = await _menuRepository.GetAllAsync();
+            var menus = MenuGroupId.HasValue
+                ? await _menuRepository.GetByMenuGroupIdAsync(MenuGroupId.Value)
+                : await _menuRepository.GetAllAsync();
+
             return Ok(menus);
         }
 
@@ -68,4 +71,4 @@ namespace DynamicMenu.API.Controllers
             return NoContent();
         }
     }
-} 
+}

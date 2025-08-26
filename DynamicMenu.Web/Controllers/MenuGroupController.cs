@@ -39,8 +39,8 @@ namespace DynamicMenu.Web.Controllers
 
         public async Task<ActionResult<IEnumerable<KeyValue>>> GetMenuTypes()
         {
-            var menuTypes = Enum.GetValues(typeof(MenuType))
-                .Cast<MenuType>()
+            var menuTypes = Enum.GetValues(typeof(MenuTypeEnum))
+                .Cast<MenuTypeEnum>()
                 .Select(a => new KeyValue(((byte)a).ToString(), a.ToString()))
                 .ToArray();
 

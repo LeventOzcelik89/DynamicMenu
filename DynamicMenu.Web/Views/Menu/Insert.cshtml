@@ -1,13 +1,14 @@
 ﻿@inject DynamicMenu.Core.Models.AppSettings appSettings
-@model DynamicMenu.API.DTOs.CreateMenuGroupDto
+@model DynamicMenu.API.DTOs.CreateMenuDto
 @{
-    ViewBag.Title = "Menu Group Insert";
+    ViewBag.Title = "Menu Insert";
 }
 
 <div class="form-container">
-    <form id="customForm" data-formType="ajax" method="post" action="/MenuGroup/Insert" class="needs-validation" novalidate>
+    <form id="customForm" data-formType="ajax" method="post" action="/Menu/Insert" class="needs-validation" novalidate>
 
-        @Html.DropDownFor(a => a.MenuType, "Menu Type ID", "/MenuGroup/GetMenuTypes", "Lütfen Menü Type ID seçin", "item.Key", "item.Value")
+        @Html.HiddenFor(a => a.MenuGroupId)
+        @Html.DropDownFor(a => a.MenuTarget, "Menu Target ID", "/Menu/GetMenuTargets", "Lütfen Menü Target seçin", "item.Key", "item.Value")
 
         <div class="mb-3">
             <label for="Name" class="form-label">Name</label>

@@ -1,8 +1,10 @@
-﻿<!-- Menü Tablosu Sayfası -->
+﻿@model DynamicMenu.Web.Model.VMMenuGroupDetail;
+
+<!-- Menü Tablosu Sayfası -->
 <div class="page" id="list" data-page="menu-list">
     <main>
         <div class="action-buttons top-buttons">
-            <a data-href="/Menu/Insert" class="action-button" id="new-menu" data-modal="" data-method="get">
+            <a data-href="/Menu/Insert?MenuGroupId=@Model.MenuGroupId" class="action-button" id="new-menu" data-modal="" data-method="get">
                 <i class="fas fa-plus"></i>
                 <span>Add Menu</span>
             </a>
@@ -44,7 +46,8 @@
 
         <td>
             <div class="btn-group" role="group">
-                <a data-href="/Menu/Update" class="btn btn-sm btn-primary" data-id="{{data.Id}}" data-modal data-method="get">Düzenle</a>
+                <a href="/Menu/Management?MenuGroupId={{data.MenuGroupId}}&MenuId={{data.Id}}" class="btn btn-sm btn-success">Yönetim</a>
+                <a data-href="/Menu/Update?Id={{data.Id}}" class="btn btn-sm btn-primary" data-modal data-method="get">Düzenle</a>
                 <a data-href="/Menu/Delete?Id={{data.Id}}" data-modal data-ask class="btn btn-sm btn-info">Sil</a>
             </div>
             </td>
@@ -61,7 +64,7 @@
             tbl: null,
             ready: function(){
 
-                ReadData('/Menu/GetAll', null, function(res){
+                ReadData('/Menu/GetAll?MenuGroupId=' + '@Html.Raw(Model.MenuGroupId)', null, function(res){
 
                     $.each(res, function(i,item){
                         TemplateEngine.RenderTo($('#tblRow'), item, $('#tbl tbody'));

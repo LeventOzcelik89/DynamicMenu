@@ -1,6 +1,6 @@
 ﻿namespace DynamicMenu.Core.Enums
 {
-    public enum MenuType : byte
+    public enum MenuTypeEnum : byte
     {
         BaseMenu = 1,
         AddableMenu = 2

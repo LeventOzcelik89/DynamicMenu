@@ -14,7 +14,7 @@ namespace DynamicMenu.Core.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
-        public MenuTarget MenuTarget { get; set; }
+        public MenuTargetEnum MenuTarget { get; set; }
         public int MenuGroupId { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public DateTime? ModifiedDate { get; set; }

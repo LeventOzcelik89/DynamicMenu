@@ -58,32 +58,3 @@
 
     </form>
 </div>
-
-<script type="text/javascript">
-
-    var baseUrl = '@Html.Raw(appSettings.baseUrl)';
-
-    function GetMenuIcons(e){
-
-        Kendo_GetRequest('/MenuBaseItem/MenuIcons');
-
-    }
-
-    $(document)
-
-        .on('click', '#icons > img', function(e){
-
-            e.preventDefault();
-
-            var val = $(this).attr('data-name');
-            $('[data-task="iconDisplay"]').attr('src', (baseUrl + 'img/icons/' + val + '.svg'));
-            $('#IconPath').val(val);
-            $('#icons').parents('.modal').find('.bootbox-close-button').trigger('click');
-
-            return false;
-
-        })
-
-        ;
-
-</script>

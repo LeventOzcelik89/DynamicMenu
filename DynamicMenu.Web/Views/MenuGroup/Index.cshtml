@@ -41,6 +41,7 @@
             <td>{{data.ModifiedDate == null ? '-' : new Date(data.ModifiedDate).toLocaleString('tr-TR')}}</td>
             <td>
                 <div class="btn-group" role="group">
+                    <a href="/Menu/Index?MenuGroupId={{data.Id}}" class="btn btn-sm btn-success">Yönetim</a>
                     <a data-href="/MenuGroup/Update" class="btn btn-sm btn-primary" data-id="{{data.Id}}" data-modal data-method="get">Düzenle</a>
                     <a data-href="/MenuGroup/Delete?Id={{data.Id}}" data-modal data-ask class="btn btn-sm btn-info">Sil</a>
                 </div>
