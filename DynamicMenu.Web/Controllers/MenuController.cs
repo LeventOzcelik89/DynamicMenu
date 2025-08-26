@@ -63,9 +63,10 @@ namespace DynamicMenu.Web.Controllers
                     var menuItem = menuItems.FirstOrDefault(a => a.Id == item.menuItem.Id);
                     if (menuItem != null)
                     {
+                        //  menuItem.MenuBaseItem.Text = item.menuItem.Text
                         //  menuItem.Text = item.menuItem.Text;
                         //  menuItem.IconPath = item.menuItem.IconPath;
-                        menuItem.MenuBaseItemId = item.menuItem.MenuBaseItemId; //  todo: kontrol et.
+                        //  menuItem.MenuBaseItemId = item.menuItem.MenuBaseItemId; //  todo: kontrol et.
                         menuItem.Keyword = item.menuItem.Keyword;
                         menuItem.SortOrder = item.menuItem.SortOrder;
                         menuItem.IsNew = item.menuItem.IsNew;
