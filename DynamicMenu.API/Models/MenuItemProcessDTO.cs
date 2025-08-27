@@ -1,10 +1,11 @@
-﻿using DynamicMenu.Core.Entities;
+﻿using DynamicMenu.API.DTOs;
+using DynamicMenu.Core.Entities;
 
 namespace DynamicMenu.API.Models
 {
     public class MenuItemProcessDTO
     {
-        public MenuItem menuItem { get; set; }
+        public MenuItemResponseUpdate menuItem { get; set; }
         public MenuItemProcessType processType { get; set; }
     }
 

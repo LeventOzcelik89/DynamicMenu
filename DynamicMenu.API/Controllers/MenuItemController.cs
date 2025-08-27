@@ -1,4 +1,5 @@
 using DynamicMenu.API.DTOs;
+using DynamicMenu.API.Models;
 using DynamicMenu.API.Models.Dtos;
 using DynamicMenu.Application;
 using DynamicMenu.Core.Entities;
@@ -408,6 +409,64 @@ namespace DynamicMenu.API.Controllers
 
 
 
+        [HttpGet("GetMenuItemsByMenuUpdate/{menuGroupId}/{menuId}")]
+        public async Task<ActionResult<List<MenuItemResponseUpdate>?>> GetMenuItemsByMenuUpdate(int menuGroupId, int menuId)
+        {
+            var res = await GetMenuUpdate(menuGroupId, menuId);
+            return res;
+        }
+
+        private async Task<List<MenuItemResponseUpdate>?> GetMenuUpdate(int menuGroupId, int menuId)
+        {
+
+            var menuItems = new List<MenuItemResponseUpdate>();
+            var items = await _menuItemRepository.GetByMenuGroupIdMenuIdAsync(menuGroupId, menuId);
+            foreach (var item in items.Where(a => a.Pid == null).OrderBy(a => a.SortOrder).ToArray())
+            {
+                menuItems.Add(new MenuItemResponseUpdate
+                {
+                    Id = item.Id,
+                    Keyword = item.Keyword,
+                    IsNew = item.IsNew,
+                    MenuBaseItem = new UpdateMenuBaseItemDto(item.MenuBaseItem.Id, item.MenuBaseItem.Text, item.MenuBaseItem.TextEn, item.MenuBaseItem.IconPath),
+                    items = GetMenuItemsUpdate(items.ToArray(), item)
+                });
+            }
+
+            return menuItems;
+
+        }
+
+        private MenuItemResponseUpdate[] GetMenuItemsUpdate(MenuItem[] items, MenuItem item)
+        {
+
+            var itemss = items.Where(a => a.Pid == item.Id).OrderBy(a => a.SortOrder).ToArray();
+            if (!itemss.Any())
+            {
+                return null;
+            }
+
+            var res = new List<MenuItemResponseUpdate>();
+            foreach (var subItem in itemss)
+            {
+
+                res.Add(new MenuItemResponseUpdate
+                {
+                    Id = subItem.Id,
+                    Pid = item.Id,
+                    Keyword = subItem.Keyword,
+                    IsNew = subItem.IsNew,
+                    SortOrder = subItem.SortOrder,
+                    MenuBaseItem = new UpdateMenuBaseItemDto(subItem.MenuBaseItem.Id, subItem.MenuBaseItem.Text, subItem.MenuBaseItem.TextEn, subItem.MenuBaseItem.IconPath),
+
+                    items = GetMenuItemsUpdate(items, subItem)
+                });
+
+            }
+
+            return res.ToArray();
+
+        }
 
 
         [HttpGet("GetMenuItemsByMenu/{menuGroupId}/{menuId}")]
@@ -428,9 +487,9 @@ namespace DynamicMenu.API.Controllers
                 {
                     id = item.Id,
                     key = item.Keyword,
-                    text = item.MenuBaseItem.Text,
-                    textEn = item.MenuBaseItem.TextEn,
-                    icon = item.MenuBaseItem.IconPath,
+                    text = item.MenuBaseItem?.Text,
+                    textEn = item.MenuBaseItem?.TextEn,
+                    icon = item.MenuBaseItem?.IconPath,
                     isNew = item.IsNew,
                     items = GetMenuItems(items.ToArray(), item)
                 });

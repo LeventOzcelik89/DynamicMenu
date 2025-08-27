@@ -4,8 +4,9 @@ namespace DynamicMenu.API.DTOs
     {
         public int Id { get; set; }
         public required string Keyword { get; set; }
-        public int? Pid { get; set; }
         public bool IsNew { get; set; }
+
+        public int? Pid { get; set; }
         public int SortOrder { get; set; }
 
         public int MenuId { get; set; }

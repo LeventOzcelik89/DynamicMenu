@@ -15,8 +15,8 @@ namespace DynamicMenu.Web.UIExtension
             string labelText,
             string remoteDataSourceUrl,
             string placeHolder = "Lütfen seçim yapın",
-            string? ItemValueTemplate = null,
-            string? ItemTextTemplate = null,
+            string? ItemValueTemplate = "item.Id",
+            string? ItemTextTemplate = "item.Name",
             Dictionary<string, object>? htmlAttributes = null)
         {
             var memberExpression = expression.Body as MemberExpression;
@@ -74,19 +74,20 @@ namespace DynamicMenu.Web.UIExtension
 
         public static IHtmlContent DropDown(
             this IHtmlHelper helper,
+            string name,
             string labelText,
             string remoteDataSourceUrl,
             string? value = null,
-            string placeHolder = "Lütfen seçim yapın",
-            string? ItemValueTemplate = null,
-            string? ItemTextTemplate = null,
+            string? placeHolder = "Lütfen seçim yapın",
+            string? ItemValueTemplate = "item.Id",
+            string? ItemTextTemplate = "item.Name",
             Dictionary<string, object>? htmlAttributes = null)
         {
 
             var baseHtmlAttributes = new Dictionary<string, object> { { "class", "form-control" } };
             var lastHtmlAttributes = htmlAttributes != null ? htmlAttributes.Concat(baseHtmlAttributes).ToDictionary(kvp => kvp.Key, kvp => kvp.Value) : baseHtmlAttributes;
 
-            var dropdown = helper.DropDownList(new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem[0], placeHolder, lastHtmlAttributes);
+            var dropdown = helper.DropDownList(name, new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem[0], placeHolder, lastHtmlAttributes);
 
             var valueHtml = string.IsNullOrEmpty(ItemValueTemplate) ? "item.Id" : ItemValueTemplate;
             var optionHtml = string.IsNullOrEmpty(ItemTextTemplate) ? "item.Name" : ItemTextTemplate;
@@ -95,14 +96,14 @@ namespace DynamicMenu.Web.UIExtension
     ReadData('{remoteDataSourceUrl}', null, function(res){{
         $.each(res, function(i, item){{
             var optElem = $('<option>').val({valueHtml}).html({optionHtml});            
-            if({valueHtml} == '{modelValueString}'){{ optElem.attr('selected', 'selected'); }} 
-            $('#{propertyName}').append(optElem);
+            if({valueHtml} == '{value}'){{ optElem.attr('selected', 'selected'); }} 
+            $('#{name}').append(optElem);
         }});
     }});
 </script>");
 
             var label = new Microsoft.AspNetCore.Mvc.Rendering.TagBuilder("label");
-            label.Attributes.Add("for", propertyName);
+            label.Attributes.Add("for", name);
             label.AddCssClass("form-label");
             label.InnerHtml.Append(labelText);
 

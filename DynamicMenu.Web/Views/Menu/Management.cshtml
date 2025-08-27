@@ -76,8 +76,15 @@
         }
 
         .modal .modal-body {
-            padding: 15px 15px 0px 15px;
+            padding: 15px;
         }
+
+        header h1 {
+            margin-block-start: 0px;
+            margin-block-end: 0px;
+            color: #ffffff;
+        }
+
     </style>
 
 }
@@ -93,65 +100,24 @@
             <div class="modal-body">
                 <form id="editMenuItemForm">
 
-                    <input type="hidden" id="id" />
-                    <input type="hidden" id="pid" />
-                    <input type="hidden" id="sortOrder" />
-                    <input type="hidden" id="processType" />
-                    @* <input type="text" id="id" /> *@
+                    <input type="hidden" id="Id" />
+                    <input type="hidden" id="Pid" />
+                    <input type="hidden" id="SortOrder" />
+                    <input type="hidden" id="ProcessType" />
 
-                    @DropDownHelper.DropDown()
+                    @* @Html.DropDown("MenuGroupId", "Menü Group ID", "/MenuGroup/GetAll", null, "Lütfen Menü Group ID seçin") *@
+                    @* @Html.DropDown("MenuId", "Menü ID", "/Menu/GetAll", null, "Lütfen Menü ID seçin") *@
+                    @Html.DropDown("MenuBaseItemId", "Menü Base Item ID", "/MenuBaseItem/GetAll", null, "Lütfen Menü Base Item ID seçin", null, "item.Text + ' | ' + item.TextEn")
 
-
-
-                    <div class="row mb-3">
-                        <div class="col-4">
-                            <label class="form-label" for="text">Menü Text</label>
-                        </div>
-                        <div class="col">
-                            <input placeholder="Görünecek ismi giriniz..." type="text" class="form-control" id="text" name="text" required="">
-                        </div>
+                    <div class="mb-3">
+                        <label for="Keyword" class="form-label">Keyword</label>
+                        @Html.TextBox("Keyword", null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
+                        <div class="invalid-feedback">Boş bırakılamaz</div>
                     </div>
 
-                    <div class="row mb-3">
-                        <div class="col-4">
-                            <label class="form-label" for="textEn">Menü Text En</label>
-                        </div>
-                        <div class="col">
-                            <input placeholder="Görünecek En ismi giriniz..." type="text" class="form-control" id="textEn" name="textEn" required="">
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-4">
-                            <label class="form-label" for="icon">Menü İkonu</label>
-                        </div>
-                        <div class="col">
-                            <input placeholder="Görünecek simgeyi seçiniz..." readonly type="text" class="form-control" id="icon" name="icon" required="">
-                        </div>
-                        <div class="col-1">
-                            <img data-task="iconDisplay" class="iconDisplay" src="" />
-                        </div>
-                        <div class="col-1">
-                            <a href="#" data-task="iconSearch" class="iconSearch btn btn-sm btn-info"><i class="fa fa-search"></i> </a>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-4">
-                            <label class="form-label" for="key">Menü Key</label>
-                        </div>
-                        <div class="col">
-                            <input placeholder="Görünecek ismi giriniz..." type="text" class="form-control" id="key" name="key" required="">
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-4">
-                            <label class="form-label" for="isNew">Yeni mi?</label>
-                        </div>
-                        <div class="col">
-                            <input type="checkbox" class="form-check-input" id="isNew" name="isNew">
-                        </div>
+                    <div class="form-check">
+                        <label for="IsNew" class="form-check-label">IsNew</label>
+                        @Html.CheckBox("IsNew", new Dictionary<string, object> { { "class", "form-check-input" } })
                     </div>
 
                 </form>
@@ -207,13 +173,13 @@
 </div>
 
 <script type="text/template" id="menuTemplate">
-    <div class="page" data-page="{{data.id}}" data-menu="{{data.menuTarget}}">
+    <div class="page" data-page="{{data.Id}}">
         <header>
-            <button class="back-button" data-page="{{data.pid}}">
+            <button class="back-button" data-page="{{data.Pid}}">
                 <i class="fas fa-arrow-left"></i>
             </button>
-            <h1 data-lang="tr">{{data.text}}</h1>
-            <h1 data-lang="en">{{data.textEn}}</h1>
+            <h1 data-lang="tr">{{data.MenuBaseItem.Text}}</h1>
+            <h1 data-lang="en">{{data.MenuBaseItem.TextEn}}</h1>
         </header>
         <main>
             <div class="menu-container" data-target="menuItems">
@@ -224,12 +190,12 @@
 </script>
 
 <script type="text/template" id="menuItemTemplate">
-            <div class="menu-item" data-page="{{data.id}}">
+            <div class="menu-item" data-page="{{data.Id}}">
     @* <img src="{{icon}}" onerror="imgError(this)"> *@
-                <img data-target="icon" src="{{data.iconPath}}" />
-                <span data-lang="tr" data-target="text">{{data.text}}</span>
-                <span data-lang="en" data-target="textEn">{{data.textEn}}</span>
-                <span data-target="isNew" class="new">Yeni</span>
+                <img data-target="icon" src="{{data.MenuBaseItem.IconUrl}}" />
+                <span data-lang="tr" data-target="text">{{data.MenuBaseItem.Text}}</span>
+                <span data-lang="en" data-target="textEn">{{data.MenuBaseItem.TextEn}}</span>
+                <span data-target="IsNew" class="new">Yeni</span>
                 <i class="fas fa-chevron-right" data-target="go"></i>
 
                 <div class="btns btn-group">
@@ -261,6 +227,9 @@
         }
 
         var page = {
+            data: null,
+            icons: null,
+            menuBaseItems: null,
             defines: {
                 baseUrl: '@Html.Raw(appSettings.baseUrl)',
                 model: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)),
@@ -271,12 +240,6 @@
                     'add': 1,
                     'edit': 2,
                     'remove': 3
-                },
-                menuTarget: {
-                    'Transactions': 1,
-                    'Cards': 2,
-                    'Profile': 3,
-                    'Applications': 4
                 }
             },
             saveData: function(){
@@ -284,21 +247,12 @@
                 $.each(page.dataList, function(k,item){
                     res.push({
                         processType: item.processType,
-                        menuItem: {
-                            Id: item.menuItem.id,
-                            NewTag: item.menuItem.isNew,
-                            Keyword: item.menuItem.key,
-                            SortOrder: item.menuItem.sortOrder,
-                            Text: item.menuItem.text,
-                            TextEn: item.menuItem.textEn,
-                            IconPath: item.menuItem.icon,
-                            Pid: isNaN(item.menuItem.pid) ? null : item.menuItem.pid
-                        }
+                        menuItem: item.menuItem
                     });
                 });
 
                 ReadData('/Menu/Save', { menuId: page.defines.model.MenuId, menuGroupId: page.defines.model.MenuGroupId, items: res }, function(ress){
-
+                    console.log(ress);
                 });
 
             },
@@ -308,7 +262,7 @@
 
                 $.each(page.data, function(d,data){
 
-                    if(data.id == id){
+                    if(data.Id == id){
                         gRes = data;
                         return false;
                     }
@@ -334,7 +288,7 @@
             },
             searchData: function(list, id){
 
-                var res = list.filter(function(item){ return item.id == id })[0];
+                var res = list.filter(function(item){ return item.Id == id })[0];
                 if(res != undefined){
                     return res;
                 }
@@ -355,8 +309,6 @@
             },
             dataList: {},
             menuContainerElem: $('#mobilApp'),
-            data: null,
-            icons: null,
             getElem_PageList: function(item){
 
                 var menuTemplate = TemplateEngine.Render($('#menuTemplate'), item);
@@ -366,21 +318,17 @@
                     menuTemplate.find('.back-button').remove();
                 }
 
-                if(item.menuTarget == null){
-                    menuTemplate.removeAttr('data-menu');
-                }
-
                 $.each(item.items, function(j, subitem){
 
-                    subitem.iconPath = (page.defines.baseUrl + 'img/icons/' + subitem.icon + '.svg');
+                    subitem.MenuBaseItem.IconUrl = (page.defines.baseUrl + 'img/icons/' + subitem.MenuBaseItem.IconPath + '.svg');
                     var menuItemTemplate = TemplateEngine.Render($('#menuItemTemplate'), subitem);
 
                     if(subitem.items == null || subitem.items.length == 0){
                         menuItemTemplate.find('[data-target="go"]').remove();
                     }
 
-                    if(subitem.isNew !== true){
-                        menuItemTemplate.find('[data-target="isNew"]').hide();
+                    if(subitem.IsNew !== true){
+                        menuItemTemplate.find('[data-target="IsNew"]').hide();
                     }
 
                     menuTemplate.find('[data-target="menuItems"]').append(menuItemTemplate);
@@ -390,14 +338,17 @@
                     subitem.render = function(){
 
                         var data = menuItemTemplate.data('data');
+                        if(data == null){
+                            return;
+                        }
                         //  todo: Burası formData update edildiğinde çalışacak bölüm.
-                        menuItemTemplate.find('[data-target="text"]').html(data.text);
-                        menuItemTemplate.find('[data-target="textEn"]').html(data.textEn);
-                        menuItemTemplate.find('[data-target="icon"]').attr('src', (page.defines.baseUrl + 'img/icons/' + data.icon + '.svg'));
-                        if(data.isNew == true){
-                            menuItemTemplate.find('[data-target="isNew"]').show();
+                        menuItemTemplate.find('[data-target="text"]').html(data.MenuBaseItem.Text);
+                        menuItemTemplate.find('[data-target="textEn"]').html(data.MenuBaseItem.TextEn);
+                        menuItemTemplate.find('[data-target="icon"]').attr('src', subitem.MenuBaseItem.IconUrl);
+                        if(data.IsNew == true){
+                            menuItemTemplate.find('[data-target="IsNew"]').show();
                         }else{
-                            menuItemTemplate.find('[data-target="isNew"]').hide();
+                            menuItemTemplate.find('[data-target="IsNew"]').hide();
                         }
 
                     };
@@ -413,7 +364,7 @@
 
                 page.menuContainerElem.append(page.getElem_PageList(item));
 
-                $.each(item.items, function(ix,itemx){
+                $.each(item.items, function(ix,  itemx){
 
                     if(itemx.items != null && itemx.items.length > 0 && skipChilds != true){
                         page.makeSubMenu(itemx);
@@ -437,17 +388,15 @@
                         // stop: function( event, ui ) { console.log('stop'); },
                         update: function( event, ui ) {
                             var elemData = ui.item.data('data');
-                            var parentData = page.getData(elemData.pid);
-                            var elems = $('#mobilApp .page[data-page="' + (parentData?.id ?? 0) + '"] .menu-container .menu-item');
+                            var parentData = page.getData(elemData.Pid);
+                            var elems = $('#mobilApp .page[data-page="' + (parentData?.Id ?? 0) + '"] .menu-container .menu-item');
 
                             $.each(elems, function(e,elem){
 
                                 var data = $(elem).data('data');
-                                data.sortOrder = e + 1;
+                                data.SortOrder = e + 1;
 
-                                debugger;
-
-                                page.dataList[data.id] = { menuItem: data, processType: page.enums.processType.edit };
+                                page.dataList[data.Id] = { menuItem: data, processType: page.enums.processType.edit };
 
 
                             });
@@ -459,13 +408,13 @@
             },
             ready: function () {
 
-                ReadData('/MenuItem/GetMenuItemsByMenu', { menuGroupId: page.defines.model.MenuGroupId, menuId: page.defines.model.MenuId }, function (res) {
+                ReadData('/MenuItem/GetMenuItemsByMenuUpdate', { menuGroupId: page.defines.model.MenuGroupId, menuId: page.defines.model.MenuId }, function (res) {
 
                     page.data = res;
-                    page.menuContainerElem.append(page.getElem_PageList({ isBase: true, id: '0', menuTarget: 'Transactions', text: 'Menü Detayı', textEn: 'Menu Detail', items: page.data }));
-                    //  page.menuContainerElem.append(page.getElem_PageList({ id: 'cards', menuTarget: 'Cards', text: 'Kart Menü', textEn: 'Cards', items: page.data.cards }));
-                    //  page.menuContainerElem.append(page.getElem_PageList({ id: 'profile', menuTarget: 'Profile', text: 'Profil', textEn: 'Profile', items: page.data.profile }));
-                    //  page.menuContainerElem.append(page.getElem_PageList({ id: 'applications', menuTarget: 'Applications', text: 'Başvurular', textEn: 'Applications', items: page.data.applications }));
+                    page.menuContainerElem.append(page.getElem_PageList({ isBase: true, Id: '0', MenuBaseItem: {Text: 'Menü Detayı', TextEn: 'Menu Detail' }, items: page.data }));
+                    //  page.menuContainerElem.append(page.getElem_PageList({ id: 'cards', text: 'Kart Menü', textEn: 'Cards', items: page.data.cards }));
+                    //  page.menuContainerElem.append(page.getElem_PageList({ id: 'profile', text: 'Profil', textEn: 'Profile', items: page.data.profile }));
+                    //  page.menuContainerElem.append(page.getElem_PageList({ id: 'applications', text: 'Başvurular', textEn: 'Applications', items: page.data.applications }));
 
                     $.each(page.data, function(i, item){
                         if(item.items != null && item.items.length > 0){
@@ -488,6 +437,12 @@
                     });
 
                 });
+
+                ReadData('/MenuBaseItem/GetAll', null, function(items){
+
+                    page.menuBaseItems = items;
+
+                })
 
             },
             getId: function(){
@@ -531,11 +486,11 @@
 
                 var data = $('#deleteConfirmModal').data('data');
 
-                page.dataList[data.id] = { menuItem: data, processType: page.enums.processType.remove };
-                $('.menu-item[data-page="' + data.id + '"]').remove();
+                page.dataList[data.Id] = { menuItem: data, processType: page.enums.processType.remove };
+                $('.menu-item[data-page="' + data.Id + '"]').remove();
 
                 var pData = $('#mobilApp .page:visible').data('data');
-                pData.items = pData.items.filter(function(a){ return a.id != data.id });
+                pData.items = pData.items.filter(function(a){ return a.Id != data.Id });
 
                 return false;
 
@@ -546,49 +501,49 @@
                 e.preventDefault();
 
                 var formData = {
-                    pid: $('#pid').val(),
-                    sortOrder: $('#sortOrder').val(),
-                    processType: $('#processType').val(),
+                    Id: isNaN(parseInt($('#Id').val())) ? null : parseInt($('#Id').val()),
+                    IsNew: $('#IsNew').prop('checked'),
+                    Keyword: $('#Keyword').val(),
+                    Pid: isNaN(parseInt($('#Pid').val())) ? null : parseInt($('#Pid').val()),
+                    SortOrder: parseInt($('#SortOrder').val()),
+                    items: null,
 
-                    id: $('#id').val(),
-                    text: $('#text').val(),
-                    textEn: $('#textEn').val(),
-                    key: $('#key').val(),
-                    isNew: $('#isNew').prop('checked'),
-                    icon: $('#icon').val()
+                    processType: parseInt($('#ProcessType').val())
+                };
+
+                var menuBaseItemId = parseInt($('#MenuBaseItemId').val());
+                var menuBaseItem = page.menuBaseItems.filter(function(item){ return item.Id == menuBaseItemId; })[0];
+
+                formData.MenuBaseItem = {
+                    Id: menuBaseItem.Id,
+                    IconPath: menuBaseItem.IconPath,
+                    Text: menuBaseItem.Text,
+                    TextEn: menuBaseItem.TextEn
                 };
 
                 if(formData.processType == page.enums.processType.edit){
-                    var pageData = page.getData(formData.id);
-                    pageData.text = formData.text;
-                    pageData.textEn = formData.textEn;
-                    pageData.key = formData.key;
-                    pageData.isNew = formData.isNew;
-                    pageData.icon = formData.icon;
+                    var pageData = page.getData(formData.Id);
+                    pageData.Keyword = formData.Keyword;
+                    pageData.IsNew = formData.IsNew;
+                    pageData.MenuBaseItem.Id =  formData.MenuBaseItem.Id;
                     pageData.render();
 
-                    page.dataList[pageData.id] = { menuItem: pageData, processType: page.enums.processType.edit };
+                    page.dataList[pageData.Id] = { menuItem: pageData, processType: page.enums.processType.edit };
 
                 }else if(formData.processType == page.enums.processType.add){
 
-                    var data = $('#mobilApp .page:visible').data('data')
-
-                    var pageData ={
-                        "id": page.getId(),
-                        "pid": formData.pid,
-                        "key": formData.key,
-                        "text": formData.text,
-                        "textEn": formData.textEn,
-                        "isNew": formData.isNew,
-                        "icon": formData.icon,
-                        "sortOrder": formData.sortOrder
+                    formData.Id = page.getId();
+                    if(formData.Pid == 0){
+                        formData.Pid = null;
                     }
 
-                    $('.page[data-page="' + data.id + '"]').remove();
-                    data.items.push(pageData);
+                    var data = $('#mobilApp .page:visible').data('data')
+
+                    $('.page[data-page="' + data.Id + '"]').remove();
+                    data.items.push(formData);
                     page.makeSubMenu(data, true);
 
-                    page.dataList[pageData.id] = { menuItem: pageData, processType: page.enums.processType.add };
+                    page.dataList[formData.Id] = { menuItem: formData, processType: page.enums.processType.add };
 
                 }
 
@@ -627,17 +582,15 @@
                 e.preventDefault();
 
                 var data = $($(this).parents('.menu-item')[0]).data('data');
-                $('#processType').val(page.enums.processType.edit);
-                $('#sortOrder').val(data.sortOrder || '');
-                $('#pid').val(data.pid || '');
+                $('#ProcessType').val(page.enums.processType.edit);
+                $('#SortOrder').val(data.SortOrder ?? '');
+                $('#Pid').val(data.Pid ?? '');
+                $('#Keyword').val(data.Keyword || '');
+                //  $('[data-task="iconDisplay"]').attr('src', (page.defines.baseUrl + 'img/icons/' + data.icon + '.svg'));
+                $('#IsNew').prop('checked', data.IsNew || false);
+                $('#Id').val(data.Id);
+                $('#MenuBaseItemId').val(data.MenuBaseItem.Id);
 
-                $('#text').val(data.text || '');
-                $('#textEn').val(data.textEn || '');
-                $('#icon').val(data.icon || '');
-                $('#key').val(data.key || '');
-                $('[data-task="iconDisplay"]').attr('src', (page.defines.baseUrl + 'img/icons/' + data.icon + '.svg'));
-                $('#isNew').prop('checked', data.isNew || false);
-                $('#id').val(data.id);
                 //  $('#editMenuItemModal').modal('show');
 
                 return false;
@@ -650,17 +603,14 @@
 
                 var data = $('#mobilApp .page:visible').data('data');
 
-                $('#pid').val(data.id || '');
-                $('#sortOrder').val(data.items.length + 1 || '');
-                $('#processType').val(page.enums.processType.add);
+                $('#Pid').val(data.Id || '');
+                $('#SortOrder').val(data.items.length + 1 || '');
+                $('#ProcessType').val(page.enums.processType.add);
 
-                $('#text').val('');
-                $('#textEn').val('');
-                $('#icon').val('');
-                $('#key').val('');
+                $('#Keyword').val('');
                 //  $('[data-task="iconDisplay"]').attr('src', 'img/icons/' + data.icon + '.svg');
-                $('#isNew').prop('checked', false);
-                $('#id').val('');
+                $('#IsNew').prop('checked', false);
+                $('#Id').val('');
 
                 return false;
 
@@ -671,7 +621,7 @@
                 e.preventDefault();
 
                 var data = $($(this).parents('.menu-item')[0]).data('data');
-                $('#deleteConfirmModal').find('input[name="id"]').val(data.id);
+                $('#deleteConfirmModal').find('input[name="Id"]').val(data.Id);
                 $('#deleteConfirmModal').data('data', data);
                 //  $('#deleteConfirmModal').modal('show');
 

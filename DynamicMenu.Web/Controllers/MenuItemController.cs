@@ -46,6 +46,13 @@ namespace DynamicMenu.Web.Controllers
             return res;
         }
 
+        public async Task<ActionResult<List<MenuItemResponseUpdate>?>> GetMenuItemsByMenuUpdate(int menuGroupId, int menuId)
+        {
+            var url = $"MenuItem/GetMenuItemsByMenuUpdate/{menuGroupId}/{menuId}";
+            var res = await _remoteServiceDynamicMenuAPI.GetData<List<MenuItemResponseUpdate>>(url);
+            return res;
+        }
+
         [HttpGet]
         public async Task<ActionResult> Insert()
         {

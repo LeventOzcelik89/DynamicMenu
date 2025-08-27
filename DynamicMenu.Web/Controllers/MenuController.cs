@@ -51,7 +51,7 @@ namespace DynamicMenu.Web.Controllers
             return View(request);
         }
 
-        public async Task<ActionResult<ResultStatus<bool>>> Save(int menuId, MenuItemProcessDTO[] items)
+        public async Task<ActionResult<ResultStatus<bool>>> Save(int menuId, int menuGroupId, MenuItemProcessDTO[] items)
         {
             try
             {
@@ -93,10 +93,9 @@ namespace DynamicMenu.Web.Controllers
                 {
                     var menuItem = new MenuItem
                     {
-                        //  Text = item.menuItem.Text,
-                        //  TextEn = item.menuItem.TextEn,
-                        //  IconPath = item.menuItem.IconPath,
-                        MenuBaseItemId = item.menuItem.MenuBaseItemId,  //  todo: bak
+                        MenuId = menuId,
+                        MenuGroupId = menuGroupId,
+                        MenuBaseItemId = item.menuItem.MenuBaseItem.Id,
                         Keyword = item.menuItem.Keyword,
                         SortOrder = item.menuItem.SortOrder,
                         IsNew = item.menuItem.IsNew,
