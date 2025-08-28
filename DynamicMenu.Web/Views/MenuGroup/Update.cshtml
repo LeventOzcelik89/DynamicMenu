@@ -4,7 +4,7 @@
 }
 
 <div class="form-container">
-    <form id="customForm" data-formType="ajax" method="post" action="/MenuGroup/Insert" class="needs-validation" novalidate>
+    <form data-form="main" data-formType="ajax" method="post" action="/MenuGroup/Insert" class="needs-validation" novalidate>
 
         @Html.HiddenFor(a => a.Id)
 
@@ -28,7 +28,7 @@
         </div>
 
         <div class="d-flex justify-content-end">
-            <button class="btn btn-secondary">Vazgeç</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
             <button type="submit" class="btn btn-primary">Kaydet</button>
         </div>
 

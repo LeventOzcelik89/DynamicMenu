@@ -201,6 +201,12 @@
 
     })
 
+    .on('success', '[data-form="main"]', function (e, resp) {
+
+        $('#tbl').DataTable().ajax.reload(null, false);
+
+    })
+
     ;
 
 var formSubmitFunc = function (e) {

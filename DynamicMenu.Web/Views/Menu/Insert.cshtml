@@ -4,7 +4,7 @@
 }
 
 <div class="form-container">
-    <form id="customForm" data-formType="ajax" method="post" action="/Menu/Insert" class="needs-validation" novalidate>
+    <form data-form="main" data-formType="ajax" method="post" action="/Menu/Insert" class="needs-validation" novalidate>
 
         @Html.HiddenFor(a => a.MenuGroupId)
         @Html.DropDownFor(a => a.MenuTarget, "Menu Target ID", "/Menu/GetMenuTargets", "Lütfen Menü Target seçin", "item.Key", "item.Value")

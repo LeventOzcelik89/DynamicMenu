@@ -80,10 +80,10 @@ namespace DynamicMenu.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Update(UpdateMenuBaseItemDto item)
         {
+            //  var dbItem = await _menuBaseItemRepository.GetByIdAsync(item.Id);
             var dto = new MenuBaseItem
             {
                 Id = item.Id,
-                ModifiedDate = DateTime.Now,
                 IconPath = item.IconPath,
                 Text = item.Text,
                 TextEn = item.TextEn
