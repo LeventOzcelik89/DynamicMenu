@@ -38,7 +38,7 @@
     <tr>
         <td>{{data.Name}}</td>
         <td>{{data.Description}}</td>
-        <td>{{data.IsActive}}</td>
+        <td><span class="badge bg-{{data.IsActive == true ? 'success' : 'danger'}}">{{data.IsActive == true ? 'Aktif' : 'Pasif'}}</span></td>
         <td>{{data.MenuGroupId}}</td>
         <td>{{data.MenuTarget}}</td>
         <td>{{new Date(data.CreatedDate).toLocaleString('tr-TR')}}</td>

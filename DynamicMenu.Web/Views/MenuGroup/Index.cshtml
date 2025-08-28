@@ -16,6 +16,7 @@
                         <th>Açıklama</th>
                         <th>Aktif mi</th>
                         <th>Menü Tipi</th>
+                        <th>Menü Grupları</th>
                         <th>Oluşturma Tarihi</th>
                         <th>Düzenleme Tarihi</th>
                         <th width="120">İşlemler</th>
@@ -37,6 +38,7 @@
             <span class="badge bg-{{data.IsActive == true ? 'success' : 'danger'}}">{{data.IsActive == true ? 'Aktif' : 'Pasif'}}</span>
         </td>
             <td>{{data.MenuType}}</td>
+            <td>{{data.Menus.map(function(item){ return '<a href="Menu/Management?MenuId=' + item.Id + '&MenuGroupId=' + data.Id + '" class="btn btn-sm btn-info m-1">' + item.Name + '</a>'; }).join(''); }}</td>
             <td>{{new Date(data.CreatedDate).toLocaleString('tr-TR')}}</td>
             <td>{{data.ModifiedDate == null ? '-' : new Date(data.ModifiedDate).toLocaleString('tr-TR')}}</td>
             <td>

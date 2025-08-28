@@ -55,6 +55,10 @@ header {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.dt-container .uk-flex:nth-child(1) {
+    margin-bottom: 15px;
+}
+
 /* Action buttons styles */
 .action-buttons {
     display: flex;
@@ -88,7 +92,7 @@ header {
 
 .form-container {
     background: #fff;
-    padding: 30px;
+    padding: 15px;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
 }

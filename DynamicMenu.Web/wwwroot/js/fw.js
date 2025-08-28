@@ -191,6 +191,16 @@
 
     })
 
+    .on('click', '.bootbox.modal [data-dismiss="modal"]', function (e) {
+
+        e.preventDefault();
+
+        $(this).parents('.bootbox.modal').modal('hide');
+
+        return false;
+
+    })
+
     ;
 
 var formSubmitFunc = function (e) {
@@ -332,7 +342,12 @@ function Kendo_GetRequest(_url, _data, _button, _modalType, title) {
             if (typeof (response.feedback) != 'undefined' && typeof (response.success) != 'undefined' && typeof (response.objects) != 'undefined') {
                 feedback(response.feedback);
                 $isJSON = true;
-                _button.parents("form").trigger("success", response);
+                if (_button.parents('form') != undefined) {
+                    _button.parents("form").trigger("success", response);
+                }
+                if (_button.parents('table') != undefined) {
+                    _button.parents('table').trigger("success", response);
+                }
                 return;
             }
 
@@ -374,7 +389,7 @@ function Kendo_GetRequest(_url, _data, _button, _modalType, title) {
                         //  $.each(haritalar, function (i, item) { item.map.updateSize(); });
                         fn_RunFormValidators();
                     }
-                })
+                });
 
             } else {
                 $(".k-pager-refresh.k-link").each(function (i, e) { $(e).trigger('click'); });
