@@ -201,7 +201,7 @@
 
     })
 
-    .on('success', '[data-form="main"]', function (e, resp) {
+    .on('success', '[data-form="main"],[data-table="main"]', function (e, resp) {
 
         $('#tbl').DataTable().ajax.reload(null, false);
 
