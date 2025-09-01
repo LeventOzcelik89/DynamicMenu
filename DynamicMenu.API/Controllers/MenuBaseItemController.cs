@@ -16,7 +16,7 @@ namespace DynamicMenu.API.Controllers
     [Route("api/[controller]")]
     public class MenuBaseItemController : ControllerBase
     {
-        private readonly IMenuBaseItemRepository _MenuBaseItemRepository;
+        private readonly IMenuBaseItemRepository _menuBaseItemRepository;
         private readonly IMenuRepository _menuRepository;
         private readonly IRemoteMenusRepository _remoteMenuConfigRepository;
         private readonly ICacheService _cacheService;
@@ -31,7 +31,7 @@ namespace DynamicMenu.API.Controllers
             DynamicMenuDbContext context)
         {
             _menuRepository = menuRepository;
-            _MenuBaseItemRepository = MenuBaseItemRepository;
+            _menuBaseItemRepository = MenuBaseItemRepository;
             _remoteMenuConfigRepository = remoteMenuConfigRepository;
             _cacheService = cacheService;
             _context = context;
@@ -46,12 +46,55 @@ namespace DynamicMenu.API.Controllers
             //if (cachedItems != null)
             //    return cachedItems;
 
-            var items = await _MenuBaseItemRepository.GetAllAsync();
+            var items = await _menuBaseItemRepository.GetAllAsync();
             var dtos = items.Select(MapToDto).ToList();
 
             //await _cacheService.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(30));
             return dtos;
         }
+
+        [HttpPost("Insert")]
+        public async Task<ActionResult> Insert([FromBody] CreateMenuBaseItemDto item)
+        {
+            var dto = new MenuBaseItem
+            {
+                CreatedDate = DateTime.Now,
+                IconPath = item.IconPath,
+                Text = item.Text,
+                TextEn = item.TextEn
+            };
+            var res = await _menuBaseItemRepository.AddAsync(dto);
+            return Ok(new ResultStatus<MenuBaseItem> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res, success = true });
+        }
+
+        [HttpPost("Update")]
+        public async Task<ActionResult> Update([FromBody] UpdateMenuBaseItemDto item)
+        {
+            //  var dbItem = await _menuBaseItemRepository.GetByIdAsync(item.Id);
+            var dto = new MenuBaseItem
+            {
+                Id = item.Id,
+                IconPath = item.IconPath,
+                Text = item.Text,
+                TextEn = item.TextEn
+            };
+            var res = await _menuBaseItemRepository.UpdateAsync(dto);
+            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Güncelleme işlemi tamamlandı" }, objects = res, success = true });
+        }
+
+        [HttpDelete("Delete/{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var result = await _menuBaseItemRepository.DeleteAsync(id);
+            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Silme işlemi tamamlandı" }, objects = result, success = true });
+        }
+
+
+
+
+
+
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<MenuBaseItemDto>> GetById(int id)
@@ -62,7 +105,7 @@ namespace DynamicMenu.API.Controllers
             //if (cachedItem != null)
             //    return cachedItem;
 
-            var item = await _MenuBaseItemRepository.GetByIdAsync(id);
+            var item = await _menuBaseItemRepository.GetByIdAsync(id);
             if (item == null)
                 return NotFound();
 
@@ -84,7 +127,7 @@ namespace DynamicMenu.API.Controllers
                 CreatedDate = DateTime.UtcNow,
             };
 
-            var created = await _MenuBaseItemRepository.AddAsync(menuBaseItem);
+            var created = await _menuBaseItemRepository.AddAsync(menuBaseItem);
             //await _cacheService.RemoveAsync($"{CacheKeyPrefix}all");
 
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, MapToDto(created));
@@ -93,7 +136,7 @@ namespace DynamicMenu.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateMenuBaseItemDto updateDto)
         {
-            var existingItem = await _MenuBaseItemRepository.GetByIdAsync(id);
+            var existingItem = await _menuBaseItemRepository.GetByIdAsync(id);
             if (existingItem == null)
                 return NotFound();
 
@@ -102,21 +145,21 @@ namespace DynamicMenu.API.Controllers
             existingItem.IconPath = updateDto.IconPath;
             existingItem.ModifiedDate = DateTime.UtcNow;
 
-            await _MenuBaseItemRepository.UpdateAsync(existingItem);
+            await _menuBaseItemRepository.UpdateAsync(existingItem);
             //await _cacheService.RemoveAsync($"{CacheKeyPrefix}all");
             //await _cacheService.RemoveAsync($"{CacheKeyPrefix}{id}");
 
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            await _MenuBaseItemRepository.DeleteAsync(id);
-            //await _cacheService.RemoveAsync($"{CacheKeyPrefix}all");
-            //await _cacheService.RemoveAsync($"{CacheKeyPrefix}{id}");
-            return NoContent();
-        }
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    await _menuBaseItemRepository.DeleteAsync(id);
+        //    //await _cacheService.RemoveAsync($"{CacheKeyPrefix}all");
+        //    //await _cacheService.RemoveAsync($"{CacheKeyPrefix}{id}");
+        //    return NoContent();
+        //}
 
         private static MenuBaseItemDto MapToDto(MenuBaseItem item)
         {

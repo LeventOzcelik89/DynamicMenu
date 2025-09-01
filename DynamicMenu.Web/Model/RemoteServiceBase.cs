@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using Azure;
+using DynamicMenu.API.DTOs;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace DynamicMenu.Web.Model
 {
@@ -18,6 +21,40 @@ namespace DynamicMenu.Web.Model
         protected RemoteServiceBase(HttpClient httpClient)
         {
             _httpClient = httpClient;
+        }
+
+        public async Task<T?> PostJsonData<T>(string url, object data) where T : class
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync(new Uri(baseAddress + url), data);
+                var result = await response.Content.ReadAsStringAsync();
+                var resultJson = JsonConvert.DeserializeObject<T>(result);
+
+                return resultJson;
+            }
+            catch (Exception ex)
+            {
+                //Log.Error(this.GetType().Name + " DownloadString Ex: " + ex.Message + Environment.NewLine + ex.StackTrace);
+                return null;
+            }
+        }
+
+        public async Task<T?> DeleteData<T>(string url) where T : class
+        {
+            try
+            {
+                var response = await _httpClient.DeleteAsync(new Uri(baseAddress + url));
+                var result = await response.Content.ReadAsStringAsync();
+                var resultJson = JsonConvert.DeserializeObject<T>(result);
+
+                return resultJson;
+            }
+            catch (Exception ex)
+            {
+                //Log.Error(this.GetType().Name + " DownloadString Ex: " + ex.Message + Environment.NewLine + ex.StackTrace);
+                return null;
+            }
         }
 
         public async Task<T?> GetData<T>(string url) where T : class

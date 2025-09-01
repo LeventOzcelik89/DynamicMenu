@@ -51,7 +51,7 @@ namespace DynamicMenu.Infrastructure.Repositories
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var MenuBaseItem = await _context.MenuBaseItem.SingleOrDefaultAsync(a => a.Id == id);
             if (MenuBaseItem != null)
@@ -59,6 +59,7 @@ namespace DynamicMenu.Infrastructure.Repositories
                 _context.MenuBaseItem.Remove(MenuBaseItem);
                 await _context.SaveChangesAsync();
             }
+            return true;
         }
 
     }

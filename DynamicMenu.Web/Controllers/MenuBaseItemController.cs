@@ -56,17 +56,11 @@ namespace DynamicMenu.Web.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> Insert(CreateMenuBaseItemDto item)
+        public async Task<ResultStatus<MenuBaseItem>> Insert(CreateMenuBaseItemDto item)
         {
-            var dto = new MenuBaseItem
-            {
-                CreatedDate = DateTime.Now,
-                IconPath = item.IconPath,
-                Text = item.Text,
-                TextEn = item.TextEn
-            };
-            var res = await _menuBaseItemRepository.AddAsync(dto);
-            return Ok(new ResultStatus<MenuBaseItem> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
+            var url = "MenuBaseItem/Insert";
+            var res = await _remoteServiceDynamicMenuAPI.PostJsonData<ResultStatus<MenuBaseItem>>(url, item);
+            return res ?? new ResultStatus<MenuBaseItem> { feedback = new FeedBack { message = "Hata oluştu" } };
         }
 
 
@@ -74,35 +68,22 @@ namespace DynamicMenu.Web.Controllers
         public async Task<ActionResult> Update(int id)
         {
             var item = await _menuBaseItemRepository.GetByIdAsync(id);
-            return View(MapToDto(item));
+            var dto = new UpdateMenuBaseItemDto
+            {
+                Id = item.Id,
+                IconPath = item.IconPath,
+                Text = item.Text,
+                TextEn = item.TextEn
+            };
+            return View(dto);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Update(UpdateMenuBaseItemDto item)
+        public async Task<ResultStatus<bool>> Update(UpdateMenuBaseItemDto item)
         {
-            //  var dbItem = await _menuBaseItemRepository.GetByIdAsync(item.Id);
-            var dto = new MenuBaseItem
-            {
-                Id = item.Id,
-                IconPath = item.IconPath,
-                Text = item.Text,
-                TextEn = item.TextEn
-            };
-            var res = await _menuBaseItemRepository.UpdateAsync(dto);
-            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Güncelleme işlemi tamamlandı" }, objects = res });
-        }
-
-        private static UpdateMenuBaseItemDto MapToDto(MenuBaseItem item)
-        {
-            if (item == null) return null;
-
-            return new UpdateMenuBaseItemDto
-            {
-                Id = item.Id,
-                IconPath = item.IconPath,
-                Text = item.Text,
-                TextEn = item.TextEn
-            };
+            var url = "MenuBaseItem/Update";
+            var res = await _remoteServiceDynamicMenuAPI.PostJsonData<ResultStatus<bool>>(url, item);
+            return res ?? new ResultStatus<bool> { feedback = new FeedBack { message = "Hata oluştu" } };
         }
 
         [HttpGet]
@@ -126,10 +107,11 @@ namespace DynamicMenu.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ResultStatus<bool>> Delete(int id)
         {
-            await _menuBaseItemRepository.DeleteAsync(id);
-            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Silme işlemi tamamlandı" }, objects = true });
+            var url = $"MenuBaseItem/Delete/{id}";
+            var res = await _remoteServiceDynamicMenuAPI.DeleteData<ResultStatus<bool>>(url);
+            return res ?? new ResultStatus<bool> { feedback = new FeedBack { message = "Hata oluştu" } };
         }
 
     }
