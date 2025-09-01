@@ -36,13 +36,12 @@ namespace DynamicMenu.Application
 
                 RemoteConfigManager manager = new RemoteConfigManager(_remoteMenusRepository);
 
-                EntityList = manager.GetRemoteMenuConfigList(Convert.ToInt32(menuTypeId));
+                EntityList = manager.GetRemoteMenuConfigList(1);
                 clientResponse.AllTransactionsMenu = manager.MenuCategoryModelMaker(EntityList[0].SubMenuList);
                 clientResponse.CardsAccountsMenu = manager.MenuCategoryModelMaker(EntityList[1].SubMenuList);
                 clientResponse.ProfileMenu = manager.MenuCategoryModelMaker(EntityList[2].SubMenuList);
                 clientResponse.ApplicationsMenu = manager.MenuCategoryModelMaker(EntityList[3].SubMenuList);
                 clientResponse.AssetsMenu = manager.MenuCategoryModelMaker(EntityList[4].SubMenuList);
-                clientResponse.MenuCacheDate = CacheDate;
 
                 //  AllTransactionsMenu
                 var menu = await _menuRepository.AddAsync(new Menu { CreatedDate = DateTime.Now, Description = "AllTransactionsMenu", Name = "AllTransactionsMenu", IsActive = true });
@@ -63,7 +62,6 @@ namespace DynamicMenu.Application
             }
             catch (Exception ex)
             {
-                cacheStatus = 2;
                 var errorText = "MenuTypeCommand: " + ex + " " + ex.StackTrace;
             }
 
@@ -90,8 +88,6 @@ namespace DynamicMenu.Application
                 SortOrder = sortOrder++,
                 Text = itemx.ItemText,
                 TextEn = itemx.ItemTextEn,
-                Description = itemx.ItemDesc,
-                DescriptionEn = itemx.ItemDescEn,
                 Keyword = itemx.ItemKey,
                 IconPath = itemx.ItemKey,
                 NewTag = itemx.IsNew,

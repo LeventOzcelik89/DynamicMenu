@@ -37,25 +37,70 @@ namespace DynamicMenu.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
+                    b.Property<int>("MenuGroupId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<byte>("menuTarget")
+                        .HasColumnType("tinyint");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Menus");
+                    b.HasIndex("MenuGroupId");
+
+                    b.ToTable("Menu");
+                });
+
+            modelBuilder.Entity("DynamicMenu.Core.Entities.MenuGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<byte>("MenuType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MenuGroup");
                 });
 
             modelBuilder.Entity("DynamicMenu.Core.Entities.MenuItem", b =>
@@ -67,15 +112,9 @@ namespace DynamicMenu.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("DescriptionEn")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("IconPath")
                         .HasMaxLength(200)
@@ -118,25 +157,7 @@ namespace DynamicMenu.Infrastructure.Migrations
 
                     b.HasIndex("Pid");
 
-                    b.ToTable("MenuItems");
-                });
-
-            modelBuilder.Entity("DynamicMenu.Core.Entities.MenuItemRole", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("MenuItemId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MenuItemId");
-
-                    b.ToTable("MenuItemRoles");
+                    b.ToTable("MenuItem");
                 });
 
             modelBuilder.Entity("DynamicMenu.Core.Entities.RemoteMenuConfig", b =>
@@ -197,7 +218,18 @@ namespace DynamicMenu.Infrastructure.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("RemoteMenus");
+                    b.ToTable("RemoteMenuConfig");
+                });
+
+            modelBuilder.Entity("DynamicMenu.Core.Entities.Menu", b =>
+                {
+                    b.HasOne("DynamicMenu.Core.Entities.MenuGroup", "MenuGroup")
+                        .WithMany("Menus")
+                        .HasForeignKey("MenuGroupId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("MenuGroup");
                 });
 
             modelBuilder.Entity("DynamicMenu.Core.Entities.MenuItem", b =>
@@ -218,20 +250,14 @@ namespace DynamicMenu.Infrastructure.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("DynamicMenu.Core.Entities.MenuItemRole", b =>
-                {
-                    b.HasOne("DynamicMenu.Core.Entities.MenuItem", "MenuItem")
-                        .WithMany()
-                        .HasForeignKey("MenuItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MenuItem");
-                });
-
             modelBuilder.Entity("DynamicMenu.Core.Entities.Menu", b =>
                 {
                     b.Navigation("MenuItems");
+                });
+
+            modelBuilder.Entity("DynamicMenu.Core.Entities.MenuGroup", b =>
+                {
+                    b.Navigation("Menus");
                 });
 
             modelBuilder.Entity("DynamicMenu.Core.Entities.MenuItem", b =>

@@ -11,6 +11,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicMenu.Core", "Dynamic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicMenu.Infrastructure", "DynamicMenu.Infrastructure\DynamicMenu.Infrastructure.csproj", "{82309FC7-B8F2-486B-BAA5-CFEB4E1ECAD8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicMenu.Web", "DynamicMenu.Web\DynamicMenu.Web.csproj", "{B99A34C5-2E0B-4B3E-9C6E-A9F0666F86A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E91ABDFF-D0AA-479E-BADD-3581BAA7849A}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +40,10 @@ Global
 		{82309FC7-B8F2-486B-BAA5-CFEB4E1ECAD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82309FC7-B8F2-486B-BAA5-CFEB4E1ECAD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82309FC7-B8F2-486B-BAA5-CFEB4E1ECAD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B99A34C5-2E0B-4B3E-9C6E-A9F0666F86A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B99A34C5-2E0B-4B3E-9C6E-A9F0666F86A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B99A34C5-2E0B-4B3E-9C6E-A9F0666F86A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B99A34C5-2E0B-4B3E-9C6E-A9F0666F86A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

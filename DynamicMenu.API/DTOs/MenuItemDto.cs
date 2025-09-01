@@ -7,8 +7,6 @@ namespace DynamicMenu.API.DTOs
         public int? Pid { get; set; }
         public string Text { get; set; }
         public string TextEn { get; set; }
-        public string Description { get; set; }
-        public string DescriptionEn { get; set; }
         //public bool DisplayType { get; set; }
         //public byte AppId { get; set; }
         public bool NewTag { get; set; }

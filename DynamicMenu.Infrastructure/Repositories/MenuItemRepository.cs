@@ -3,6 +3,7 @@ using DynamicMenu.Core.Interfaces;
 using DynamicMenu.Core.Enums;
 using DynamicMenu.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace DynamicMenu.Infrastructure.Repositories
 {
@@ -17,17 +18,17 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task<MenuItem> GetByIdAsync(int id)
         {
-            return await _context.MenuItems
+            return await _context.MenuItem
                 //.Include(x => x.MenuItemRoles)
-                .Include(x => x.Children)
+                //  .Include(x => x.Children)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<MenuItem>> GetAllAsync()
         {
-            return await _context.MenuItems
+            return await _context.MenuItem
                 //.Include(x => x.MenuItemRoles)
-                .Include(x => x.Children)
+                //.Include(x => x.Children)
                 .Where(x => x.Pid == null)
                 .OrderBy(x => x.SortOrder)
                 .Select(x => new MenuItem
@@ -37,8 +38,6 @@ namespace DynamicMenu.Infrastructure.Repositories
                     Pid = x.Pid,
                     Text = x.Text ?? x.Keyword ?? string.Empty,
                     TextEn = x.TextEn ?? x.Text ?? x.Keyword ?? string.Empty,
-                    Description = x.Description ?? string.Empty,
-                    DescriptionEn = x.DescriptionEn ?? string.Empty,
                     //DisplayType = x.DisplayType,
                     //AppId = x.AppId,
                     NewTag = x.NewTag,
@@ -54,9 +53,9 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task<IEnumerable<MenuItem>> GetByAppTypeAsync(AppType appType)
         {
-            return await _context.MenuItems
+            return await _context.MenuItem
                 //.Include(x => x.MenuItemRoles)
-                .Include(x => x.Children)
+                //.Include(x => x.Children)
                 //.Where(x => x.AppId == appType && x.Pid == null)
                 .OrderBy(x => x.SortOrder)
                 .ToListAsync();
@@ -75,16 +74,14 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task<IEnumerable<MenuItem>> GetByMenuIdAsync(int menuId)
         {
-            return await _context.MenuItems
+            return await _context.MenuItem
                 .Where(x => x.MenuId == menuId)
-                .Include(x => x.Children)
-                .OrderBy(x => x.SortOrder)
                 .ToListAsync();
         }
 
         public async Task<MenuItem> AddAsync(MenuItem menuItem)
         {
-            await _context.MenuItems.AddAsync(menuItem);
+            await _context.MenuItem.AddAsync(menuItem);
             await _context.SaveChangesAsync();
             return menuItem;
         }
@@ -97,12 +94,19 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            var menuItem = await _context.MenuItems.FindAsync(id);
+            var menuItem = await _context.MenuItem.FindAsync(id);
             if (menuItem != null)
             {
-                _context.MenuItems.Remove(menuItem);
+                _context.MenuItem.Remove(menuItem);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<MenuItem>> GetByMenuIdsAsync(IEnumerable<int> menuId)
+        {
+            return await _context.MenuItem
+                .Where(x => menuId.Contains(x.MenuId))
+                .ToListAsync();
         }
     }
 } 

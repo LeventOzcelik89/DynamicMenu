@@ -1,8 +1,10 @@
 using DynamicMenu.Core.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DynamicMenu.Core.Entities
 {
+    [Table("MenuItem")]
     public class MenuItem
     {
         [Key]
@@ -11,8 +13,6 @@ namespace DynamicMenu.Core.Entities
         public int? Pid { get; set; }
         public string Text { get; set; }
         public string TextEn { get; set; }
-        public string Description { get; set; }
-        public string DescriptionEn { get; set; }
         //public bool DisplayType { get; set; }
         //public AppType AppId { get; set; }
         public bool NewTag { get; set; }
@@ -22,10 +22,9 @@ namespace DynamicMenu.Core.Entities
         public DateTime? ModifiedDate { get; set; }
         //public string CategoryName { get; set; }
         public int MenuId { get; set; }
-        public Menu Menu { get; set; }
+        public virtual Menu Menu { get; set; }
 
-        public MenuItem Parent { get; set; }
-        public ICollection<MenuItem> Children { get; set; }
-        //public ICollection<MenuItemRole> MenuItemRoles { get; set; }
+        public virtual MenuItem Parent { get; set; }
+        public virtual ICollection<MenuItem> Children { get; set; }
     }
 } 

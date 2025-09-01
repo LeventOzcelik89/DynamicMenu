@@ -102,7 +102,6 @@ namespace DynamicMenu.Application
                     Keyword = item.ItemKey,
                     Pid = parentId,
                     Text = item.ItemText,
-                    Description = item.ItemDesc,
                     NewTag = item.IsNew,
                     SortOrder = sortOrder++,
                     CreatedDate = DateTime.UtcNow,

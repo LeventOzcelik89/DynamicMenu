@@ -20,42 +20,17 @@ namespace DynamicMenu.Infrastructure.Data
             base.OnConfiguring(optionsBuilder);
         }
 
-        public DbSet<MenuItem> MenuItems { get; set; }
-        public DbSet<MenuItemRole> MenuItemRoles { get; set; }
-        public DbSet<Menu> Menus { get; set; }
-        public DbSet<RemoteMenuConfig> RemoteMenus { get; set; }
+        public DbSet<Menu> Menu { get; set; }
+        public DbSet<MenuItem> MenuItem { get; set; }
+        public DbSet<MenuGroup> MenuGroup { get; set; }
+        public DbSet<RemoteMenuConfig> RemoteMenuConfig { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new MenuConfiguration());
             modelBuilder.ApplyConfiguration(new MenuItemConfiguration());
-            modelBuilder.ApplyConfiguration(new MenuItemRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new MenuGroupConfiguration());
             modelBuilder.ApplyConfiguration(new RemoteMenuConfigConfiguration());
-
-            modelBuilder.Entity<Menu>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Description)
-                    .HasMaxLength(200);
-
-                entity.Property(e => e.IsActive)
-                    .HasDefaultValue(true);
-
-                entity.Property(e => e.CreatedDate)
-                    .HasDefaultValueSql("GETUTCDATE()");
-            });
-
-            modelBuilder.Entity<MenuItem>(entity =>
-            {
-                entity.HasOne(d => d.Menu)
-                    .WithMany(p => p.MenuItems)
-                    .HasForeignKey(d => d.MenuId)
-                    .OnDelete(DeleteBehavior.Restrict);
-            });
         }
     }
 } 

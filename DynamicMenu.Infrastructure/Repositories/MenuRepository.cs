@@ -18,17 +18,17 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task<Menu> GetByIdAsync(int id)
         {
-            return await _context.Menus.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Menu.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<Menu>> GetAllAsync()
         {
-            return await _context.Menus.ToListAsync();
+            return await _context.Menu.ToListAsync();
         }
 
         public async Task<Menu> AddAsync(Menu menuItem)
         {
-            await _context.Menus.AddAsync(menuItem);
+            await _context.Menu.AddAsync(menuItem);
             await _context.SaveChangesAsync();
             return menuItem;
         }
@@ -41,12 +41,17 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            var menuItem = await _context.Menus.FindAsync(id);
+            var menuItem = await _context.Menu.FindAsync(id);
             if (menuItem != null)
             {
-                _context.Menus.Remove(menuItem);
+                _context.Menu.Remove(menuItem);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<Menu>> GetByMenuGroupIdAsync(int id)
+        {
+            return await _context.Menu.Where(a => a.MenuGroupId == id).ToArrayAsync();
         }
     }
 }

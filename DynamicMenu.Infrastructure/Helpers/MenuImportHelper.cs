@@ -46,7 +46,6 @@ namespace DynamicMenu.Infrastructure.Helpers
                 Pid = parentId,
                 Text = item.ItemText,
                 TextEn = item.ItemText,
-                Description = item.ItemDesc,
                 //DisplayType = item.DisplayType == 1,
                 NewTag = item.IsNew,
                 //CategoryName = item.CategoryName ?? string.Empty,
@@ -55,7 +54,7 @@ namespace DynamicMenu.Infrastructure.Helpers
                 MenuId = menuId
             };
 
-            _context.MenuItems.Add(menuItem);
+            _context.MenuItem.Add(menuItem);
             await _context.SaveChangesAsync();
 
             if (item.SubList != null && item.SubList.Any())

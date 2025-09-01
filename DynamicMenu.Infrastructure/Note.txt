@@ -2,3 +2,4 @@ dotnet ef migrations add InitialCreate --project DynamicMenu.Infrastructure --st
 
 dotnet ef database update --project DynamicMenu.Infrastructure --startup-project DynamicMenu.API
 
+dotnet ef migrations remove --project DynamicMenu.Infrastructure --startup-project DynamicMenu.API
