@@ -1,0 +1,102 @@
+﻿<!-- Menü Tablosu Sayfası -->
+<div class="page" id="list" data-page="menu-list">
+    <main>
+        <div class="action-buttons top-buttons">
+            <a data-href="/MenuItem/Insert" class="action-button" id="new-menu" data-modal="" data-method="get">
+                <i class="fas fa-plus"></i>
+                <span>Add Menu Item</span>
+            </a>
+        </div>
+
+        <div class="data-table-container">
+            <table class="table table-bordered table-hover align-middle" id="tbl">
+                <thead class="table-light">
+                    <tr>
+                        <th>Keyword</th>
+                        <th>Pid</th>
+                        <th>Is New</th>
+                        <th>Sort Order</th>
+                        <th>Menu Id</th>
+                        <th>Menu Base Item Id</th>
+                        <th>Menu Group Id</th>
+
+                        <th>Base Text</th>
+                        <th>Base Text (En)</th>
+                        <th>Base Icon</th>
+
+                        <th width="120">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </main>
+</div>
+
+<script type="text/template" id="tblRow">
+
+    <tr>
+        <td>{{data.Keyword}}</td>
+        <td>{{data.Pid}}</td>
+        <td>{{data.IsNew}}</td>
+        <td>{{data.SortOrder}}</td>
+        <td>{{data.MenuId}}</td>
+        <td>{{data.MenuBaseItemId}}</td>
+        <td>{{data.MenuGroupId}}</td>
+        <td>{{data.Text}}</td>
+        <td>{{data.TextEn}}</td>
+        <td>{{data.IconPath}}</td>
+
+        <td>
+            <div class="btn-group" role="group">
+                <a data-href="/MenuItem/Update" class="btn btn-sm btn-primary" data-id="{{data.Id}}" data-modal data-method="get">Düzenle</a>
+                <a data-href="/MenuItem/Delete?Id={{data.Id}}" data-modal data-ask class="btn btn-sm btn-info">Sil</a>
+            </div>
+            </td>
+        </tr>
+
+</script>
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        var page = {
+
+            tbl: null,
+            ready: function(){
+
+                ReadData('/MenuItem/GetAll', null, function(res){
+
+                    $.each(res, function(i,item){
+                        TemplateEngine.RenderTo($('#tblRow'), item, $('#tbl tbody'));
+                    });
+
+                    $('#tbl').dataTable({
+                    responsive: true,
+                    language: {
+                        url: '/lib/dataTables/tr.json'
+                    }
+                    });
+
+                });
+
+            }
+
+        };
+
+
+        $(document)
+
+        .ready(function () {
+
+            page.ready();
+
+        })
+
+        ;
+
+    </script>
+
+}

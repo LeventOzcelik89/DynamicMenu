@@ -1,0 +1,34 @@
+﻿@model DynamicMenu.API.DTOs.CreateMenuGroupDto
+@{
+    ViewBag.Title = "Menu Group Insert";
+}
+
+<div class="form-container">
+    <form data-form="main" data-formType="ajax" method="post" action="/MenuGroup/Insert" class="needs-validation" novalidate>
+
+        @Html.DropDownFor(a => a.MenuType, "Menu Type ID", "/MenuGroup/GetMenuTypes", "Lütfen Menü Type ID seçin", "item.Key", "item.Value")
+
+        <div class="mb-3">
+            <label for="Name" class="form-label">Name</label>
+            @Html.TextBoxFor(a => a.Name, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
+            <div class="invalid-feedback">Boş bırakılamaz</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="Description" class="form-label">Description</label>
+            @Html.TextBoxFor(a => a.Description, null, new Dictionary<string, object> { { "class", "form-control" }, { "required", "required" } })
+            <div class="invalid-feedback">Boş bırakılamaz</div>
+        </div>
+
+        <div class="mb-3 form-check">
+            <label for="IsActive" class="form-check-label">IsActive</label>
+            @Html.CheckBoxFor(a => a.IsActive, new Dictionary<string, object> { { "class", "form-check-input" } })
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-secondary">Vazgeç</button>
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        </div>
+
+    </form>
+</div>

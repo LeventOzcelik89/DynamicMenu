@@ -1,4 +1,4 @@
-using DynamicMenu.API.DTOs;
+﻿using DynamicMenu.API.DTOs;
 using DynamicMenu.Core.Entities;
 using DynamicMenu.Core.Interfaces;
 using DynamicMenu.Core.Enums;
@@ -59,100 +59,45 @@ namespace DynamicMenu.API.Controllers
             return menuGroup;
         }
 
-        [HttpGet("GetMenuGroup/{menuGroupId}")]
-        public async Task<ActionResult<MenuGroupModelResponse>> GetMenuGroup(int menuGroupId)
-        {
+        //[HttpGet("GetMenuGroup/{menuGroupId}")]
+        //public async Task<ActionResult<MenuGroupModelResponse>> GetMenuGroup(int menuGroupId)
+        //{
 
-            var menuGroup = await _menuGroupRepository.GetByIdAsync(menuGroupId);
-            if (menuGroup == null)
-            {
-                return NotFound();
-            }
+        //    var menuGroup = await _menuGroupRepository.GetByIdAsync(menuGroupId);
+        //    if (menuGroup == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var menus = await _menuRepository.GetByMenuGroupIdAsync(menuGroup.Id);
+        //    var menus = await _menuRepository.GetByMenuGroupIdAsync(menuGroup.Id);
 
-            var res = new MenuGroupModelResponse
-            {
-                menuGroup = new MenuGroupResponse
-                {
-                    Id = menuGroup.Id,
-                    Name = menuGroup.Name,
-                    IsActive = menuGroup.IsActive,
-                    MenuType = menuGroup.MenuType,
-                    Description = menuGroup.Description,
-                },
-                menus = new MenuTargetResponse
-                {
-                    Cards = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Cards)?.Id),
-                    Profile = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Profile)?.Id),
-                    Transactions = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Transactions)?.Id),
-                    Applications = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Applications)?.Id),
-                }
-            };
+        //    var res = new MenuGroupModelResponse
+        //    {
+        //        menuGroup = new MenuGroupResponse
+        //        {
+        //            Id = menuGroup.Id,
+        //            Name = menuGroup.Name,
+        //            IsActive = menuGroup.IsActive,
+        //            MenuType = menuGroup.MenuType,
+        //            Description = menuGroup.Description,
+        //        },
+        //        menus = new MenuTargetResponse
+        //        {
+        //            Cards = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Cards)?.Id ?? 0, 1),
+        //            Profile = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Profile)?.Id ?? 0, 1),
+        //            Transactions = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Transactions)?.Id ?? 0, 1),
+        //            Applications = await GetMenu(menus.FirstOrDefault(a => a.MenuTarget == MenuTarget.Applications)?.Id ?? 0, 1),
+        //        }
+        //    };
 
-            return res;
-        }
+        //    return res;
+        //}
 
-        private async Task<List<MenuItemResponse>?> GetMenu(int? menuId)
-        {
 
-            if (!menuId.HasValue)
-            {
-                return null;
-            }
 
-            var menuItems = new List<MenuItemResponse>();
-            var items = await _menuItemRepository.GetByMenuIdAsync(menuId.Value);
-            foreach (var item in items.Where(a => a.Pid == null).OrderBy(a => a.SortOrder).ToArray())
-            {
-                menuItems.Add(new MenuItemResponse
-                {
-                    id = item.Id,
-                    key = item.Keyword,
-                    text = item.Text,
-                    textEn = item.TextEn,
-                    icon = item.IconPath,
-                    isNew = item.NewTag,
-                    sortOrder = item.SortOrder,
-                    items = GetMenuItems(items.ToArray(), item)
-                });
-            }
+        
 
-            return menuItems;
-
-        }
-
-        private MenuItemResponse[] GetMenuItems(MenuItem[] items, MenuItem item)
-        {
-
-            var itemss = items.Where(a => a.Pid == item.Id).OrderBy(a => a.SortOrder).ToArray();
-            if (!itemss.Any())
-            {
-                return null;
-            }
-
-            var res = new List<MenuItemResponse>();
-            foreach (var subItem in itemss)
-            {
-
-                res.Add(new MenuItemResponse
-                {
-                    id = subItem.Id,
-                    pid = item.Id,
-                    key = subItem.Keyword,
-                    text = subItem.Text,
-                    textEn = subItem.TextEn,
-                    icon = subItem.IconPath,
-                    isNew = subItem.NewTag,
-                    sortOrder = subItem.SortOrder,
-                    items = GetMenuItems(items, subItem)
-                });
-
-            }
-
-            return res.ToArray();
-
-        }
+        
 
     }
 }

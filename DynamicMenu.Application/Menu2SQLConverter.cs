@@ -101,11 +101,12 @@ namespace DynamicMenu.Application
                 {
                     Keyword = item.ItemKey,
                     Pid = parentId,
-                    Text = item.ItemText,
-                    NewTag = item.IsNew,
+                    //  Text = item.ItemText,
+                    MenuBaseItemId = 8888,    //  todo: patlayacak muhtemelen kullanılıyor mu bilmiyorum.
+                    IsNew = item.IsNew,
                     SortOrder = sortOrder++,
                     CreatedDate = DateTime.UtcNow,
-                    MenuId = 1 // Varsayılan bir değer, isteğe bağlı değiştirilebilir
+                    MenuGroupId = 1 // Varsayılan bir değer, isteğe bağlı değiştirilebilir
                 };
 
                 flatList.Add(menuItem);

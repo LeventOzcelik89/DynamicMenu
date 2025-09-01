@@ -23,7 +23,7 @@ namespace DynamicMenu.Infrastructure.Repositories
 
         public async Task<IEnumerable<MenuGroup>> GetAllAsync()
         {
-            return await _context.MenuGroup.ToListAsync();
+            return await _context.MenuGroup.Include(a => a.Menus).ToListAsync();
         }
 
         public async Task<MenuGroup> AddAsync(MenuGroup menuGroupItem)
@@ -33,10 +33,11 @@ namespace DynamicMenu.Infrastructure.Repositories
             return menuGroupItem;
         }
 
-        public async Task UpdateAsync(MenuGroup menuGroupItem)
+        public async Task<bool> UpdateAsync(MenuGroup menuGroupItem)
         {
             _context.Entry(menuGroupItem).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            var res = await _context.SaveChangesAsync();
+            return res > 0;
         }
 
         public async Task DeleteAsync(int id)

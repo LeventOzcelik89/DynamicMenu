@@ -16,6 +16,10 @@ builder.Services.AddControllers()
     {
         options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        options.SerializerSettings.ContractResolver = new DefaultContractResolver
+        {
+            NamingStrategy = new DefaultNamingStrategy()
+        };
     })
     .AddApplicationPart(typeof(Program).Assembly);
 
@@ -93,6 +97,13 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = "swagger";
     });
 }
+
+//  todo: Burada loop olusuyor ama sorunu çözmedi. Nesneleri kontrol eddeceğim.
+JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+{
+    Formatting = Newtonsoft.Json.Formatting.Indented,
+    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+};
 
 app.UseCors("AllowAll");
 

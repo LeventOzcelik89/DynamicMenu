@@ -199,17 +199,40 @@ var cookies = {
 
 var TemplateEngine = {
 
+    RenderTo: function (templateElement, data, target) {
+
+        var template = TemplateEngine.Render(templateElement, data);
+        target.append(template);
+
+    },
+
+    RenderAll: function (templateElement, data, target) {
+
+        $.each(data, function (i, item) {
+            var res = TemplateEngine.Render(templateElement, item);
+            target.append(res);
+        });
+
+    },
+
     Render: function (templateElement, data) {
 
         var template = templateElement.html();
-        $.each(data, function (i, item) {
-            template = template.replace(new RegExp('{{' + i + '}}'), item);
+        var matches = template.match(/{{(.*?)}}/g);
+
+        $.each(matches, function (m, match) {
+
+            var replaced = eval(match);
+            template = template.replace(match, replaced);
+
+            //  template = eval(template.replace(new RegExp('#' + i + ''), item)).replace('}}', '').replace('{{', '');
         });
 
         template = $(template);
 
         return template;
 
-    }
+    },
 
 };
+

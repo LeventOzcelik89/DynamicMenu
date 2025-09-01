@@ -1,0 +1,118 @@
+﻿<!-- Menü Tablosu Sayfası -->
+<div class="page" id="list" data-page="menu-list">
+    <main>
+        <div class="action-buttons top-buttons">
+            <a data-href="/MenuBaseItem/Insert" class="action-button" id="new-menu" data-modal="" data-method="get">
+                <i class="fas fa-plus"></i>
+                <span>Add Menu Base Item</span>
+            </a>
+        </div>
+
+        <div class="data-table-container">
+            <table class="table table-bordered table-hover align-middle" id="tbl">
+                <thead class="table-light">
+                    <tr>
+                        <th>Adı</th>
+                        <th>Adı (En)</th>
+                        <th>icon</th>
+                        <th>Oluşturma Tarihi</th>
+                        <th>Düzenleme Tarihi</th>
+                        <th style="width: 120px;">İşlemler</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+    </main>
+</div>
+
+@* <script type="text/template" id="tblRow">
+
+    <tr>
+        <td>{{data.Text}}</td>
+        <td>{{data.TextEn}}</td>
+        <td><img src="@Html.Raw(appSettings.baseUrl)img/icons/{{data.IconPath}}.svg" /></td>
+        <td>{{data.CreatedDate == null ? '-' : new Date(data.CreatedDate).toLocaleString('tr-TR')}}</td>
+        <td>{{data.ModifiedDate == null ? '-' : new Date(data.ModifiedDate).toLocaleString('tr-TR')}}</td>
+        <td>
+            <div class="btn-group" role="group">
+                <a data-href="/MenuBaseItem/Update/{{data.Id}}" class="btn btn-sm btn-primary" data-id="{{data.Id}}" data-modal data-method="get">Düzenle</a>
+                <a data-href="/MenuBaseItem/Delete?Id={{data.Id}}" data-modal data-ask class="btn btn-sm btn-info">Sil</a>
+            </div>
+            </td>
+        </tr>
+
+</script> *@
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        var page = {
+            baseUrl: '',
+            tbl: null,
+            ready: function(){
+
+                $('#tbl').dataTable({
+                    ajax: {
+                        url: '/MenuBaseItem/GetAll',
+                        dataType: 'json',
+                        dataSrc: ''
+                    },
+
+                    responsive: true,
+                    language: {
+                        url: '/lib/dataTables/tr.json'
+                    },
+
+                    columns: [
+                        { data: 'Text' },
+                        { data: 'TextEn' },
+                        {
+                            data: 'IconPath',
+                            render: (data, type, row) => {
+                                return '<img src="@Html.Raw(appSettings.baseUrl)img/icons/' + row.IconPath + '.svg" />';
+                            } 
+                        },
+                        {
+                            data: 'CreatedDate',
+                            render: (data, type, row) => {
+                                return row.CreatedDate == null ? '' : new Date(row.CreatedDate).toLocaleString('tr-TR');
+                            }
+                        },
+                        {
+                            data: 'ModifiedDate',
+                            render: (data, type, row) => {
+                                return row.ModifiedDate == null ? '' : new Date(row.ModifiedDate).toLocaleString('tr-TR');
+                            }
+                        },
+                        {
+                            data: null,
+                            render: (data, type, row) => {
+                                return '<div class="btn-group" role="group">' +
+                                    '<a data-href="/MenuBaseItem/Update/' + row.Id + '" class="btn btn-sm btn-primary" data-id="' + row.Id + '" data-modal data-method="get">Düzenle</a>' +
+                                    '<a data-href="/MenuBaseItem/Delete?Id=' + row.Id + '" data-modal data-ask class="btn btn-sm btn-info">Sil</a>' + 
+                                    '</div>';
+                            }
+                        }
+                    ]
+
+                });
+
+            }
+
+        };
+
+        $(document)
+
+        .ready(function () {
+
+            page.ready();
+
+        })
+
+        ;
+
+    </script>
+
+}

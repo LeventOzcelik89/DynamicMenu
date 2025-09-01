@@ -12,32 +12,23 @@ namespace DynamicMenu.Infrastructure.Data.Configurations
             
             builder.Property(x => x.Keyword)
                 .IsRequired()
-                .HasMaxLength(50);
-
-            builder.Property(x => x.Text)
-                .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(x => x.TextEn)
-                .HasMaxLength(100)
-                .IsRequired(false);
+            builder.Property(a => a.MenuBaseItemId)
+                .IsRequired(true);
 
-            builder.Property(x => x.IconPath)
-                .HasMaxLength(200)
-                .IsRequired(false);
-
-            builder.Property(x => x.MenuId)
+            //builder.HasOne(a => a.MenuBaseItem)
+            //    .WithMany(a => a.MenuItems)
+            //    .HasForeignKey(a => a.MenuBaseItemId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+            
+            builder.Property(x => x.MenuGroupId)
                 .HasDefaultValue(1);
 
             builder.HasOne(x => x.Parent)
                 .WithMany(x => x.Children)
                 .HasForeignKey(x => x.Pid)
                 .OnDelete(DeleteBehavior.NoAction);
-
-            builder.HasOne(x => x.Menu)
-                .WithMany(x => x.MenuItems)
-                .HasForeignKey(x => x.MenuId)
-                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("GETUTCDATE()");

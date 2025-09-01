@@ -13,7 +13,7 @@ namespace DynamicMenu.Core.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
-        public MenuType MenuType { get; set; }
+        public MenuTypeEnum MenuType { get; set; }
     }
 
     public class MenuGroupModelResponse

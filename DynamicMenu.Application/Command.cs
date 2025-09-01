@@ -86,13 +86,14 @@ namespace DynamicMenu.Application
             var mItem = new MenuItem
             {
                 SortOrder = sortOrder++,
-                Text = itemx.ItemText,
-                TextEn = itemx.ItemTextEn,
                 Keyword = itemx.ItemKey,
-                IconPath = itemx.ItemKey,
-                NewTag = itemx.IsNew,
+                //  Text = itemx.ItemText,
+                //  TextEn = itemx.ItemTextEn,
+                //  IconPath = itemx.ItemKey,
+                MenuBaseItemId = 999,   //  todo: patlayacak muhtemelen. Method kullanılıyor mu bilmiyorum.
+                IsNew = itemx.IsNew,
                 CreatedDate = DateTime.Now,
-                MenuId = menuId,
+                MenuGroupId = menuId,
                 Pid = pid
             };
 

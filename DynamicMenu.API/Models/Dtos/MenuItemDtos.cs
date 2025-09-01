@@ -1,8 +1,9 @@
 namespace DynamicMenu.API.Models.Dtos
 {
-    public class UpdateMenuItemDto
+    public class UpdateMenuItemDtox
     {
         public string Keyword { get; set; }
+        public int MenuBaseItemId { get; set; }
         public int? Pid { get; set; }
         public string Text { get; set; }
         public string TextEn { get; set; }
@@ -24,4 +25,4 @@ namespace DynamicMenu.API.Models.Dtos
         public bool NewTag { get; set; }
         public int? MenuId { get; set; }
     }
-} 
+}

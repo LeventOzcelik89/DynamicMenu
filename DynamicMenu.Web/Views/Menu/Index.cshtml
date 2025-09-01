@@ -1,0 +1,99 @@
+﻿@model DynamicMenu.Web.Model.VMMenuGroupDetail;
+
+<!-- Menü Tablosu Sayfası -->
+<div class="page" id="list" data-page="menu-list">
+    <main>
+        <div class="action-buttons top-buttons">
+            <a data-href="/Menu/Insert?MenuGroupId=@Model.MenuGroupId" class="action-button" id="new-menu" data-modal="" data-method="get">
+                <i class="fas fa-plus"></i>
+                <span>Add Menu</span>
+            </a>
+        </div>
+
+        <div class="data-table-container">
+            <table class="table table-bordered table-hover align-middle" id="tbl">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Is Active</th>
+                        <th>Menu Group Id</th>
+                        <th>Menu Target</th>
+
+                        <th>Created Date</th>
+                        <th>Modified Date</th>
+                        
+                        <th width="120">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </main>
+</div>
+
+<script type="text/template" id="tblRow">
+
+    <tr>
+        <td>{{data.Name}}</td>
+        <td>{{data.Description}}</td>
+        <td><span class="badge bg-{{data.IsActive == true ? 'success' : 'danger'}}">{{data.IsActive == true ? 'Aktif' : 'Pasif'}}</span></td>
+        <td>{{data.MenuGroupId}}</td>
+        <td>{{data.MenuTarget}}</td>
+        <td>{{new Date(data.CreatedDate).toLocaleString('tr-TR')}}</td>
+        <td>{{data.ModifiedDate == null ? '-' : new Date(data.ModifiedDate).toLocaleString('tr-TR')}}</td>
+
+        <td>
+            <div class="btn-group" role="group">
+                <a href="/Menu/Management?MenuGroupId={{data.MenuGroupId}}&MenuId={{data.Id}}" class="btn btn-sm btn-success">Yönetim</a>
+                <a data-href="/Menu/Update?Id={{data.Id}}" class="btn btn-sm btn-primary" data-modal data-method="get">Düzenle</a>
+                <a data-href="/Menu/Delete?Id={{data.Id}}" data-modal data-ask class="btn btn-sm btn-info">Sil</a>
+            </div>
+            </td>
+        </tr>
+
+</script>
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        var page = {
+
+            tbl: null,
+            ready: function(){
+
+                ReadData('/Menu/GetAll?MenuGroupId=' + '@Html.Raw(Model.MenuGroupId)', null, function(res){
+
+                    $.each(res, function(i,item){
+                        TemplateEngine.RenderTo($('#tblRow'), item, $('#tbl tbody'));
+                    });
+
+                    $('#tbl').dataTable({
+                        responsive: true,
+                        language: {
+                            url: '/lib/dataTables/tr.json'
+                        }
+                    });
+
+                });
+
+            }
+
+        };
+
+
+        $(document)
+
+        .ready(function () {
+
+            page.ready();
+
+        })
+
+        ;
+
+    </script>
+
+}

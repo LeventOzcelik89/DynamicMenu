@@ -48,6 +48,9 @@ namespace DynamicMenu.Infrastructure.Migrations
                     b.Property<int>("MenuGroupId")
                         .HasColumnType("int");
 
+                    b.Property<byte>("MenuTarget")
+                        .HasColumnType("tinyint");
+
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
@@ -56,14 +59,42 @@ namespace DynamicMenu.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<byte>("menuTarget")
-                        .HasColumnType("tinyint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MenuGroupId");
 
                     b.ToTable("Menu");
+                });
+
+            modelBuilder.Entity("DynamicMenu.Core.Entities.MenuBaseItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IconPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TextEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MenuBaseItem");
                 });
 
             modelBuilder.Entity("DynamicMenu.Core.Entities.MenuGroup", b =>
@@ -116,25 +147,27 @@ namespace DynamicMenu.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<string>("IconPath")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<bool>("IsNew")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Keyword")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("MenuId")
+                    b.Property<int>("MenuBaseItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MenuGroupId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(1);
 
+                    b.Property<int>("MenuId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("NewTag")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("Pid")
                         .HasColumnType("int");
@@ -142,16 +175,11 @@ namespace DynamicMenu.Infrastructure.Migrations
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
 
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("TextEn")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("MenuBaseItemId");
+
+                    b.HasIndex("MenuGroupId");
 
                     b.HasIndex("MenuId");
 
@@ -234,10 +262,22 @@ namespace DynamicMenu.Infrastructure.Migrations
 
             modelBuilder.Entity("DynamicMenu.Core.Entities.MenuItem", b =>
                 {
-                    b.HasOne("DynamicMenu.Core.Entities.Menu", "Menu")
+                    b.HasOne("DynamicMenu.Core.Entities.MenuBaseItem", "MenuBaseItem")
+                        .WithMany("MenuItems")
+                        .HasForeignKey("MenuBaseItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DynamicMenu.Core.Entities.MenuGroup", "MenuGroup")
+                        .WithMany()
+                        .HasForeignKey("MenuGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DynamicMenu.Core.Entities.Menu", null)
                         .WithMany("MenuItems")
                         .HasForeignKey("MenuId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DynamicMenu.Core.Entities.MenuItem", "Parent")
@@ -245,12 +285,19 @@ namespace DynamicMenu.Infrastructure.Migrations
                         .HasForeignKey("Pid")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.Navigation("Menu");
+                    b.Navigation("MenuBaseItem");
+
+                    b.Navigation("MenuGroup");
 
                     b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("DynamicMenu.Core.Entities.Menu", b =>
+                {
+                    b.Navigation("MenuItems");
+                });
+
+            modelBuilder.Entity("DynamicMenu.Core.Entities.MenuBaseItem", b =>
                 {
                     b.Navigation("MenuItems");
                 });
