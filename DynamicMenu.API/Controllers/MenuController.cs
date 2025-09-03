@@ -1,5 +1,8 @@
+using DynamicMenu.API.DTOs;
 using DynamicMenu.Core.Entities;
 using DynamicMenu.Core.Interfaces;
+using DynamicMenu.Core.Models;
+using DynamicMenu.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DynamicMenu.API.Controllers
@@ -45,30 +48,46 @@ namespace DynamicMenu.API.Controllers
             return Ok(menu);
         }
 
-        // Ekle
-        [HttpPost]
-        public async Task<ActionResult<Menu>> Create([FromBody] Menu menu)
+        [HttpPost("Insert")]
+        public async Task<IActionResult> Insert([FromBody] CreateMenuDto item)
         {
-            var created = await _menuRepository.AddAsync(menu);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            var dto = new Menu
+            {
+                CreatedDate = DateTime.Now,
+                Description = item.Description,
+                IsActive = item.IsActive,
+                MenuTarget = item.MenuTarget,
+                MenuGroupId = item.MenuGroupId,
+                Name = item.Name
+            };
+            var res = await _menuRepository.AddAsync(dto);
+            return Ok(new ResultStatus<Menu> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
         }
 
-        // Güncelle
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Menu menu)
+        [HttpPost("Update")]
+        public async Task<IActionResult> Update([FromBody] UpdateMenuDto item)
         {
-            if (id != menu.Id)
-                return BadRequest();
-            await _menuRepository.UpdateAsync(menu);
-            return NoContent();
+            //  API giderek işletmemiz gerekecek.
+            var dto = new Menu
+            {
+                Id = item.Id,
+                Description = item.Description,
+                IsActive = item.IsActive,
+                Name = item.Name,
+                ModifiedDate = DateTime.Now,
+                MenuGroupId = item.MenuGroupId,
+                MenuTarget = item.MenuTarget
+            };
+            var res = await _menuRepository.UpdateAsync(dto);
+            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
         }
 
-        // Sil
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _menuRepository.DeleteAsync(id);
-            return NoContent();
+            var res = await _menuRepository.DeleteAsync(id);
+            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Silme işlemi tamamlandı" }, objects = res });
         }
+
     }
 }

@@ -39,22 +39,6 @@ namespace DynamicMenu.API.Controllers
             _context = context;
         }
 
-        [HttpGet("GetAllHierarchical")]
-        public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetAllHierarchical()
-        {
-            var cacheKey = $"{CacheKeyPrefix}all";
-            var cachedItems = await _cacheService.GetAsync<List<MenuItemDto>>(cacheKey);
-
-            if (cachedItems != null)
-                return cachedItems;
-
-            var items = await _menuItemRepository.GetAllHierarchicalAsync();
-            var dtos = items.Select(MapToDto).ToList();
-
-            await _cacheService.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(30));
-            return dtos;
-        }
-
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetAll()
         {
@@ -81,6 +65,72 @@ namespace DynamicMenu.API.Controllers
             }).ToList();
 
             //await _cacheService.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(30));
+            return dtos;
+        }
+
+        [HttpPost("Insert")]
+        public async Task<ActionResult> Insert([FromBody] CreateMenuItemDto item)
+        {
+            var dto = new MenuItem
+            {
+                CreatedDate = DateTime.Now,
+                IsNew = item.IsNew,
+                Keyword = item.Keyword,
+                MenuBaseItemId = item.MenuBaseItemId,
+                MenuGroupId = item.MenuGroupId,
+                MenuId = item.MenuId,
+                Pid = item.Pid
+            };
+
+            var res = await _menuItemRepository.AddAsync(dto);
+            return Ok(new ResultStatus<MenuItem> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
+        }
+
+        [HttpPost("Update")]
+        public async Task<ActionResult> Update([FromBody] UpdateMenuItemDto item)
+        {
+            var dto = new MenuItem
+            {
+                Id = item.Id,
+                CreatedDate = DateTime.Now,
+                IsNew = item.IsNew,
+                Keyword = item.Keyword,
+                MenuBaseItemId = item.MenuBaseItemId,
+                MenuGroupId = item.MenuGroupId,
+                MenuId = item.MenuId,
+                Pid = item.Pid
+            };
+
+            var res = await _menuItemRepository.UpdateAsync(dto);
+            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
+        }
+
+        [HttpDelete("Delete/{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var res = await _menuItemRepository.DeleteAsync(id);
+            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Silme işlemi tamamlandı" }, objects = res });
+        }
+
+
+
+
+
+
+
+        [HttpGet("GetAllHierarchical")]
+        public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetAllHierarchical()
+        {
+            var cacheKey = $"{CacheKeyPrefix}all";
+            var cachedItems = await _cacheService.GetAsync<List<MenuItemDto>>(cacheKey);
+
+            if (cachedItems != null)
+                return cachedItems;
+
+            var items = await _menuItemRepository.GetAllHierarchicalAsync();
+            var dtos = items.Select(MapToDto).ToList();
+
+            await _cacheService.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(30));
             return dtos;
         }
 
@@ -202,14 +252,14 @@ namespace DynamicMenu.API.Controllers
             return false;
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            await _menuItemRepository.DeleteAsync(id);
-            await _cacheService.RemoveAsync($"{CacheKeyPrefix}all");
-            await _cacheService.RemoveAsync($"{CacheKeyPrefix}{id}");
-            return NoContent();
-        }
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    await _menuItemRepository.DeleteAsync(id);
+        //    await _cacheService.RemoveAsync($"{CacheKeyPrefix}all");
+        //    await _cacheService.RemoveAsync($"{CacheKeyPrefix}{id}");
+        //    return NoContent();
+        //}
 
         [HttpPost("import")]
         public async Task<IActionResult> ImportMenu(IFormFile jsonFile)

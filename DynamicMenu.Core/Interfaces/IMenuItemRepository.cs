@@ -16,6 +16,6 @@ namespace DynamicMenu.Core.Interfaces
         Task<IEnumerable<MenuItem>> GetByMenuIdsAsync(IEnumerable<int> menuId);
         Task<MenuItem> AddAsync(MenuItem menuItem);
         Task<bool> UpdateAsync(MenuItem menuItem);
-        Task DeleteAsync(int id);
+        Task<bool> DeleteAsync(int id);
     }
 } 

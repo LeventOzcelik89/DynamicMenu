@@ -11,17 +11,11 @@ namespace DynamicMenu.Web.Controllers
 {
     public class MenuBaseItemController : Controller
     {
-        private readonly IMenuRepository _menuRepository;
-        private readonly IMenuItemRepository _menuItemRepository;
-        private readonly IMenuGroupRepository _menuGroupRepository;
         private readonly IMenuBaseItemRepository _menuBaseItemRepository;
         private readonly RemoteServiceDynamicMenuAPI _remoteServiceDynamicMenuAPI;
 
-        public MenuBaseItemController(IMenuBaseItemRepository menuBaseItemRepository, IMenuGroupRepository menuGroupRepository, IMenuRepository menuRepository, IMenuItemRepository menuItemRepository, RemoteServiceDynamicMenuAPI remoteServiceDynamicMenuAPI)
+        public MenuBaseItemController(IMenuBaseItemRepository menuBaseItemRepository, RemoteServiceDynamicMenuAPI remoteServiceDynamicMenuAPI)
         {
-            _menuRepository = menuRepository;
-            _menuItemRepository = menuItemRepository;
-            _menuGroupRepository = menuGroupRepository;
             _remoteServiceDynamicMenuAPI = remoteServiceDynamicMenuAPI;
             _menuBaseItemRepository = menuBaseItemRepository;
         }
@@ -56,34 +50,50 @@ namespace DynamicMenu.Web.Controllers
 
 
         [HttpPost]
-        public async Task<ResultStatus<MenuBaseItem>> Insert(CreateMenuBaseItemDto item)
+        public async Task<IActionResult> Insert(CreateMenuBaseItemDto item)
         {
             var url = "MenuBaseItem/Insert";
             var res = await _remoteServiceDynamicMenuAPI.PostJsonData<ResultStatus<MenuBaseItem>>(url, item);
-            return res ?? new ResultStatus<MenuBaseItem> { feedback = new FeedBack { message = "Hata oluştu" } };
+            return Ok(res ?? new ResultStatus<MenuBaseItem> { feedback = new FeedBack { message = "Hata oluştu" } });
         }
 
 
         [HttpGet]
         public async Task<ActionResult> Update(int id)
         {
-            var item = await _menuBaseItemRepository.GetByIdAsync(id);
+            var url = $"MenuBaseItem/GetById/{id}";
+            var res = await _remoteServiceDynamicMenuAPI.GetData<ResultStatus<MenuBaseItem>>(url);
+
+            if (!res.success)
+            {
+                return View(new UpdateMenuBaseItemDto());
+            }
+
             var dto = new UpdateMenuBaseItemDto
             {
-                Id = item.Id,
-                IconPath = item.IconPath,
-                Text = item.Text,
-                TextEn = item.TextEn
+                Id = res.objects.Id,
+                IconPath = res.objects.IconPath,
+                Text = res.objects.Text,
+                TextEn = res.objects.TextEn
             };
             return View(dto);
         }
 
         [HttpPost]
-        public async Task<ResultStatus<bool>> Update(UpdateMenuBaseItemDto item)
+        public async Task<IActionResult> Update(UpdateMenuBaseItemDto item)
         {
             var url = "MenuBaseItem/Update";
             var res = await _remoteServiceDynamicMenuAPI.PostJsonData<ResultStatus<bool>>(url, item);
-            return res ?? new ResultStatus<bool> { feedback = new FeedBack { message = "Hata oluştu" } };
+            return Ok(res ?? new ResultStatus<bool> { feedback = new FeedBack { message = "Hata oluştu" } });
+        }
+
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var url = $"MenuBaseItem/Delete/{id}";
+            var res = await _remoteServiceDynamicMenuAPI.DeleteData<ResultStatus<bool>>(url);
+            return Ok(res ?? new ResultStatus<bool> { feedback = new FeedBack { message = "Hata oluştu" } });
         }
 
         [HttpGet]
@@ -104,14 +114,6 @@ namespace DynamicMenu.Web.Controllers
 
             return Ok(res);
 
-        }
-
-        [HttpPost]
-        public async Task<ResultStatus<bool>> Delete(int id)
-        {
-            var url = $"MenuBaseItem/Delete/{id}";
-            var res = await _remoteServiceDynamicMenuAPI.DeleteData<ResultStatus<bool>>(url);
-            return res ?? new ResultStatus<bool> { feedback = new FeedBack { message = "Hata oluştu" } };
         }
 
     }

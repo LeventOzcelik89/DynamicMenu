@@ -111,7 +111,7 @@ namespace DynamicMenu.Infrastructure.Repositories
             return res > 0;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var menuItem = await _context.MenuItem.FindAsync(id);
             if (menuItem != null)
@@ -119,6 +119,7 @@ namespace DynamicMenu.Infrastructure.Repositories
                 _context.MenuItem.Remove(menuItem);
                 await _context.SaveChangesAsync();
             }
+            return true;
         }
 
         public async Task<IEnumerable<MenuItem>> GetByMenuIdsAsync(IEnumerable<int> menuId)

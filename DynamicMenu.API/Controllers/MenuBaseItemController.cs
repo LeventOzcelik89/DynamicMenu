@@ -89,15 +89,8 @@ namespace DynamicMenu.API.Controllers
             return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Silme işlemi tamamlandı" }, objects = result, success = true });
         }
 
-
-
-
-
-
-
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MenuBaseItemDto>> GetById(int id)
+        [HttpGet("GetById/{id}")]
+        public async Task<IActionResult> GetById(int id)
         {
             //var cacheKey = $"{CacheKeyPrefix}{id}";
             //var cachedItem = await _cacheService.GetAsync<MenuBaseItemDto>(cacheKey);
@@ -109,9 +102,17 @@ namespace DynamicMenu.API.Controllers
             if (item == null)
                 return NotFound();
 
-            var dto = MapToDto(item);
+            var dto = new MenuBaseItemDto
+            {
+                Id = item.Id,
+                IconPath = item.IconPath,
+                Text = item.Text,
+                TextEn = item.TextEn,
+                CreatedDate = item.CreatedDate,
+                ModifiedDate = item.ModifiedDate
+            };
             //await _cacheService.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(30));
-            return dto;
+            return Ok(new ResultStatus<MenuBaseItemDto> { feedback = new FeedBack { message = "Silme işlemi tamamlandı" }, objects = dto, success = true });
         }
 
         //  todo Buraya gelmeden bir adım önce MenuBaseItem Add yapmamız gerekiyor.
