@@ -4,8 +4,29 @@
     {
         public bool success { get; set; }
         public int code { get; set; }
-        public string message { get; set; }
+        public string? message { get; set; }
         public T? objects { get; set; }
         public FeedBack? feedback { get; set; }
+
+        public static ResultStatus<T> Error(string? message = null)
+        {
+            return new ResultStatus<T>
+            {
+                message = message,
+                feedback = FeedBack.Error(message ?? "Beklenmedik bir sorun oluştu.")
+            };
+        }
+
+        public static ResultStatus<T> Success(T data, string? message = null)
+        {
+            return new ResultStatus<T>
+            {
+                message = message ?? "İşlem başarıyla tamamlandı.",
+                success = true,
+                objects = data,
+                feedback = FeedBack.Success(message),
+            };
+        }
+
     }
 }

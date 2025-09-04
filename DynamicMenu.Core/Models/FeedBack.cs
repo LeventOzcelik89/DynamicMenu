@@ -8,7 +8,7 @@
         public int timeout { get; set; } = 8;
         public string message { get; set; }
 
-        public static FeedBack Create(bool issuccess, string message)
+        public static FeedBack Create(string message, bool issuccess = false)
         {
             return new FeedBack
             {
@@ -17,21 +17,22 @@
             };
         }
 
-        public static FeedBack Success(string message)
+        public static FeedBack Success(string? message)
         {
             return new FeedBack
             {
-                message = message.Replace(Environment.NewLine, "<br />")
+                message = message?.Replace(Environment.NewLine, "<br />")
             };
         }
 
-        public static FeedBack Error(string message)
+        public static FeedBack Error(string? message)
         {
             return new FeedBack
             {
-                message = message.Replace(Environment.NewLine, "<br />"),
+                message = message?.Replace(Environment.NewLine, "<br />"),
                 status = "error"
             };
         }
+
     }
 }

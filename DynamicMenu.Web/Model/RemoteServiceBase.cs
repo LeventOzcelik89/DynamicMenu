@@ -1,5 +1,6 @@
 ﻿using Azure;
 using DynamicMenu.API.DTOs;
+using DynamicMenu.Core.Models;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -10,13 +11,6 @@ namespace DynamicMenu.Web.Model
         public abstract string baseAddress { get; }
 
         private readonly HttpClient _httpClient;
-        //public readonly ConfigManager _configManager;
-
-        //protected RemoteServiceBase(HttpClient httpClient, ConfigManager configManager)
-        //{
-        //    _httpClient = httpClient;
-        //    _configManager = configManager;
-        //}
 
         protected RemoteServiceBase(HttpClient httpClient)
         {
@@ -35,8 +29,23 @@ namespace DynamicMenu.Web.Model
             }
             catch (Exception ex)
             {
-                //Log.Error(this.GetType().Name + " DownloadString Ex: " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
+            }
+        }
+
+        public async Task<ResultStatus<T>?> PostJsonDataResultStatus<T>(string url, object data) where T : class
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync(new Uri(baseAddress + url), data);
+                var result = await response.Content.ReadAsStringAsync();
+                var resultJson = JsonConvert.DeserializeObject<ResultStatus<T>>(result);
+
+                return resultJson;
+            }
+            catch (Exception ex)
+            {
+                return ResultStatus<T>.Error(ex.Message);
             }
         }
 
@@ -52,7 +61,6 @@ namespace DynamicMenu.Web.Model
             }
             catch (Exception ex)
             {
-                //Log.Error(this.GetType().Name + " DownloadString Ex: " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
         }
@@ -68,8 +76,23 @@ namespace DynamicMenu.Web.Model
             }
             catch (Exception ex)
             {
-                //Log.Error(this.GetType().Name + " DownloadString Ex: " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
+                //  return ex.Message;
+            }
+        }
+
+        public async Task<ResultStatus<T>> GetDataResultStatus<T>(string url) where T : class
+        {
+            try
+            {
+                var str = await _httpClient.GetStringAsync(new Uri(baseAddress + url));
+                var result = JsonConvert.DeserializeObject<ResultStatus<T>>(str);
+
+                return result ?? ResultStatus<T>.Error("Null response from API server.");
+            }
+            catch (Exception ex)
+            {
+                return ResultStatus<T>.Error(ex.Message);
             }
         }
 
@@ -82,10 +105,8 @@ namespace DynamicMenu.Web.Model
             }
             catch (Exception ex)
             {
-                //Log.Error(this.GetType().Name + " DownloadString Ex: " + ex.Message + Environment.NewLine + ex.StackTrace);
                 return null;
             }
         }
-
     }
 }

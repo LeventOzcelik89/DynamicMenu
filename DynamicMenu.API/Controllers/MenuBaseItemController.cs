@@ -38,7 +38,7 @@ namespace DynamicMenu.API.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<MenuBaseItemDto>>> GetAll()
+        public async Task<ResultStatus<IEnumerable<MenuBaseItemDto>>> GetAll()
         {
             //var cacheKey = $"{CacheKeyPrefix}all";
             //var cachedItems = await _cacheService.GetAsync<List<MenuBaseItemDto>>(cacheKey);
@@ -50,11 +50,11 @@ namespace DynamicMenu.API.Controllers
             var dtos = items.Select(MapToDto).ToList();
 
             //await _cacheService.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(30));
-            return dtos;
+            return ResultStatus<IEnumerable<MenuBaseItemDto>>.Success(dtos);
         }
 
         [HttpPost("Insert")]
-        public async Task<ActionResult> Insert([FromBody] CreateMenuBaseItemDto item)
+        public async Task<ResultStatus<MenuBaseItem>> Insert([FromBody] CreateMenuBaseItemDto item)
         {
             var dto = new MenuBaseItem
             {
@@ -64,11 +64,11 @@ namespace DynamicMenu.API.Controllers
                 TextEn = item.TextEn
             };
             var res = await _menuBaseItemRepository.AddAsync(dto);
-            return Ok(new ResultStatus<MenuBaseItem> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res, success = true });
+            return ResultStatus<MenuBaseItem>.Success(dto, "Kayıt işlemi tamamlandı.");
         }
 
         [HttpPost("Update")]
-        public async Task<ActionResult> Update([FromBody] UpdateMenuBaseItemDto item)
+        public async Task<ResultStatus<bool>> Update([FromBody] UpdateMenuBaseItemDto item)
         {
             //  var dbItem = await _menuBaseItemRepository.GetByIdAsync(item.Id);
             var dto = new MenuBaseItem
@@ -79,7 +79,7 @@ namespace DynamicMenu.API.Controllers
                 TextEn = item.TextEn
             };
             var res = await _menuBaseItemRepository.UpdateAsync(dto);
-            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Güncelleme işlemi tamamlandı" }, objects = res, success = true });
+            return ResultStatus<bool>.Success(res, "Güncelleme işlemi tamamlandı.");
         }
 
         [HttpDelete("Delete/{id}")]
@@ -100,7 +100,9 @@ namespace DynamicMenu.API.Controllers
 
             var item = await _menuBaseItemRepository.GetByIdAsync(id);
             if (item == null)
-                return NotFound();
+            {
+                return Ok(ResultStatus<MenuBaseItemDto>.Error("İstenilen kayıt bulunamadı."));
+            }
 
             var dto = new MenuBaseItemDto
             {
@@ -112,7 +114,7 @@ namespace DynamicMenu.API.Controllers
                 ModifiedDate = item.ModifiedDate
             };
             //await _cacheService.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(30));
-            return Ok(new ResultStatus<MenuBaseItemDto> { feedback = new FeedBack { message = "Silme işlemi tamamlandı" }, objects = dto, success = true });
+            return Ok(ResultStatus<MenuBaseItemDto>.Success(dto));
         }
 
         //  todo Buraya gelmeden bir adım önce MenuBaseItem Add yapmamız gerekiyor.

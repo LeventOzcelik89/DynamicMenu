@@ -1,13 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Http  
 @using DynamicMenu.Web.UIExtension
-@inject IHttpContextAccessor HttpContextAccessor  
 @using Newtonsoft.Json  
 
+@inject IHttpContextAccessor HttpContextAccessor
+
 @{  
-    var feedback = HttpContextAccessor.HttpContext.Session.GetString("feedback") != null  
-        ? JsonConvert.SerializeObject(HttpContextAccessor.HttpContext.Session.GetString("feedback"))  
-        : null;  
-    HttpContextAccessor.HttpContext.Session.Remove("feedback");  
+    var feedback = HttpContextAccessor.HttpContext.Session.GetString("feedback");
+    HttpContextAccessor.HttpContext.Session.Remove("feedback");
 }  
 
 <!DOCTYPE html>  
@@ -53,6 +52,10 @@
     </div>
 
     @RenderSection("Scripts", false)  
+    <script type="text/javascript" data-selector="modalContainer">
+            debugger;
+            feedback(@Html.Raw(feedback));
+    </script>
 
 </body>  
 </html>

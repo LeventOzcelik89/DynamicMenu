@@ -6,6 +6,7 @@ using DynamicMenu.Core.Models;
 using DynamicMenu.Infrastructure.Repositories;
 using DynamicMenu.Web.Model;
 using Microsoft.AspNetCore.Mvc;
+using DynamicMenu.API;
 
 namespace DynamicMenu.Web.Controllers
 {
@@ -25,14 +26,17 @@ namespace DynamicMenu.Web.Controllers
             return View();
         }
 
-        public async Task<ActionResult<IEnumerable<MenuBaseItemDto>>> GetAll()
+        public async Task<ResultStatus<IEnumerable<MenuBaseItemDto>>?> GetAll()
         {
-
             var url = "MenuBaseItem/GetAll";
-            var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<MenuBaseItemDto>>(url);
+            var res = await _remoteServiceDynamicMenuAPI.GetDataResultStatus<IEnumerable<MenuBaseItemDto>>(url);
+            return res;
+        }
 
-            return Ok(res);
-
+        public async Task<IEnumerable<MenuBaseItemDto>?> GetAllData()
+        {
+            var res = await GetAll();
+            return res?.objects;
         }
 
         public async Task<ActionResult<List<MenuItemResponse>?>> GetMenuItemsByMenu(int menuGroupId, int menuId)
@@ -50,11 +54,11 @@ namespace DynamicMenu.Web.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Insert(CreateMenuBaseItemDto item)
+        public async Task<ResultStatus<MenuBaseItem>> Insert(CreateMenuBaseItemDto item)
         {
             var url = "MenuBaseItem/Insert";
-            var res = await _remoteServiceDynamicMenuAPI.PostJsonData<ResultStatus<MenuBaseItem>>(url, item);
-            return Ok(res ?? new ResultStatus<MenuBaseItem> { feedback = new FeedBack { message = "Hata oluştu" } });
+            var res = await _remoteServiceDynamicMenuAPI.PostJsonDataResultStatus<MenuBaseItem>(url, item);
+            return res ?? ResultStatus<MenuBaseItem>.Error();
         }
 
 
@@ -62,10 +66,11 @@ namespace DynamicMenu.Web.Controllers
         public async Task<ActionResult> Update(int id)
         {
             var url = $"MenuBaseItem/GetById/{id}";
-            var res = await _remoteServiceDynamicMenuAPI.GetData<ResultStatus<MenuBaseItem>>(url);
+            var res = await _remoteServiceDynamicMenuAPI.GetDataResultStatus<MenuBaseItem>(url);
 
             if (!res.success)
             {
+                HttpContext.Session.SetString("feedback", FeedBack.Error(res?.message).ToJson());
                 return View(new UpdateMenuBaseItemDto());
             }
 
