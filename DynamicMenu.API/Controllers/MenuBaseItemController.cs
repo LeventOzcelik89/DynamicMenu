@@ -83,10 +83,10 @@ namespace DynamicMenu.API.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ResultStatus<bool>> Delete(int id)
         {
             var result = await _menuBaseItemRepository.DeleteAsync(id);
-            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Silme işlemi tamamlandı" }, objects = result, success = true });
+            return ResultStatus<bool>.Success(result, "Silme işlemi tamamlandı.");
         }
 
         [HttpGet("GetById/{id}")]

@@ -39,13 +39,6 @@ namespace DynamicMenu.Web.Controllers
             return res?.objects;
         }
 
-        public async Task<ActionResult<List<MenuItemResponse>?>> GetMenuItemsByMenu(int menuGroupId, int menuId)
-        {
-            var url = $"MenuItem/GetMenuItemsByMenu/{menuGroupId}/{menuId}";
-            var res = await _remoteServiceDynamicMenuAPI.GetData<List<MenuItemResponse>>(url);
-            return res;
-        }
-
         [HttpGet]
         public async Task<ActionResult> Insert()
         {
@@ -85,20 +78,33 @@ namespace DynamicMenu.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(UpdateMenuBaseItemDto item)
+        public async Task<ResultStatus<bool>> Update(UpdateMenuBaseItemDto item)
         {
             var url = "MenuBaseItem/Update";
             var res = await _remoteServiceDynamicMenuAPI.PostJsonData<ResultStatus<bool>>(url, item);
-            return Ok(res ?? new ResultStatus<bool> { feedback = new FeedBack { message = "Hata oluştu" } });
+            return res ?? ResultStatus<bool>.Error();
         }
 
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ResultStatus<bool>> Delete(int id)
         {
             var url = $"MenuBaseItem/Delete/{id}";
             var res = await _remoteServiceDynamicMenuAPI.DeleteData<ResultStatus<bool>>(url);
-            return Ok(res ?? new ResultStatus<bool> { feedback = new FeedBack { message = "Hata oluştu" } });
+            return res ?? ResultStatus<bool>.Error();
+        }
+
+
+
+        //  todo: buradan aşağısı kontrol edilecek.
+
+
+
+        public async Task<ActionResult<List<MenuItemResponse>?>> GetMenuItemsByMenu(int menuGroupId, int menuId)
+        {
+            var url = $"MenuItem/GetMenuItemsByMenu/{menuGroupId}/{menuId}";
+            var res = await _remoteServiceDynamicMenuAPI.GetData<List<MenuItemResponse>>(url);
+            return res;
         }
 
         [HttpGet]
