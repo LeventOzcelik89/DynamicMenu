@@ -33,12 +33,6 @@ namespace DynamicMenu.Web.Controllers
             return res;
         }
 
-        public async Task<IEnumerable<MenuBaseItemDto>?> GetAllData()
-        {
-            var res = await GetAll();
-            return res?.objects;
-        }
-
         [HttpGet]
         public async Task<ActionResult> Insert()
         {
@@ -67,12 +61,13 @@ namespace DynamicMenu.Web.Controllers
                 return View(new UpdateMenuBaseItemDto());
             }
 
+            var item = res.objects;
             var dto = new UpdateMenuBaseItemDto
             {
-                Id = res.objects.Id,
-                IconPath = res.objects.IconPath,
-                Text = res.objects.Text,
-                TextEn = res.objects.TextEn
+                Id = item.Id,
+                IconPath = item.IconPath,
+                Text = item.Text,
+                TextEn = item.TextEn
             };
             return View(dto);
         }

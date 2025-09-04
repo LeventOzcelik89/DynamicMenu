@@ -90,7 +90,7 @@ namespace DynamicMenu.API.Controllers
         }
 
         [HttpGet("GetById/{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ResultStatus<MenuBaseItemDto>> GetById(int id)
         {
             //var cacheKey = $"{CacheKeyPrefix}{id}";
             //var cachedItem = await _cacheService.GetAsync<MenuBaseItemDto>(cacheKey);
@@ -101,7 +101,7 @@ namespace DynamicMenu.API.Controllers
             var item = await _menuBaseItemRepository.GetByIdAsync(id);
             if (item == null)
             {
-                return Ok(ResultStatus<MenuBaseItemDto>.Error("İstenilen kayıt bulunamadı."));
+                return ResultStatus<MenuBaseItemDto>.Error("İstenilen kayıt bulunamadı.");
             }
 
             var dto = new MenuBaseItemDto
@@ -114,8 +114,11 @@ namespace DynamicMenu.API.Controllers
                 ModifiedDate = item.ModifiedDate
             };
             //await _cacheService.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(30));
-            return Ok(ResultStatus<MenuBaseItemDto>.Success(dto));
+            return ResultStatus<MenuBaseItemDto>.Success(dto);
         }
+
+
+
 
         //  todo Buraya gelmeden bir adım önce MenuBaseItem Add yapmamız gerekiyor.
         [HttpPost]

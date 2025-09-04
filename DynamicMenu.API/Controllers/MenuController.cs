@@ -18,38 +18,19 @@ namespace DynamicMenu.API.Controllers
             _menuRepository = menuRepository;
         }
 
-        // Listeleme
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<Menu>>> GetAll(int? MenuGroupId = null)
+        public async Task<ResultStatus<IEnumerable<Menu>>> GetAll(int? MenuGroupId = null)
         {
             var menus = MenuGroupId.HasValue
                 ? await _menuRepository.GetByMenuGroupIdAsync(MenuGroupId.Value)
                 : await _menuRepository.GetAllAsync();
 
-            return Ok(menus);
+            return ResultStatus<IEnumerable<Menu>>.Success(menus);
         }
 
-        // Listeleme
-        [HttpGet("GetByMenuGroup/{id}")]
-        public async Task<ActionResult<IEnumerable<Menu>>> GetByMenuGroup(int id)
-        {
-            var menus = await _menuRepository.GetByMenuGroupIdAsync(id);
-            return Ok(menus);
-        }
-
-
-        // Tekil Getir
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Menu>> GetById(int id)
-        {
-            var menu = await _menuRepository.GetByIdAsync(id);
-            if (menu == null)
-                return NotFound();
-            return Ok(menu);
-        }
 
         [HttpPost("Insert")]
-        public async Task<IActionResult> Insert([FromBody] CreateMenuDto item)
+        public async Task<ResultStatus<Menu>> Insert([FromBody] CreateMenuDto item)
         {
             var dto = new Menu
             {
@@ -61,13 +42,12 @@ namespace DynamicMenu.API.Controllers
                 Name = item.Name
             };
             var res = await _menuRepository.AddAsync(dto);
-            return Ok(new ResultStatus<Menu> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
+            return ResultStatus<Menu>.Success(dto, "Kayıt işlemi tamamlandı.");
         }
 
         [HttpPost("Update")]
-        public async Task<IActionResult> Update([FromBody] UpdateMenuDto item)
+        public async Task<ResultStatus<bool>> Update([FromBody] UpdateMenuDto item)
         {
-            //  API giderek işletmemiz gerekecek.
             var dto = new Menu
             {
                 Id = item.Id,
@@ -79,14 +59,44 @@ namespace DynamicMenu.API.Controllers
                 MenuTarget = item.MenuTarget
             };
             var res = await _menuRepository.UpdateAsync(dto);
-            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
+            return ResultStatus<bool>.Success(res, "Güncelleme işlemi tamamlandı.");
         }
 
         [HttpDelete("Delete/{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ResultStatus<bool>> Delete(int id)
         {
-            var res = await _menuRepository.DeleteAsync(id);
-            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Silme işlemi tamamlandı" }, objects = res });
+            var result = await _menuBaseItemRepository.DeleteAsync(id);
+            return ResultStatus<bool>.Success(result, "Silme işlemi tamamlandı.");
+        }
+
+        [HttpGet("GetById/{id}")]
+        public async Task<ResultStatus<MenuDto>> GetById(int id)
+        {
+            //var cacheKey = $"{CacheKeyPrefix}{id}";
+            //var cachedItem = await _cacheService.GetAsync<MenuBaseItemDto>(cacheKey);
+
+            //if (cachedItem != null)
+            //    return cachedItem;
+
+            var item = await _menuRepository.GetByIdAsync(id);
+            if (item == null)
+            {
+                return ResultStatus<MenuDto>.Error("İstenilen kayıt bulunamadı.");
+            }
+
+            var dto = new MenuDto
+            {
+                Id = item.Id,
+                CreatedDate = item.CreatedDate,
+                ModifiedDate = item.ModifiedDate,
+
+                Name = item.Name,
+                Description = item.Description,
+                IsActive = item.IsActive,
+                MenuGroupId = item.MenuGroupId,
+            };
+            //await _cacheService.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(30));
+            return ResultStatus<MenuDto>.Success(dto);
         }
 
     }
