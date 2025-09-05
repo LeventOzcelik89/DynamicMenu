@@ -13,14 +13,10 @@ namespace DynamicMenu.Web.Controllers
 {
     public class MenuGroupController : Controller
     {
-        private readonly IMenuRepository _menuRepository;
-        private readonly IMenuGroupRepository _menuGroupRepository;
         private readonly RemoteServiceDynamicMenuAPI _remoteServiceDynamicMenuAPI;
 
-        public MenuGroupController(IMenuGroupRepository menuGroupRepository, IMenuRepository menuRepository, IMenuItemRepository menuItemRepository, RemoteServiceDynamicMenuAPI remoteServiceDynamicMenuAPI)
+        public MenuGroupController(IMenuItemRepository menuItemRepository, RemoteServiceDynamicMenuAPI remoteServiceDynamicMenuAPI)
         {
-            _menuRepository = menuRepository;
-            _menuGroupRepository = menuGroupRepository;
             _remoteServiceDynamicMenuAPI = remoteServiceDynamicMenuAPI;
         }
 
