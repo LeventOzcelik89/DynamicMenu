@@ -40,7 +40,7 @@ namespace DynamicMenu.API.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetAll()
+        public async Task<ResultStatus<IEnumerable<MenuItemDto>>> GetAll()
         {
             //var cacheKey = $"{CacheKeyPrefix}all";
             //var cachedItems = await _cacheService.GetAsync<List<MenuItemDto>>(cacheKey);
@@ -65,11 +65,11 @@ namespace DynamicMenu.API.Controllers
             }).ToList();
 
             //await _cacheService.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(30));
-            return dtos;
+            return ResultStatus<IEnumerable<MenuItemData>>.Success(dtos);
         }
 
         [HttpPost("Insert")]
-        public async Task<ActionResult> Insert([FromBody] CreateMenuItemDto item)
+        public async Task<ResultStatus<MenuItem>> Insert([FromBody] CreateMenuItemDto item)
         {
             var dto = new MenuItem
             {
@@ -83,11 +83,11 @@ namespace DynamicMenu.API.Controllers
             };
 
             var res = await _menuItemRepository.AddAsync(dto);
-            return Ok(new ResultStatus<MenuItem> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
+            return ResultStatus<MenuItem>.Success(res);
         }
 
         [HttpPost("Update")]
-        public async Task<ActionResult> Update([FromBody] UpdateMenuItemDto item)
+        public async Task<ResultStatus<bool>> Update([FromBody] UpdateMenuItemDto item)
         {
             var dto = new MenuItem
             {
@@ -102,16 +102,117 @@ namespace DynamicMenu.API.Controllers
             };
 
             var res = await _menuItemRepository.UpdateAsync(dto);
-            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
+            return ResultStatus<bool>.Success(res);
         }
 
         [HttpDelete("Delete/{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ResultStatus<bool>> Delete(int id)
         {
             var res = await _menuItemRepository.DeleteAsync(id);
-            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Silme işlemi tamamlandı" }, objects = res });
+            return ResultStatus<bool>.Success(res, "Silme işlemi tamamlandı");
         }
 
+        [HttpGet("{id}")]
+        public async Task<ResultStatus<MenuItemDto>> GetById(int id)
+        {
+            //var cacheKey = $"{CacheKeyPrefix}{id}";
+            //var cachedItem = await _cacheService.GetAsync<MenuItemDto>(cacheKey);
+
+            //if (cachedItem != null)
+            //    return cachedItem;
+
+            var item = await _menuItemRepository.GetByIdAsync(id);
+            if (item == null)
+            {
+                return ResultStatus<MenuItemDto>.Error("İstenilen kayıt bulunamadı.");
+            }
+
+            var dto = MapToDto(item);
+            //await _cacheService.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(30));
+            return ResultStatus<MenuItemDto>.Success(dto);
+        }
+
+        [HttpGet("GetMenuItemsByMenuUpdate/{menuGroupId}/{menuId}")]
+        public async Task<ActionResult<List<MenuItemResponseUpdate>?>> GetMenuItemsByMenuUpdate(int menuGroupId, int menuId)
+        {
+            var res = await GetMenuUpdate(menuGroupId, menuId);
+            return res;
+        }
+
+        private async Task<List<MenuItemResponseUpdate>?> GetMenuUpdate(int menuGroupId, int menuId)
+        {
+
+            var menuItems = new List<MenuItemResponseUpdate>();
+            var items = await _menuItemRepository.GetByMenuGroupIdMenuIdAsync(menuGroupId, menuId);
+            foreach (var item in items.Where(a => a.Pid == null).OrderBy(a => a.SortOrder).ToArray())
+            {
+                menuItems.Add(new MenuItemResponseUpdate
+                {
+                    Id = item.Id,
+                    Keyword = item.Keyword,
+                    IsNew = item.IsNew,
+                    MenuBaseItem = new UpdateMenuBaseItemDto(item.MenuBaseItem.Id, item.MenuBaseItem.Text, item.MenuBaseItem.TextEn, item.MenuBaseItem.IconPath),
+                    items = GetMenuItemsUpdate(items.ToArray(), item)
+                });
+            }
+
+            return menuItems;
+
+        }
+
+        private MenuItemResponseUpdate[] GetMenuItemsUpdate(MenuItem[] items, MenuItem item)
+        {
+
+            var itemss = items.Where(a => a.Pid == item.Id).OrderBy(a => a.SortOrder).ToArray();
+            if (!itemss.Any())
+            {
+                return null;
+            }
+
+            var res = new List<MenuItemResponseUpdate>();
+            foreach (var subItem in itemss)
+            {
+
+                res.Add(new MenuItemResponseUpdate
+                {
+                    Id = subItem.Id,
+                    Pid = item.Id,
+                    Keyword = subItem.Keyword,
+                    IsNew = subItem.IsNew,
+                    SortOrder = subItem.SortOrder,
+                    MenuBaseItem = new UpdateMenuBaseItemDto(subItem.MenuBaseItem.Id, subItem.MenuBaseItem.Text, subItem.MenuBaseItem.TextEn, subItem.MenuBaseItem.IconPath),
+
+                    items = GetMenuItemsUpdate(items, subItem)
+                });
+
+            }
+
+            return res.ToArray();
+
+        }
+
+        private static MenuItemDto MapToDto(MenuItem item)
+        {
+            if (item == null) return null;
+
+            return new MenuItemDto
+            {
+                Id = item.Id,
+                Keyword = item.Keyword ?? string.Empty,
+                IsNew = item.IsNew,
+                Pid = item.Pid,
+                MenuBaseItemId = item.MenuBaseItemId,
+                MenuId = item.MenuId,
+                MenuGroupId = item.MenuGroupId,
+                Children = item.Children?.Select(MapToDto).Where(x => x != null).ToList() ?? new List<MenuItemDto>()
+            };
+        }
+
+
+
+
+
+        //  todo: buradan aşağısı kontrol edilecek.
 
 
 
@@ -132,24 +233,6 @@ namespace DynamicMenu.API.Controllers
 
             await _cacheService.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(30));
             return dtos;
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MenuItemDto>> GetById(int id)
-        {
-            var cacheKey = $"{CacheKeyPrefix}{id}";
-            var cachedItem = await _cacheService.GetAsync<MenuItemDto>(cacheKey);
-
-            if (cachedItem != null)
-                return cachedItem;
-
-            var item = await _menuItemRepository.GetByIdAsync(id);
-            if (item == null)
-                return NotFound();
-
-            var dto = MapToDto(item);
-            await _cacheService.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(30));
-            return dto;
         }
 
         [HttpGet("by-app/{appId}")]
@@ -430,93 +513,11 @@ namespace DynamicMenu.API.Controllers
             return Ok("Test data seeded successfully");
         }
 
-        private static MenuItemDto MapToDto(MenuItem item)
-        {
-            if (item == null) return null;
-
-            return new MenuItemDto
-            {
-                Id = item.Id,
-                Keyword = item.Keyword ?? string.Empty,
-                IsNew = item.IsNew,
-                Pid = item.Pid,
-                MenuBaseItemId = item.MenuBaseItemId,
-                MenuId = item.MenuId,
-                MenuGroupId = item.MenuGroupId,
-                //  Text = item.Text ?? item.Keyword ?? string.Empty,
-                //  TextEn = item.TextEn ?? item.Text ?? item.Keyword ?? string.Empty,
-                //DisplayType = item.DisplayType,
-                //AppId = (byte)item.AppId,
-                //  IconPath = item.IconPath ?? string.Empty,
-                //  SortOrder = item.SortOrder,
-                //RoleIds = item.MenuItemRoles?.Select(r => r.RoleId).ToList() ?? new List<int>(),
-                Children = item.Children?.Select(MapToDto).Where(x => x != null).ToList() ?? new List<MenuItemDto>()
-            };
-        }
 
 
 
 
 
-
-        [HttpGet("GetMenuItemsByMenuUpdate/{menuGroupId}/{menuId}")]
-        public async Task<ActionResult<List<MenuItemResponseUpdate>?>> GetMenuItemsByMenuUpdate(int menuGroupId, int menuId)
-        {
-            var res = await GetMenuUpdate(menuGroupId, menuId);
-            return res;
-        }
-
-        private async Task<List<MenuItemResponseUpdate>?> GetMenuUpdate(int menuGroupId, int menuId)
-        {
-
-            var menuItems = new List<MenuItemResponseUpdate>();
-            var items = await _menuItemRepository.GetByMenuGroupIdMenuIdAsync(menuGroupId, menuId);
-            foreach (var item in items.Where(a => a.Pid == null).OrderBy(a => a.SortOrder).ToArray())
-            {
-                menuItems.Add(new MenuItemResponseUpdate
-                {
-                    Id = item.Id,
-                    Keyword = item.Keyword,
-                    IsNew = item.IsNew,
-                    MenuBaseItem = new UpdateMenuBaseItemDto(item.MenuBaseItem.Id, item.MenuBaseItem.Text, item.MenuBaseItem.TextEn, item.MenuBaseItem.IconPath),
-                    items = GetMenuItemsUpdate(items.ToArray(), item)
-                });
-            }
-
-            return menuItems;
-
-        }
-
-        private MenuItemResponseUpdate[] GetMenuItemsUpdate(MenuItem[] items, MenuItem item)
-        {
-
-            var itemss = items.Where(a => a.Pid == item.Id).OrderBy(a => a.SortOrder).ToArray();
-            if (!itemss.Any())
-            {
-                return null;
-            }
-
-            var res = new List<MenuItemResponseUpdate>();
-            foreach (var subItem in itemss)
-            {
-
-                res.Add(new MenuItemResponseUpdate
-                {
-                    Id = subItem.Id,
-                    Pid = item.Id,
-                    Keyword = subItem.Keyword,
-                    IsNew = subItem.IsNew,
-                    SortOrder = subItem.SortOrder,
-                    MenuBaseItem = new UpdateMenuBaseItemDto(subItem.MenuBaseItem.Id, subItem.MenuBaseItem.Text, subItem.MenuBaseItem.TextEn, subItem.MenuBaseItem.IconPath),
-
-                    items = GetMenuItemsUpdate(items, subItem)
-                });
-
-            }
-
-            return res.ToArray();
-
-        }
 
 
         [HttpGet("GetMenuItemsByMenu/{menuGroupId}/{menuId}")]

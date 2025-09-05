@@ -1,4 +1,5 @@
-﻿using DynamicMenu.API.DTOs;
+﻿using DynamicMenu.API;
+using DynamicMenu.API.DTOs;
 using DynamicMenu.API.Models;
 using DynamicMenu.Core.Entities;
 using DynamicMenu.Core.Interfaces;
@@ -11,16 +12,10 @@ namespace DynamicMenu.Web.Controllers
 {
     public class MenuItemController : Controller
     {
-        private readonly IMenuRepository _menuRepository;
-        private readonly IMenuItemRepository _menuItemRepository;
-        private readonly IMenuGroupRepository _menuGroupRepository;
         private readonly RemoteServiceDynamicMenuAPI _remoteServiceDynamicMenuAPI;
 
-        public MenuItemController(IMenuGroupRepository menuGroupRepository, IMenuRepository menuRepository, IMenuItemRepository menuItemRepository, RemoteServiceDynamicMenuAPI remoteServiceDynamicMenuAPI)
+        public MenuItemController(RemoteServiceDynamicMenuAPI remoteServiceDynamicMenuAPI)
         {
-            _menuRepository = menuRepository;
-            _menuItemRepository = menuItemRepository;
-            _menuGroupRepository = menuGroupRepository;
             _remoteServiceDynamicMenuAPI = remoteServiceDynamicMenuAPI;
         }
 
@@ -29,15 +24,86 @@ namespace DynamicMenu.Web.Controllers
             return View();
         }
 
-        public async Task<ActionResult<IEnumerable<MenuItemDto>>> GetAll()
+        public async Task<ResultStatus<IEnumerable<MenuItemDto>>> GetAll()
         {
-
             var url = "MenuItem/GetAll";
-            var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<MenuItemDto>>(url);
+            var res = await _remoteServiceDynamicMenuAPI.GetDataResultStatus<IEnumerable<MenuItemDto>>(url);
 
-            return Ok(res);
-
+            return res ?? ResultStatus<IEnumerable<MenuItemDto>>.Error();
         }
+
+        [HttpGet]
+        public async Task<ActionResult> Insert()
+        {
+            return View(new CreateMenuItemDto { Keyword = Guid.NewGuid().ToString().Substring(0, 8) });
+        }
+
+        [HttpPost]
+        public async Task<ResultStatus<MenuItem>> Insert(CreateMenuGroupDto item)
+        {
+            var url = "MenuItem/Insert";
+            var res = await _remoteServiceDynamicMenuAPI.PostJsonDataResultStatus<MenuItem>(url, item);
+            return res ?? ResultStatus<MenuItem>.Error();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Update(int id)
+        {
+            var url = $"MenuItem/GetById/{id}";
+            var res = await _remoteServiceDynamicMenuAPI.GetDataResultStatus<MenuItemDto>(url);
+
+            if (!res.success)
+            {
+                HttpContext.Session.SetString("feedback", FeedBack.Error(res?.message).ToJson());
+                return View(new UpdateMenuItemDto { Keyword = Guid.NewGuid().ToString().Substring(0, 8) });
+            }
+
+            var item = res.objects;
+            var dto = new UpdateMenuItemDto
+            {
+                Id = item.Id,
+                Keyword = item.Keyword,
+                MenuBaseItemId = item.MenuBaseItemId,
+                MenuGroupId = item.MenuGroupId,
+                IsNew = item.IsNew,
+                MenuId = item.MenuId,
+                Pid = item.Pid,
+                SortOrder = item.SortOrder
+            };
+            return View(dto);
+        }
+
+        [HttpPost]
+        public async Task<ResultStatus<bool>> Update(UpdateMenuItemDto item)
+        {
+            var url = "MenuItem/Update";
+            var res = await _remoteServiceDynamicMenuAPI.PostJsonData<ResultStatus<bool>>(url, item);
+            return res ?? ResultStatus<bool>.Error();
+        }
+
+        [HttpDelete]
+        public async Task<ResultStatus<bool>> Delete(int id)
+        {
+            var url = $"MenuItem/Delete/{id}";
+            var res = await _remoteServiceDynamicMenuAPI.DeleteData<ResultStatus<bool>>(url);
+            return res ?? ResultStatus<bool>.Error();
+        }
+
+        //  todo: buradan aşağısıı kontrol edilecek.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public async Task<ActionResult<List<MenuItemResponse>?>> GetMenuItemsByMenu(int menuGroupId, int menuId)
         {
@@ -53,53 +119,6 @@ namespace DynamicMenu.Web.Controllers
             return res;
         }
 
-        [HttpGet]
-        public async Task<ActionResult> Insert()
-        {
-            return View(new CreateMenuItemDto { Keyword = Guid.NewGuid().ToString().Substring(0, 8) });
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<ResultStatus<MenuItem>>> Insert(CreateMenuItemDto item)
-        {
-            var url = "MenuItem/Insert";
-            var res = await _remoteServiceDynamicMenuAPI.PostJsonData<ResultStatus<MenuItem>>(url, item);
-            return Ok(res ?? new ResultStatus<MenuItem> { feedback = new FeedBack { message = "Hata oluştu" } });
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> Update(int id)
-        {
-            var item = await _menuItemRepository.GetByIdAsync(id);
-            var itemDto = new UpdateMenuItemDto
-            {
-                Id = item.Id,
-                Keyword = item.Keyword,
-                MenuBaseItemId = item.MenuBaseItemId,
-                MenuGroupId = item.MenuGroupId,
-                IsNew = item.IsNew,
-                MenuId = item.MenuId,
-                Pid = item.Pid,
-                SortOrder = item.SortOrder
-            };
-            return View(itemDto);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Update(UpdateMenuItemDto item)
-        {
-            var url = "MenuItem/Update";
-            var res = await _remoteServiceDynamicMenuAPI.PostJsonData<ResultStatus<bool>>(url, item);
-            return Ok(res ?? new ResultStatus<bool> { feedback = new FeedBack { message = "Hata oluştu" } });
-        }
-
-        [HttpDelete]
-        public async Task<ActionResult> Delete(int id)
-        {
-            var url = $"MenuItem/Delete/{id}";
-            var res = await _remoteServiceDynamicMenuAPI.DeleteData<ResultStatus<bool>>(url);
-            return Ok(res ?? new ResultStatus<bool> { feedback = new FeedBack { message = "Hata oluştu" } });
-        }
 
     }
 }
