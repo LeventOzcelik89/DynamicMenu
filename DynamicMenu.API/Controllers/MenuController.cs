@@ -32,7 +32,6 @@ namespace DynamicMenu.API.Controllers
             return ResultStatus<IEnumerable<Menu>>.Success(menus);
         }
 
-
         [HttpPost("Insert")]
         public async Task<ResultStatus<Menu>> Insert([FromBody] CreateMenuDto item)
         {

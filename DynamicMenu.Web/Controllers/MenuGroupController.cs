@@ -1,4 +1,5 @@
-﻿using DynamicMenu.API.DTOs;
+﻿using DynamicMenu.API;
+using DynamicMenu.API.DTOs;
 using DynamicMenu.API.Models;
 using DynamicMenu.Core.Entities;
 using DynamicMenu.Core.Enums;
@@ -28,23 +29,13 @@ namespace DynamicMenu.Web.Controllers
             return View();
         }
 
-        public async Task<ActionResult<IEnumerable<MenuGroup>>> GetAll()
+
+        public async Task<ResultStatus<IEnumerable<MenuGroup>>> GetAll()
         {
             var url = "MenuGroup/GetAll";
-            var res = await _remoteServiceDynamicMenuAPI.GetData<IEnumerable<MenuGroup>>(url);
+            var res = await _remoteServiceDynamicMenuAPI.GetDataResultStatus<IEnumerable<MenuGroup>>(url);
 
-            return Ok(res);
-
-        }
-
-        public async Task<ActionResult<IEnumerable<KeyValue>>> GetMenuTypes()
-        {
-            var menuTypes = Enum.GetValues(typeof(MenuTypeEnum))
-                .Cast<MenuTypeEnum>()
-                .Select(a => new KeyValue(((byte)a).ToString(), a.ToString()))
-                .ToArray();
-
-            return Ok(menuTypes);
+            return res ?? ResultStatus<IEnumerable<MenuGroup>>.Error();
         }
 
         [HttpGet]
@@ -54,24 +45,26 @@ namespace DynamicMenu.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<MenuGroup>> Insert(CreateMenuGroupDto item)
+        public async Task<ResultStatus<MenuGroup>> Insert(CreateMenuGroupDto item)
         {
-            var dto = new MenuGroup
-            {
-                CreatedDate = DateTime.Now,
-                Description = item.Description,
-                IsActive = item.IsActive,
-                MenuType = item.MenuType,
-                Name = item.Name
-            };
-            var res = await _menuGroupRepository.AddAsync(dto);
-            return Ok(new ResultStatus<MenuGroup> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
+            var url = "MenuGroup/Insert";
+            var res = await _remoteServiceDynamicMenuAPI.PostJsonDataResultStatus<MenuGroup>(url, item);
+            return res ?? ResultStatus<MenuGroup>.Error();
         }
 
         [HttpGet]
-        public async Task<ActionResult<MenuGroup>> Update(int id)
+        public async Task<ActionResult> Update(int id)
         {
-            var item = await _menuGroupRepository.GetByIdAsync(id);
+            var url = $"MenuGroup/GetById/{id}";
+            var res = await _remoteServiceDynamicMenuAPI.GetDataResultStatus<MenuGroup>(url);
+
+            if (!res.success)
+            {
+                HttpContext.Session.SetString("feedback", FeedBack.Error(res?.message).ToJson());
+                return View(new UpdateMenuGroupDto());
+            }
+
+            var item = res.objects;
             var dto = new UpdateMenuGroupDto
             {
                 Id = item.Id,
@@ -84,27 +77,29 @@ namespace DynamicMenu.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<MenuGroup>> Update(UpdateMenuGroupDto item)
+        public async Task<ResultStatus<bool>> Update(UpdateMenuDto item)
         {
-            //  API giderek işletmemiz gerekecek.
-            var dto = new MenuGroup
-            {
-                Id = item.Id,
-                Description = item.Description,
-                IsActive = item.IsActive,
-                MenuType = item.MenuType,
-                Name = item.Name,
-                ModifiedDate = DateTime.Now
-            };
-            var res = await _menuGroupRepository.UpdateAsync(dto);
-            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "işlem tamamlandı" }, objects = res });
+            var url = "MenuGroup/Update";
+            var res = await _remoteServiceDynamicMenuAPI.PostJsonData<ResultStatus<bool>>(url, item);
+            return res ?? ResultStatus<bool>.Error();
         }
 
         [HttpDelete]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ResultStatus<bool>> Delete(int id)
         {
-            var res = await _menuGroupRepository.DeleteAsync(id);
-            return Ok(new ResultStatus<bool> { feedback = new FeedBack { message = "Silme işlemi tamamlandı" }, objects = res });
+            var url = $"MenuGroup/Delete/{id}";
+            var res = await _remoteServiceDynamicMenuAPI.DeleteData<ResultStatus<bool>>(url);
+            return res ?? ResultStatus<bool>.Error();
+        }
+
+        public async Task<ActionResult<IEnumerable<KeyValue>>> GetMenuTypes()
+        {
+            var menuTypes = Enum.GetValues(typeof(MenuTypeEnum))
+                .Cast<MenuTypeEnum>()
+                .Select(a => new KeyValue(((byte)a).ToString(), a.ToString()))
+                .ToArray();
+
+            return Ok(menuTypes);
         }
 
     }

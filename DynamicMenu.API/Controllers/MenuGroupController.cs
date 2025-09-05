@@ -1,5 +1,8 @@
+using DynamicMenu.API.DTOs;
 using DynamicMenu.Core.Entities;
 using DynamicMenu.Core.Interfaces;
+using DynamicMenu.Core.Models;
+using DynamicMenu.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DynamicMenu.API.Controllers
@@ -15,48 +18,82 @@ namespace DynamicMenu.API.Controllers
             _menuGroupRepository = menuGroupRepository;
         }
 
-        // Listeleme
+
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<MenuGroup>>> GetAll()
+        public async Task<ResultStatus<IEnumerable<MenuGroup>>> GetAll(int? MenuGroupId = null)
         {
             var menuGroups = await _menuGroupRepository.GetAllAsync();
-            return Ok(menuGroups);
+            return ResultStatus<IEnumerable<MenuGroup>>.Success(menuGroups);
         }
 
-        // Tekil Getir
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MenuGroup>> GetById(int id)
+
+        [HttpPost("Insert")]
+        public async Task<ResultStatus<MenuGroup>> Insert([FromBody] CreateMenuGroupDto item)
         {
-            var menuGroup = await _menuGroupRepository.GetByIdAsync(id);
-            if (menuGroup == null)
-                return NotFound();
-            return Ok(menuGroup);
+            var dto = new MenuGroup
+            {
+                CreatedDate = DateTime.Now,
+                Description = item.Description,
+                IsActive = item.IsActive,
+                MenuType = item.MenuType,
+                Name = item.Name
+            };
+            var res = await _menuGroupRepository.AddAsync(dto);
+            return ResultStatus<MenuGroup>.Success(dto);
         }
 
-        // Ekle
-        [HttpPost]
-        public async Task<ActionResult<MenuGroup>> Create([FromBody] MenuGroup menuGroup)
+        [HttpPost("Update")]
+        public async Task<ResultStatus<bool>> Update([FromBody] UpdateMenuGroupDto item)
         {
-            var created = await _menuGroupRepository.AddAsync(menuGroup);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            //  API giderek işletmemiz gerekecek.
+            var dto = new MenuGroup
+            {
+                Id = item.Id,
+                Description = item.Description,
+                IsActive = item.IsActive,
+                MenuType = item.MenuType,
+                Name = item.Name,
+                ModifiedDate = DateTime.Now
+            };
+            var res = await _menuGroupRepository.UpdateAsync(dto);
+            return ResultStatus<bool>.Success(res);
         }
 
-        // Güncelle
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] MenuGroup menuGroup)
+        [HttpDelete("Delete/{id}")]
+        public async Task<ResultStatus<bool>> Delete(int id)
         {
-            if (id != menuGroup.Id)
-                return BadRequest();
-            await _menuGroupRepository.UpdateAsync(menuGroup);
-            return NoContent();
+            var result = await _menuGroupRepository.DeleteAsync(id);
+            return ResultStatus<bool>.Success(result, "Silme işlemi tamamlandı.");
         }
 
-        // Sil
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpGet("GetById/{id}")]
+        public async Task<ResultStatus<MenuGroupDto>> GetById(int id)
         {
-            await _menuGroupRepository.DeleteAsync(id);
-            return NoContent();
+            //var cacheKey = $"{CacheKeyPrefix}{id}";
+            //var cachedItem = await _cacheService.GetAsync<MenuBaseItemDto>(cacheKey);
+
+            //if (cachedItem != null)
+            //    return cachedItem;
+
+            var item = await _menuGroupRepository.GetByIdAsync(id);
+            if (item == null)
+            {
+                return ResultStatus<MenuGroupDto>.Error("İstenilen kayıt bulunamadı.");
+            }
+
+            var dto = new MenuGroupDto
+            {
+                Id = item.Id,
+                Description = item.Description,
+                IsActive = item.IsActive,
+                MenuType = item.MenuType,
+                Name = item.Name,
+                CreatedDate = item.CreatedDate,
+                ModifiedDate = item.ModifiedDate,
+            };
+            //await _cacheService.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(30));
+            return ResultStatus<MenuGroupDto>.Success(dto);
         }
+
     }
-} 
+}
