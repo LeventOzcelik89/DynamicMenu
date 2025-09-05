@@ -6,6 +6,7 @@ using System.Text;
 
 namespace DynamicMenu.Web.Model
 {
+
     public abstract class RemoteServiceBase
     {
         public abstract string baseAddress { get; }
@@ -33,7 +34,7 @@ namespace DynamicMenu.Web.Model
             }
         }
 
-        public async Task<ResultStatus<T>?> PostJsonDataResultStatus<T>(string url, object data) where T : class
+        public async Task<ResultStatus<T>?> PostJsonDataResultStatus<T>(string url, object data)
         {
             try
             {

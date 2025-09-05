@@ -1,4 +1,5 @@
 using DynamicMenu.API.DTOs;
+using DynamicMenu.API.Models;
 using DynamicMenu.Core.Entities;
 using DynamicMenu.Core.Interfaces;
 using DynamicMenu.Core.Models;
@@ -12,10 +13,13 @@ namespace DynamicMenu.API.Controllers
     public class MenuController : ControllerBase
     {
         private readonly IMenuRepository _menuRepository;
+        private readonly IMenuItemRepository _menuItemRepository;
+        private readonly IMenuBaseItemRepository _menuBaseItemRepository;
 
-        public MenuController(IMenuRepository menuRepository)
+        public MenuController(IMenuRepository menuRepository, IMenuItemRepository menuItemRepository)
         {
             _menuRepository = menuRepository;
+            _menuItemRepository = menuItemRepository;
         }
 
         [HttpGet("GetAll")]
@@ -98,6 +102,71 @@ namespace DynamicMenu.API.Controllers
             //await _cacheService.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(30));
             return ResultStatus<MenuDto>.Success(dto);
         }
+
+
+        [HttpPost("Save")]
+        public async Task<ResultStatus<bool>> Save(MenuItemProcessDTO processItem)
+        {
+            try
+            {
+                var menuItems = await _menuItemRepository.GetByMenuIdAsync(processItem.menuId);
+
+                //  Edit
+                foreach (var item in processItem.items.Where(a => a.processType == MenuItemProcessType.edit))
+                {
+                    var menuItem = menuItems.FirstOrDefault(a => a.Id == item.menuItem.Id);
+                    if (menuItem != null)
+                    {
+                        //  menuItem.MenuBaseItem.Text = item.menuItem.Text
+                        //  menuItem.Text = item.menuItem.Text;
+                        //  menuItem.IconPath = item.menuItem.IconPath;
+                        //  menuItem.MenuBaseItemId = item.menuItem.MenuBaseItemId; //  todo: kontrol et.
+                        menuItem.Keyword = item.menuItem.Keyword;
+                        menuItem.SortOrder = item.menuItem.SortOrder;
+                        menuItem.IsNew = item.menuItem.IsNew;
+                        menuItem.Pid = item.menuItem.Pid;
+                        menuItem.ModifiedDate = DateTime.Now;
+
+                        await _menuItemRepository.UpdateAsync(menuItem);
+                    }
+
+                }
+
+                //  Remove
+                foreach (var item in processItem.items.Where(a => a.processType == MenuItemProcessType.remove))
+                {
+                    var menuItem = menuItems.FirstOrDefault(a => a.Id == item.menuItem.Id);
+                    if (menuItem != null)
+                    {
+                        await _menuItemRepository.DeleteAsync(menuItem.Id);
+                    }
+                }
+
+                //  Add
+                foreach (var item in processItem.items.Where(a => a.processType == MenuItemProcessType.add))
+                {
+                    var menuItem = new MenuItem
+                    {
+                        MenuId = processItem.menuId,
+                        MenuGroupId = processItem.menuGroupId,
+                        MenuBaseItemId = item.menuItem.MenuBaseItem.Id,
+                        Keyword = item.menuItem.Keyword,
+                        SortOrder = item.menuItem.SortOrder,
+                        IsNew = item.menuItem.IsNew,
+                        Pid = item.menuItem.Pid,
+                        CreatedDate = DateTime.Now
+                    };
+                    await _menuItemRepository.AddAsync(menuItem);
+                }
+
+                return ResultStatus<bool>.Success(true);
+            }
+            catch (Exception ex)
+            {
+                return ResultStatus<bool>.Error(ex.Message);
+            }
+        }
+
 
     }
 }

@@ -10,18 +10,20 @@
 
         public static ResultStatus<T> Error(string? message = null)
         {
+            message = message ?? "Beklenmedik bir sorun oluştu.";
             return new ResultStatus<T>
             {
                 message = message,
-                feedback = FeedBack.Error(message ?? "Beklenmedik bir sorun oluştu.")
+                feedback = FeedBack.Error(message)
             };
         }
 
         public static ResultStatus<T> Success(T data, string? message = null)
         {
+            message = message ?? "İşlem başarıyla tamamlandı.";
             return new ResultStatus<T>
             {
-                message = message ?? "İşlem başarıyla tamamlandı.",
+                message = message,
                 success = true,
                 objects = data,
                 feedback = FeedBack.Success(message),
