@@ -150,7 +150,15 @@
                 if (result.isConfirmed) {
 
                     if (_modal) {
-                        Kendo_GetRequest(_this.attr('data-href'), _data, _this, _modalType);
+                        Kendo_GetRequest({
+                            url: _this.attr('data-href'),
+                            data: _data,
+                            modalType: _modalType,
+                            method: _button.attr('data-method') ?? 'POST',
+                            form: _button.parents('form'),
+                            table: _button.parents('table')
+                        });
+                        //  Kendo_GetRequest(_this.attr('data-href'), _data, _this, _modalType);
                     } else {
 
                         var __data = '';
@@ -173,7 +181,15 @@
         } else {
 
             if (_modal) {
-                Kendo_GetRequest(_this.attr('data-href'), _data, _this, _modalType);
+                Kendo_GetRequest({
+                    url: _this.attr('data-href'),
+                    data: _data,
+                    modalType: _modalType,
+                    method: _button.attr('data-method') ?? 'POST',
+                    form: _button.parents('form'),
+                    table: _button.parents('table')
+                });
+                //  Kendo_GetRequest(_this.attr('data-href'), _data, _this, _modalType);
             } else {
                 var __data = '';
                 $.each(_data, function (i, item) { if (item != '' && item != null) { __data += '&' + i + '=' + item; } });
@@ -324,23 +340,38 @@ function fn_RunFormValidators() {
 
 }
 
-function Kendo_GetRequest(_url, _data, _button, _modalType, title) {
+function Kendo_GetRequest(options) {
+
+    var baseOpts = {
+        url: 'Null',
+        data: null,
+        method: 'GET',
+        form: null,     //  will be trigger with success parameter
+        table: null,    //  will be trigger with success parameter
+        loadingModalTarget: $('body'),
+        button: null,
+        modalTitle: null,
+        modalType: 'type-info'
+    };
+
+    var opts = $.extend(baseOpts, options);
+
     var _title = '';
     var $message = $('<div class="clearfix"></div>');
     var $isJSON = false;
 
-    if (_button == undefined) {
-        _button = $('<button data-method="GET"></button>');
+    if (opts.button == undefined) {
+        opts.button = $('<button data-method="GET"></button>');
     }
 
     $.ajax({
         timeout: 6000000,
-        url: _url,
-        type: _button.attr('data-method') ?? 'POST',
-        data: _data,
+        url: opts.url,
+        type: opts.method,
+        data: opts.data,
         beforeSend: function () {
-            $('body').loadingModal({ text: 'Lütfen Bekleyin...', animation: 'rotatingPlane', backgroundColor: 'black' });
-            _button.attr("disabled", "disabled");
+            opts.loadingModalTarget.loadingModal({ text: 'Lütfen Bekleyin...', animation: 'rotatingPlane', backgroundColor: 'black' });
+            opts.button.attr("disabled", "disabled");
         },
         success: function (response) {
 
@@ -348,11 +379,11 @@ function Kendo_GetRequest(_url, _data, _button, _modalType, title) {
             if (typeof (response.feedback) != 'undefined' && typeof (response.success) != 'undefined' && typeof (response.objects) != 'undefined') {
                 feedback(response.feedback);
                 $isJSON = true;
-                if (_button.parents('form') != undefined) {
-                    _button.parents("form").trigger("success", response);
+                if (opts.form != undefined) {
+                    opts.form.trigger("success", response);
                 }
-                if (_button.parents('table') != undefined) {
-                    _button.parents('table').trigger("success", response);
+                if (opts.table != undefined) {
+                    opts.table.trigger("success", response);
                 }
                 return;
             }
@@ -369,7 +400,7 @@ function Kendo_GetRequest(_url, _data, _button, _modalType, title) {
                 }
             });
 
-            if (title != undefined) { _title = title; }
+            if (opts.modalTitle != undefined) { _title = opts.modalTitle; }
 
             if (tHtml.children() == 0) { $message.html("Seçici Bulunamadı"); }
 
@@ -379,19 +410,19 @@ function Kendo_GetRequest(_url, _data, _button, _modalType, title) {
         },
         complete: function () {
 
-            _button.removeAttr("disabled");
+            opts.button.removeAttr("disabled");
             $('body').loadingModal('destroy');
 
-            if (_button.data("nothing")) //  alttaki işlemlerin yapılmaması için tanımlanmıştır.
-                return;
+            //  if (_button.data("nothing")) //  alttaki işlemlerin yapılmaması için tanımlanmıştır.
+            //      return;
 
             if (!$isJSON) {
 
                 Dialog($message, {
-                    type: _modalType ? _modalType : 'type-info',
+                    type: opts.modalType,
                     title: (_title == '' || typeof (_title) == 'undefined') ? "Kayıt Detayı" : _title,
                     onShown: function (dialogRef) {
-                        _button.trigger("open:modal");
+                        opts.button.trigger("open:modal");
                         //  $.each(haritalar, function (i, item) { item.map.updateSize(); });
                         fn_RunFormValidators();
                     }
@@ -419,7 +450,32 @@ function Dialog(message, opts) {
 
 }
 
+$.fn.dTable = function (opts, topButtonsOptions) {
 
+    var buttonBaseOptions = {
+        text: 'insert',
+        dropIcon: false,
+        action: null,
+    };
 
+    $.each(topButtonsOptions, function (b, buttonOptions) {
+        topButtonsOptions[b] = $.extend(buttonBaseOptions, buttonOptions);
+    });
 
+    var baseOptions = {
+        responsive: true,
+        language: {
+            url: '/lib/dataTables/tr.json'
+        },
+        layout: {
+            topStart: {
+                buttons: topButtonsOptions != undefined ? topButtonsOptions : null
+            }
+        }
+    };
 
+    var options = $.extend(baseOptions, opts);
+
+    this.dataTable(options);
+
+}

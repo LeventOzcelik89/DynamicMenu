@@ -23,7 +23,7 @@ namespace DynamicMenu.API.Controllers
         public async Task<ResultStatus<IEnumerable<MenuGroup>>> GetAll(int? MenuGroupId = null)
         {
             var menuGroups = await _menuGroupRepository.GetAllAsync();
-            return ResultStatus<IEnumerable<MenuGroup>>.Success(menuGroups);
+            return ResultStatus<IEnumerable<MenuGroup>>.Success(menuGroups, "");
         }
 
 

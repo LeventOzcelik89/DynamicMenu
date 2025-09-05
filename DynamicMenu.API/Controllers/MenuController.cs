@@ -29,7 +29,7 @@ namespace DynamicMenu.API.Controllers
                 ? await _menuRepository.GetByMenuGroupIdAsync(MenuGroupId.Value)
                 : await _menuRepository.GetAllAsync();
 
-            return ResultStatus<IEnumerable<Menu>>.Success(menus);
+            return ResultStatus<IEnumerable<Menu>>.Success(menus, "");
         }
 
         [HttpPost("Insert")]

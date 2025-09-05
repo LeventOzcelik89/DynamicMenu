@@ -52,9 +52,9 @@ namespace DynamicMenu.API.Controllers
             var dtos = items.Select(a => new MenuItemDto
             {
                 Id = a.Id,
-                Text = a.MenuBaseItem.Text,
-                TextEn = a.MenuBaseItem.TextEn,
-                IconPath = a.MenuBaseItem.IconPath,
+                Text = a.MenuBaseItem?.Text,
+                TextEn = a.MenuBaseItem?.TextEn,
+                IconPath = a.MenuBaseItem?.IconPath,
                 Keyword = a.Keyword,
                 IsNew = a.IsNew,
                 Pid = a.Pid,
@@ -65,7 +65,7 @@ namespace DynamicMenu.API.Controllers
             }).ToList();
 
             //await _cacheService.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(30));
-            return ResultStatus<IEnumerable<MenuItemData>>.Success(dtos);
+            return ResultStatus<IEnumerable<MenuItemDto>>.Success(dtos, "");
         }
 
         [HttpPost("Insert")]

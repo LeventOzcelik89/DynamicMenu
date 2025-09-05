@@ -1,12 +1,6 @@
 ﻿<!-- Menü Tablosu Sayfası -->
 <div class="page" id="list" data-page="menu-list">
     <main>
-        <div class="action-buttons top-buttons">
-            <a data-href="/MenuGroup/Insert" class="action-button" id="new-menu" data-modal="" data-method="get">
-                <i class="fas fa-plus"></i>
-                <span>Add Menu Group</span>
-            </a>
-        </div>
 
         <div class="data-table-container">
             <table class="table table-bordered table-hover align-middle" id="tbl">
@@ -29,7 +23,7 @@
     </main>
 </div>
 
-<script type="text/template" id="tblRow">
+@* <script type="text/template" id="tblRow">
 
     <tr>
         <td>{{data.Name}}</td>
@@ -50,7 +44,9 @@
             </td>
         </tr>
 
-</script>
+</script> *@
+
+
 
 @section Scripts {
 
@@ -61,18 +57,60 @@
         tbl: null,
         ready: function(){
 
-            ReadData('/MenuGroup/GetAll', null, function(res){
+            //  ReadData('/MenuGroup/GetAll', null, function(res){
 
-                TemplateEngine.RenderAll($('#tblRow'), res, $('#tbl tbody'));
-
-                    $('#tbl').dataTable({
-                            responsive: true,
-                            language: {
-                                url: '/lib/dataTables/tr.json'
+                //  TemplateEngine.RenderAll($('#tblRow'), res, $('#tbl tbody'));
+                
+                $('#tbl').dTable({
+                    ajax: { url: '/MenuGroup/GetAll', dataType: 'json', dataSrc: 'objects' },
+                    columns: [
+                        { data: 'Name' },
+                        { data: 'Description' },
+                        {
+                            data: 'IsActive',
+                            render: (data, type, row) => {
+                                return '<span class="badge bg-' + row.IsActive == true ? 'success' : 'danger' + '">' + row.IsActive == true ? 'Aktif' : 'Pasif' + '</span>';
                             }
-                            });
+                        },
+                        { data: 'MenuType' },
+                        {
+                            data: 'Menus',
+                            render: (data, type, row) => {
+                                return row.Menus.map(function(item){ return '<a href="Menu/Management?MenuId=' + row.Id + '&MenuGroupId=' + row.Id + '" class="btn btn-sm btn-info m-1">' + row.Name + '</a>'; }).join('');
+                            }
+                        },
+                        {
+                            data: 'CreatedDate',
+                            render: (data, type, row) => {
+                                return row.CreatedDate == null ? '' : new Date(row.CreatedDate).toLocaleString('tr-TR');
+                            }
+                        },
+                        {
+                            data: 'ModifiedDate',
+                            render: (data, type, row) => {
+                                return row.ModifiedDate == null ? '' : new Date(row.ModifiedDate).toLocaleString('tr-TR');
+                            }
+                        },
+                        {
+                            data: null,
+                            render: (data, type, row) => {
+                                return '<div class="btn-group" role="group">' +
+                                        '<a href="/Menu/Index?MenuGroupId=' + row.Id + '" class="btn btn-sm btn-success">Yönetim</a>' +
+                                        '<a data-href="/MenuGroup/Update" class="btn btn-sm btn-primary" data-id="' + row.Id + '" data-modal data-method="get">Düzenle</a>' +
+                                        '<a data-href="/MenuGroup/Delete?Id=' + row.Id + '" data-modal data-ask class="btn btn-sm btn-info">Sil</a>' +
+                                    '</div>';
+                            }
+                        }
+                    ]
+                }, 
+                [{ 
+                    text: 'Add Menu Group', 
+                    action: function(){ 
+                        Kendo_GetRequest({ url: '/MenuGroup/Insert', method: 'GET', table: $('#tbl') }); 
+                    } 
+                }]);
 
-            });
+            //  });
 
         }
 

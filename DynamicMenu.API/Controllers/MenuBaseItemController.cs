@@ -50,7 +50,7 @@ namespace DynamicMenu.API.Controllers
             var dtos = items.Select(MapToDto).ToList();
 
             //await _cacheService.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(30));
-            return ResultStatus<IEnumerable<MenuBaseItemDto>>.Success(dtos);
+            return ResultStatus<IEnumerable<MenuBaseItemDto>>.Success(dtos, "");
         }
 
         [HttpPost("Insert")]

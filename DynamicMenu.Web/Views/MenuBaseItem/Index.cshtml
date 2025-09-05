@@ -53,18 +53,12 @@
             tbl: null,
             ready: function(){
 
-                $('#tbl').dataTable({
+                $('#tbl').dTable({
                     ajax: {
-                        url: '/MenuBaseItem/GetAllData',
+                        url: '/MenuBaseItem/GetAll',
                         dataType: 'json',
-                        dataSrc: ''
+                        dataSrc: 'objects'
                     },
-
-                    responsive: true,
-                    language: {
-                        url: '/lib/dataTables/tr.json'
-                    },
-
                     columns: [
                         { data: 'Text' },
                         { data: 'TextEn' },
@@ -72,7 +66,7 @@
                             data: 'IconPath',
                             render: (data, type, row) => {
                                 return '<img src="@Html.Raw(appSettings.baseUrl)img/icons/' + row.IconPath + '.svg" />';
-                            } 
+                            }
                         },
                         {
                             data: 'CreatedDate',
@@ -91,13 +85,18 @@
                             render: (data, type, row) => {
                                 return '<div class="btn-group" role="group">' +
                                     '<a data-href="/MenuBaseItem/Update/' + row.Id + '" class="btn btn-sm btn-primary" data-id="' + row.Id + '" data-modal data-method="get">Düzenle</a>' +
-                                    '<a data-href="/MenuBaseItem/Delete?Id=' + row.Id + '" data-modal data-ask class="btn btn-sm btn-info">Sil</a>' + 
+                                    '<a data-href="/MenuBaseItem/Delete?Id=' + row.Id + '" data-modal data-ask class="btn btn-sm btn-info">Sil</a>' +
                                     '</div>';
                             }
                         }
                     ]
-
-                });
+                }, 
+                [{
+                    text: 'Add Menu Group', 
+                    action: function(){ 
+                        Kendo_GetRequest({ url: '/MenuGroup/Insert', method: 'GET', table: $('#tbl') }); 
+                    } 
+                }]);
 
             }
 
